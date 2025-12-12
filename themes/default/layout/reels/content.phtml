@@ -1,0 +1,167 @@
+<script>
+	url = "reels";
+</script>
+
+<?php if($sm['theme']['design_style_wide']['val'] == 'Yes'){ ?>
+	<div class="col s2 real" style="padding-right: 0px;" >
+	<?php 
+		if($sm['plugins']['adsWeb']['enabled'] == 'Yes' && $sm['plugins']['adsWeb']['enable_160x600'] == "Yes"){
+	    if($sm['plugins']['adsWeb']['160x600'] == '[ADSMANAGER]'){
+	        $sm['plugins']['adsWeb']['160x600'] = getAD('160x600');
+	    } 		 
+			echo '<div class="ad-zone-vertical">'.$sm['plugins']['adsWeb']['160x600'].'</div>';
+		}
+	?>		
+	</div>
+	<div class="col s8 real mainContentBorderColor"  id="site-content" style="background: <?=$sm['theme']['wall_bg_discover']['val']; ?>;">
+<?php } else { ?>
+	<div class="col s8 real fix-width-content mainContentBorderColor" style="padding-right: 0px;background: <?=$sm['theme']['wall_bg_discover']['val']; ?>;" id="site-content">
+<?php } ?>	
+
+<button type="button" ng-click="myReels()" id="goToMyReels" style="display: none;">
+    <img src="<?= $sm['user']['profile_photo']; ?>" class="brick-img profile-photo box-shadow-credits" />
+</button>   
+
+<div class="swiper-menu">
+	<ul class="swiper-menu-ul">
+
+	<li class="swiper-menu-li" style="margin-bottom: 80px;">
+		<a href="javascript:;" class="box-shadow-credits gradient6 montserrat vivify popIn delay-1500" style="color:#fff" onclick="reelsTab(1)" data-reel-tab="trending">
+			<span><?= $sm['lang'][932]['text']; ?></span>
+		</a>
+	</li>		
+
+	<li class="swiper-menu-li">
+		<a href="javascript:;" class="box-shadow-credits montserrat active vivify fadeIn delay-100" onclick="reelsTab(0)" data-reel-tab="latest">
+			<span><?= $sm['lang'][931]['text']; ?></span>
+		</a>
+	</li>	
+	<li class="swiper-menu-li">
+		<a href="javascript:;" class="box-shadow-credits montserrat vivify fadeIn delay-300" data-reel-tab="2" onclick="reelsTab(2)">
+			<span><?= $sm['lang'][949]['text']; ?></span>
+		</a>
+	</li>		
+	<li class="swiper-menu-li">
+		<a href="javascript:;" class="box-shadow-credits montserrat vivify fadeIn delay-500" data-reel-tab="3" onclick="reelsTab(3)">
+			<span><?= $sm['lang'][948]['text']; ?></span>
+		</a>
+	</li>		
+	<li class="swiper-menu-li">
+		<a href="javascript:;" class="box-shadow-credits montserrat vivify fadeIn delay-700" data-reel-tab="4" onclick="reelsTab(4)">
+			<span><?= $sm['lang'][950]['text']; ?></span>
+		</a>
+	</li>			
+	<li class="swiper-menu-li">
+		<a href="javascript:;" class="box-shadow-credits montserrat vivify fadeIn delay-900" data-reel-tab="5" onclick="reelsTab(5)">
+			<span><?= $sm['lang'][940]['text']; ?></span>
+		</a>
+	</li>			
+	</ul>
+</div>
+
+<div id="reelsContainer" >
+	<div class="detail reel-nothing-found" id="reelNothingFound">
+	    <div class="video-item">
+	        <div class="video-wraper black">
+
+	            <div class="mask">                                  
+	                <div class="guide-info" style="width: 80%;">
+	                    <div class="ani-guide">
+	                        <img src="<?= $sm['user']['profile_photo']; ?>" style="width: 100%;border-radius: 50%;">
+	                    </div>
+	                    <p class="title" id="nothingFoundText" style="font-weight:400;border: none;"><?= $sm['lang'][933]['text']; ?></p>
+	                </div>
+	            </div>                               
+	        </div>
+	    </div>
+	</div>
+
+	<div class="detail vivify fadeIn reel-nothing-found" id="reelNothingToShow">
+	    <div class="video-item">
+	        <div class="video-wraper" onclick="hideReelNothingToShow();">
+	            <div class="mask">                                  
+	                <div class="guide-info" style="width: 80%;">
+	                    <div class="ani-guide">
+	                        <img src="<?= $sm['user']['profile_photo']; ?>" style="width: 100%;border-radius: 50%;">
+	                    </div>
+	                    <p class="title" style="font-weight:400;border: none;">
+	                        <?= $sm['lang'][934]['text']; ?>
+	                    </p>
+	                </div>
+	            </div>                               
+	        </div>
+	    </div>
+	</div>
+
+	<div class="detail upload-reel-container">
+	    <div class="video-item">
+	        <div class="video-wraper black">
+	            <div class="play-button" style="display: none;"></div>
+
+	            <div class="poster isTop uploadingReelVideo" id="uploadingReelVideo" style="display:none">
+	            </div>
+
+	            <div class="refresh-wrapper" 
+	                style="background-image: url(<?= $sm['user']['profile_photo']; ?>);display:none";>
+	            </div>
+	            <div class="side-bar" id="uploadReelSidebar" style="bottom:2.65rem!important;opacity:0.75;display: none;">
+
+	                <svg onclick="upReel()" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M20 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6M12 15V3m0 0L8.5 6.5M12 3l3.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+	            </div>
+	            <div class="info-wraper" id="uploadReelInfo" style="bottom: 5.35rem;display: none;">
+	                <div class="user-info"  style="margin-left:12px">
+	                    <a href="#"><img src="<?= $sm['user']['profile_photo']; ?>" class="avator" style="object-fit:cover" id="uploadReelPhoto"></a>
+	                    <p class="name" id="uploadReelName"><?= $sm['user']['name']; ?></p>
+
+	                </div>
+
+                  <div class="reel-form reel-m-15">
+                      <textarea class="montserrat reel-desktop-textarea" onkeyup="updateMyReel('caption')" id="uploadReelCaption" placeholder="<?= $sm['lang'][935]['text']; ?>"></textarea>
+                  </div>	
+	                <div class="montserrat reel-form reel-m-15" id="reelPrice">
+	                    <span><?= $sm['lang'][937]['text']; ?></span>
+	                    <label class="" style="margin-left:25px">
+	                      <input class="reel-desktop-private-input" type="number" value="0" onkeyup="updateMyReel('price')" id="privateReelPrice" >
+	                    </label>
+	                </div>  
+
+	            </div>
+	            <div class="mask uploadingReel" >                                  
+	                <div class="guide-info" style="width:80%">
+	                    <div class="ani-guide">
+	                        <img src="<?= $sm['user']['profile_photo']; ?>" style="width: 100%;border-radius: 50%;">
+	                    </div>
+	                    <p class="title" id="uploadingReelTitleStart" onclick="uploadReelFromTitle()" style="font-weight:400;border: none;"><?= $sm['lang'][938]['text']; ?></p>
+	                    <p class="title" id="uploadingReelTitle" style="display:none"><?= $sm['lang'][939]['text']; ?></p>
+	                    <p class="content reels-p-0"><strong class="uploadingReelProgress"></strong></p>
+	                    
+	                </div>
+	            </div>                                
+	        </div>
+	    </div>
+	</div>
+
+
+	<div class="detail active-reels bg-black-reels">    
+	  <div class="swiper-container swiper swiper-container-vertical swiper-container-android">
+
+	      <div class="swiper-wrapper" id="reels-content" style="display:none">
+	              
+	      </div>
+	  </div>
+	</div>
+
+</div>
+<?php if($sm['theme']['design_style_wide']['val'] == 'Yes'){ ?>
+	<div class="col s2 real">
+		<?php 
+			if($sm['plugins']['adsWeb']['enabled'] == 'Yes' && $sm['plugins']['adsWeb']['enable_160x600'] == "Yes"){
+		    if($sm['plugins']['adsWeb']['160x600'] == '[ADSMANAGER]'){
+		        $sm['plugins']['adsWeb']['160x600'] = getAD('160x600');
+		    } 			 
+				echo '<div class="ad-zone-vertical" style="margin-left:79px;">'.$sm['plugins']['adsWeb']['160x600'].'</div>';
+			}
+		?>	
+	</div>
+<?php }?>	            
+

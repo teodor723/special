@@ -1,0 +1,53 @@
+<ion-view title="" hide-nav-bar="true">
+   <div class="twigo-register-header">
+      <div class="content-header-div-title">
+         <h2 class="twigo-font view-title-h2">{{alang[246].text}}</h2>
+      </div>
+      <div class="content-header-div-right" ng-click="goTo('home.register','left','')">
+         <img src="twigo/img/arrow-back.png"/>
+      </div>
+   </div>
+   <ion-content class="twigo-gradient1 pt-80" nav-transition="none" scroll="true" ng-style="{height: iframeHeight + 'px'}">
+      <div class="wrapper nop-nom page-content"  fit vertical layout justified>
+         <div class="login-form animated fadeIn pt-10p">
+            <div class="landing-logo mt-10px">
+                <div class="brick box-shadow-credits register-photo" ng-click="pick()" style="display:block;margin:0 auto;">
+                  <div class="brick__image" id="photo-upload" style="background-image: url('img/no_user.png')"></div>
+                </div>
+            </div>
+            <h2 class="comforta twigo-register-page3-text" style="margin-top:-30px;">
+            	<strong>{{name}}</strong>, {{lang31}}
+            <h2>
+            <p class="comforta twigo-register-page3-p" data-alid="32"></p>
+            <input type="date" placeholder="mm/dd/yyyy" min="1940-01-01" id="birth" class="login-input twigo-register-Date" />					
+            <p class="comforta twigo-register-page3-p" data-alid="258"></p>
+            <div class="twigo-register-page3-gender">
+               <div class="selectGender" id="gender{{g.id}}" data-gender="g.id" ng-click="selectGender(g.id)" ng-repeat="g in genders track by $index">
+                  <span class="comforta">{{g.text}}</span>
+               </div>
+            </div>
+            <p class="comforta twigo-register-page3-p" data-alid="259"></p>
+            <div class="twigo-register-page3-gender">
+               <div class="selectGender" id="looking{{g.id}}" data-looking="g.id" ng-click="selectLooking(g.id)" ng-repeat="g in genders track by $index">
+                  <span class="comforta">{{g.text}}</span>
+               </div>
+            </div>
+            <div class="login-btn ml-20px" ng-class="{active: isActive}" ng-if="!regBtn" ng-click="send()">
+               <span class="comforta register-span">
+                  <center>{{nexttext}}</center>
+               </span>
+            </div>
+            <div class="login-loader" ng-if="regBtn">
+               <center>
+                  <div class="loader02"></div>
+               </center>
+            </div>
+         </div>
+      </div>
+      <div flow-init
+          flow-name="uploader.flow"
+          flow-files-added="processFiles($files)">
+          <button flow-btn type="file" id="uploadRegPhoto" style="display: none;">Upload Images</button>
+        </div>
+   </ion-content>
+</ion-view>

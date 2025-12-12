@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Sitemap: http://special-dating.com/?sitemapindex.xml
+Sitemap: http://special-dating.com/?sitemap237.xml
+Sitemap: http://special-dating.com/?sitemap334.xml
+Sitemap: http://special-dating.com/?sitemap897.xml
+Sitemap: http://special-dating.com/?sitemap957.xml
+Sitemap: http://special-dating.com/?sitemap245.xml
+Sitemap: http://special-dating.com/pages.php?sitemap122.xml

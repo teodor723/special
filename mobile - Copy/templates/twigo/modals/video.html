@@ -1,0 +1,42 @@
+<ion-modal-view view-title="">
+  <ion-content scroll="false" ng-style="{height: iframeHeight + 'px'}">
+    <div class="videocall-container" ng-style="{height: iframeHeight + 'px'}">
+      <div class="videopb"></div>
+      <div class="videofooter"></div>
+      <div class="bulbs called bulbs-called" ng-if="called">
+        <div class="bulb-1 twigo-bulb-1" ng-click="endVideoCall(1)">
+          <i class="ion-ios-telephone"></i>
+        </div>
+        <div class="bulb-2 twigo-bulb-2" ng-click="acceptCall()">
+          <i class="ion-ios-videocam" style=""></i>
+        </div>
+      </div>
+      <div class="bulbs called" ng-show="!called" ng-class="">
+        <div id="end-call" ng-click="closeVideoModal();" class="bulb-2 b-centered bulb-end">
+          <i class="ion-close-round"></i>
+        </div>
+      </div>
+      <div class="ball vivify pulsate infinite" ng-show="!inCall">
+        <div class="halo infinite"></div>
+      </div>
+      <video class="zIndex-99" autoplay muted playsinline loop id="myCam" ng-show="!called" ng-style="{height: iframeHeight + 'px'}">
+        <source src="" type="video/mp4"></source>
+      </video>
+      <video autoplay muted playsinline loop id="theirCam" ng-show="!called" ng-style="{height: iframeHeight + 'px'}" style="display: none">
+        <source src="" type="video/mp4">
+        </source>
+      </video>
+      <div class="loading zIndex-99" ng-if="!called" ng-show="!inCall">
+        <h4 id="callUserName" class="comforta animated fadeInUp fc-fff">{{name}}</h4>
+        <b id="call_status" class="comforta animated fadeInUp fc-f2f2f2">{{text}}</b>
+        <br><br>
+        <div class="call-loader"></div>
+      </div>
+      <div class="loading zIndex-99" ng-if="called" ng-show="!inCall">
+        <h4 id="callUserName" class="comforta animated fadeInUp fc-fff">{{name}}</h4>
+        <b id="call_status" class="comforta animated fadeInUp call-status-time">{{text}}</b><br><br>
+        <div class="call-loader"></div>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>

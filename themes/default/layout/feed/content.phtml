@@ -1,0 +1,221 @@
+<script>
+	url = "feed";
+</script>
+
+<?php if($sm['theme']['design_style_wide']['val'] == 'Yes'){ ?>
+	<div class="col s2 real" style="padding-right: 0px;" >
+	<?php 
+		if($sm['plugins']['adsWeb']['enabled'] == 'Yes' && $sm['plugins']['adsWeb']['enable_160x600'] == "Yes"){
+	    if($sm['plugins']['adsWeb']['160x600'] == '[ADSMANAGER]'){
+	        $sm['plugins']['adsWeb']['160x600'] = getAD('160x600');
+	    } 		 
+			echo '<div class="ad-zone-vertical">'.$sm['plugins']['adsWeb']['160x600'].'</div>';
+		}
+	?>		
+	</div>
+	<div class="col s8 real mainContentBorderColor"  id="site-content" style="background: <?=$sm['theme']['wall_bg_discover']['val']; ?>;">
+<?php } else { ?>
+	<div class="col s8 real fix-width-content mainContentBorderColor" style="padding-right: 0px;background: <?=$sm['theme']['wall_bg_discover']['val']; ?>;" id="site-content">
+<?php } ?>	
+
+	<center class="mb-50" data-discover-result="0" style="display: none;">
+		<br>
+		<strong>
+			<h5 style="color:<?= $sm['theme']['wall_color_discover']['val']; ?>"><?=$sm['lang'][153]['text'];?></h5>
+		</strong>
+		<h5 style="color:<?= $sm['theme']['wall_color_discover']['val']; ?>;opacity: .5">
+			<?=$sm['lang'][597]['text'];?>
+		</h5>
+	</center>
+
+<div class="feed-menu">
+	<ul class="feed-menu-ul">
+	<li class="feed-menu-li">
+		<a href="javascript:;" class="box-shadow-credits" id="all-feed" onclick="loadUserFeed('all')">
+			<span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3zM21 9H3M21 15H3M12 3v18"/></svg>
+				<?= $sm['lang'][911]['text']; ?>
+			</span>
+		</a>
+	</li>		
+
+	<li class="feed-menu-li ">
+		<a href="javascript:;" class="box-shadow-credits" onclick="loadUserFeed('liked')">
+			<span>
+				<svg class="unlike" id="unlike-1632" color="currentColor" fill="currentColor" height="26" role="img" viewBox="0 0 24 24" width="26">                                        <path d="M16.792 3.904A4.989 4.989 0 0121.5                                           9.122c0                                           3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865                                           3.469-4.303                                           3.752-.477-.309-2.143-1.823-4.303-3.752C5.141                                           14.072 2.5 12.167 2.5 9.122a4.989 4.989 0                                           014.708-5.218 4.21 4.21 0 013.675 1.941c.84                                           1.175.98 1.763 1.12 1.763s.278-.588                                           1.11-1.766a4.17 4.17 0 013.679-1.938m0-2a6.04                                           6.04 0 00-4.797 2.127 6.052 6.052 0                                           00-4.787-2.127A6.985 6.985 0 00.5 9.122c0 3.61                                           2.55 5.827 5.015                                           7.97.283.246.569.494.853.747l1.027.918a44.998                                           44.998 0 003.518 3.018 2 2 0 002.174 0 45.263                                           45.263 0                                           003.626-3.115l.922-.824c.293-.26.59-.519.885-.774                                           2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0                                           00-6.708-7.218z"></path>                                    </svg>
+				<?= $sm['lang'][912]['text']; ?>
+			</span>
+		</a>
+	</li>
+	<li class="feed-menu-li">
+		<a href="javascript:;" class="box-shadow-credits" onclick="loadUserFeed('saved')">
+			<span>
+					<svg class="save" color="currentColor" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">                              <polygon fill="none" points="20 21 12 13.44 4 21 4                                 3 20 3 20 21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polygon>                           </svg>
+				<?= $sm['lang'][913]['text']; ?>
+			</span>
+		</a>
+	</li>	
+	<li class="feed-menu-li">
+		<a href="javascript:;" class="box-shadow-credits" onclick="loadUserFeed('purchased')">
+			<span>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="bevel"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+				<?= $sm['lang'][914]['text']; ?>
+			</span>
+		</a>
+	</li>		
+	<li class="feed-menu-li">
+		<a href="javascript:;" class="box-shadow-credits" onclick="loadUserFeed('me')">
+			<span>
+				<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3"/><circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/></svg>
+				<?= $sm['lang'][915]['text']; ?>
+			</span>
+		</a>
+	</li>		
+	<li class="feed-menu-li">
+		<a href="javascript:;" class="box-shadow-credits" onclick="openUploadFGFeed()">
+			<span>
+				<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
+				<?= $sm['lang'][916]['text']; ?>
+			</span>
+		</a>
+	</li>		
+	</ul>
+</div>
+
+<?php for ($i=1; $i < 8; $i++) { ?>
+	<div class="instagram-sec loading-feed" id="loading-feed-<?= $i; ?>">
+		<div class="skeleton-wrapper">
+		  <div class="skeleton-wrapper-cell">
+		    <div class="skeleton-line loader-feed-avatar"></div>
+		    <div class="skeleton-line loader-feed-name"></div>
+		    <div class="loader-feed-image">
+		      <div class="skeleton-line loader-feed-image-line"></div>
+		    </div>
+		    <div class="skeleton-line loader-caption-btns"></div>  
+		    <div class="skeleton-line loader-caption-btns"></div>  
+		    <div class="skeleton-line loader-caption-btns loader-right-btn"></div>    
+		    <div class="skeleton-line loader-caption"></div>  
+		    <div class="skeleton-line loader-caption"></div>  	         	    
+		  </div>
+	  </div>
+	</div>	
+<?php } ?>
+
+
+
+<div class="insta-comments-overlay" id="create-feed-post-overlay"></div>
+<div class="instagram-sec premium-post box-shadow-credits" id="create-feed-post">
+    <div class="insta-sec-heading gradient18">
+        <div class="insta-sec-head-content">
+            <a href="javascript:;"> <img src="<?= $sm['user']['profile_photo']; ?>" class="insta-profile-img border-white-2px" /> </a>
+            <div class="insta-sec-head-inner" style="cursor: pointer;">
+                <h6 class="text-white"><?= $sm['lang'][918]['text']; ?></h6>
+                <p class="text-white"><?= $sm['lang'][919]['text']; ?></p>
+            </div>
+        </div>
+				<button class="moreDropdown btn btn--ico box-shadow-low bg-white" type="button" href="javascript:;" onclick="closeUploadFGFeed()"><svg xmlns="http://www.w3.org/2000/svg" width="70%" height="70%" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>    	                  </button>        
+    </div>
+    <div id="upload-feed-div">
+        <div id="preview-upload-image-feed"></div>
+    </div>
+    <div class="premium-post-label" onclick="uploadFeedMedia()" id="upload-feed-image">
+					<center><svg aria-label="" color="#262626" fill="#262626" height="120" role="img" viewBox="0 0 97.6 77.3" width="96"><path d="M16.3 24h.3c2.8-.2 4.9-2.6 4.8-5.4-.2-2.8-2.6-4.9-5.4-4.8s-4.9 2.6-4.8 5.4c.1 2.7 2.4 4.8 5.1 4.8zm-2.4-7.2c.5-.6 1.3-1 2.1-1h.2c1.7 0 3.1 1.4 3.1 3.1 0 1.7-1.4 3.1-3.1 3.1-1.7 0-3.1-1.4-3.1-3.1 0-.8.3-1.5.8-2.1z" fill="currentColor"></path><path d="M84.7 18.4L58 16.9l-.2-3c-.3-5.7-5.2-10.1-11-9.8L12.9 6c-5.7.3-10.1 5.3-9.8 11L5 51v.8c.7 5.2 5.1 9.1 10.3 9.1h.6l21.7-1.2v.6c-.3 5.7 4 10.7 9.8 11l34 2h.6c5.5 0 10.1-4.3 10.4-9.8l2-34c.4-5.8-4-10.7-9.7-11.1zM7.2 10.8C8.7 9.1 10.8 8.1 13 8l34-1.9c4.6-.3 8.6 3.3 8.9 7.9l.2 2.8-5.3-.3c-5.7-.3-10.7 4-11 9.8l-.6 9.5-9.5 10.7c-.2.3-.6.4-1 .5-.4 0-.7-.1-1-.4l-7.8-7c-1.4-1.3-3.5-1.1-4.8.3L7 49 5.2 17c-.2-2.3.6-4.5 2-6.2zm8.7 48c-4.3.2-8.1-2.8-8.8-7.1l9.4-10.5c.2-.3.6-.4 1-.5.4 0 .7.1 1 .4l7.8 7c.7.6 1.6.9 2.5.9.9 0 1.7-.5 2.3-1.1l7.8-8.8-1.1 18.6-21.9 1.1zm76.5-29.5l-2 34c-.3 4.6-4.3 8.2-8.9 7.9l-34-2c-4.6-.3-8.2-4.3-7.9-8.9l2-34c.3-4.4 3.9-7.9 8.4-7.9h.5l34 2c4.7.3 8.2 4.3 7.9 8.9z" fill="currentColor"></path><path d="M78.2 41.6L61.3 30.5c-2.1-1.4-4.9-.8-6.2 1.3-.4.7-.7 1.4-.7 2.2l-1.2 20.1c-.1 2.5 1.7 4.6 4.2 4.8h.3c.7 0 1.4-.2 2-.5l18-9c2.2-1.1 3.1-3.8 2-6-.4-.7-.9-1.3-1.5-1.8zm-1.4 6l-18 9c-.4.2-.8.3-1.3.3-.4 0-.9-.2-1.2-.4-.7-.5-1.2-1.3-1.1-2.2l1.2-20.1c.1-.9.6-1.7 1.4-2.1.8-.4 1.7-.3 2.5.1L77 43.3c1.2.8 1.5 2.3.7 3.4-.2.4-.5.7-.9.9z" fill="currentColor"></path></svg>
+						</center>
+						<p style="text-align: center;"><?= $sm['lang'][920]['text']; ?></p>
+    </div>
+    <div class="insta-sec-footer-wrap">
+        <div class="insta-sec-footer">
+					<div class="new-comment">
+						<small></small>
+						<textarea id="postMessage" placeholder="<?= $sm['lang'][921]['text']; ?>" style="padding-left: 10px;"></textarea>
+						<select id="postType">
+							<option value="Public"><?= $sm['lang'][926]['text']; ?></option>						
+							<option value="Private"><?= $sm['lang'][927]['text']; ?></option>
+						</select>													
+					</div>
+				</div>
+			</div>
+    <div class="insta-sec-heading" style="background:#fff">
+        <div class="insta-sec-head-content" style="margin-bottom:15px">
+            <div class="insta-sec-head-inner" onclick="createFeedPost()" style="cursor: pointer;">
+                <h6 style="color: #333;"><?= $sm['lang'][922]['text']; ?><svg style="position: absolute;top:18px;margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></h6>
+            </div>
+        </div>
+    </div>    
+</div>
+
+
+<div id="feed-content"></div>
+
+<div class="insta-comments-overlay"></div>
+<div class="insta-comments-image">
+	<div id="feed-comment-media" style="background-size: cover;background-repeat: no-repeat !important;background-position: top center !important;height:100%;overflow:hidden"></div>
+</div>
+<div class="insta-comments" >
+
+  <div class="insta-comments-inner">
+    <div class="comments-header">
+      <button type="button" class="arrow-back" onclick="closeFeedComments()">
+        <svg aria-label="Back" class="_8-yf5" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24">
+          <path d="M21 17.502a.997.997 0
+          01-.707-.293L12 8.913l-8.293
+          8.296a1 1 0
+          11-1.414-1.414l9-9.004a1.03
+          1.03 0 011.414 0l9 9.004A1 1
+          0 0121 17.502z"></path>
+        </svg>
+      </button>
+      <span>Comments</span>
+      <button type="button" class="messanger-btn" >
+        <svg aria-label="Share Post" class="_8-yf5" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24" style="display: none;">
+          <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line>
+          <polygon fill="none" points="11.698 20.334 22
+                                                  3.001 2 3.001 9.218 10.084
+                                                  11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon>
+        </svg>
+      </button>
+
+    </div>
+    <div class="comment-message">
+      <div class="comment-like-wrap post-content">
+        <div class="comment-wrap">
+          <a href="javascript:;" class="comment-img">
+            <img src="" id="feed-comment-photo" style="object-fit: cover;" alt=""></a>
+            <div class="comment-content">
+            <p id="feed-comment"></p>
+            <div class="comment-link">
+              <a class="time-ago" id="feed-comment-time"  href="javscript:;"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul id="feed-comments">
+
+      </ul>
+    </div>
+    <div class="comment-footer">
+      <img src="<?= $sm['user']['profile_photo']; ?>" class="insta-profile-img" alt="">
+      <form method="POST" id="post-comment">
+        <input type="hidden" id="feedID" />
+        <textarea class="box-shadow-credits" id="comment-write" placeholder="Write your comment..." autocomplete="off" autocorrect="off" rows="1"></textarea>
+        <button type="submit" id="comment-btn" style="font-size:15px;font-weight: bold;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h7"/></svg></button>
+      </form>
+    </div>
+  </div>
+</div>
+	
+
+
+<?php if($sm['theme']['design_style_wide']['val'] == 'Yes'){ ?>
+	<div class="col s2 real" style="position: relative;">
+		<?php 
+			if($sm['plugins']['adsWeb']['enabled'] == 'Yes' && $sm['plugins']['adsWeb']['enable_160x600'] == "Yes"){
+		    if($sm['plugins']['adsWeb']['160x600'] == '[ADSMANAGER]'){
+		        $sm['plugins']['adsWeb']['160x600'] = getAD('160x600');
+		    } 			 
+				echo '<div class="ad-zone-vertical" style="margin-left:79px;">'.$sm['plugins']['adsWeb']['160x600'].'</div>';
+			}
+		?>	
+	</div>
+<?php }?>	            
+

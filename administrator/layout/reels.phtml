@@ -1,0 +1,492 @@
+<?php
+global $adminUrl;
+  if($sm['admin_ajax'] == false){
+    header('Location:'.$sm['config']['site_url'].'index.php?page=admin');
+  }
+?>
+<script>
+  aurl = 'reels';
+  currentMenu = 'reels';
+  currentMenuCollapse = ''; 
+</script>
+<!-- SECTION CONTENT -->
+<div class="container-fluid page__container" id="postContainer" style="padding-top:25px;min-height: 800px ">
+  <div class="card-group" id="globalResult" >
+      <div class="card card-body text-center">
+          <div class="d-flex flex-row align-items-center">
+              <div class="card-header__title m-0">Total Reels</div>
+              <div class="text-amount ml-auto font16"><?= selectC('reels',''); ?></div>
+          </div>
+      </div>
+      <div class="card card-body text-center">
+          <div class="d-flex flex-row align-items-center">
+              <div class="card-header__title m-0">Total views</div>
+              <div class="text-amount ml-auto font16"><?= selectSum('reels','viewed'); ?></div>
+          </div>
+      </div>      
+      <div class="card card-body text-center">
+          <div class="d-flex flex-row align-items-center">
+              <div class="card-header__title m-0">Total likes</div>
+              <div class="text-amount ml-auto font16"><?= selectSum('reels','likes'); ?></div>
+          </div>
+      </div> 
+      <div class="card card-body text-center">
+          <div class="d-flex flex-row align-items-center">
+              <div class="card-header__title m-0">Total purchases</div>
+              <div class="text-amount ml-auto font16"><?= selectSum('reels','purchased'); ?></div>
+          </div>
+      </div>                                                                     
+  </div>
+
+  <div class="card card-form d-flex flex-column flex-sm-row" >
+      <div class="card-form__body card-body-form-group flex">
+          <div class="row">
+              <div class="col-sm-6" >
+                  <div class="form-group">
+                      <label for="filter_id">Search By User ID</label>
+                      <input id="filter_id" type="search" data-sfpost="search" class="form-control" placeholder="Search by user ID">
+                  </div>
+              </div>
+              <div class="col-sm-3">
+                  <div class="form-group">
+                      <label for="filter_status">Order by</label><br>
+                      <select id="filter_status" data-sfpost="status" class="custom-select">
+                          <option value="latest">Latest first</option>
+                          <option value="viewed">Most viewed</option>                          
+                          <option value="likes">Most liked</option>
+                          <option value="purchased">Most purchased</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-sm-3">
+                  <div class="form-group">
+                      <label for="filter_visible">Status</label><br>
+                      <select id="filter_visible" data-sfpost="visible" class="custom-select">
+                          <option value="all">All Reels</option>
+                          <option value="1">Approved</option>
+                          <option value="0">Pending Review</option>
+                          <option value="2">Rejected</option>
+                      </select>
+                  </div>
+              </div>                                        
+          </div>
+      </div>
+      <button class="btn bg-white border-left border-top border-top-sm-0 rounded-top-0 rounded-top-sm rounded-left-sm-0" data-update-reel-search style="outline: none">
+        <i class="material-icons text-primary icon-30pt" data-update-reel-search-btn>refresh</i></button>
+  </div>
+
+  <div class="card card-form  flex-column flex-sm-row divHidden" data-search-result style="height: 60px">
+      <div class="card-form__body card-body-form-group flex">
+          <div class="row">
+              <div class="col-sm-12">
+                  <div style="position: absolute;right:25px;display: none" id="searchreelByUserActionDiv">
+                    <div class="avatar avatar-sm" id="searchresultUserIcon" style="width:34px;height:34px;display: none;margin-right: 5px;margin-top: -5px">
+                        <img src="" id="searchreelByUserPhoto" class="avatar-img rounded" style="border-radius:50%!important;">
+                    </div>                       
+                    <label>Add reel to <span id="searchreelByIdName"> </span></label>
+                  </div>  
+                  <div class="form-group">
+                      <label id="searching"><i class="material-icons mr-3">search</i> Searching...</label>
+
+                      <label id="searchComplete" style="display: none">
+                        <div style="display: inline-table;width: 40px;">                       
+                          <i class="material-icons mr-3" >search</i>
+                        </div>
+                        Search result <span id="totalResult"></span> reels</label>                    
+                  </div>
+                
+              </div>                                                 
+          </div>
+      </div>
+
+      <button class="btn bg-white border-left border-top border-top-sm-0 rounded-top-0 rounded-top-sm rounded-left-sm-0" id="searchreelByIdUpload" style="outline: none;display: none">
+        <i class="material-icons text-dark icon-30pt">upload</i></button>   
+      <button class="btn bg-white border-left border-top border-top-sm-0 rounded-top-0 rounded-top-sm rounded-left-sm-0" onclick="goTo('reels')" id="searchreelByIdClose" style="outline: none;display: none">
+        <i class="material-icons text-dark icon-30pt">close</i></button>               
+  </div>  
+
+
+  <div class="card card-form  flex-column flex-sm-row divHidden" data-selected-data style="display: none">
+      <div class="card-form__body card-body-form-group flex">
+          <div class="row">
+              <div class="col-sm-12">
+                  <div class="form-group">
+                      <label for="filter_name">Selected <strong data-selected-data-total></strong> reels</label>                    
+                  </div>
+                  <div class="avatar-group" data-checkedData style="position: absolute;top: -7px;left: 180px">
+
+
+                  </div>
+              </div>                                                 
+          </div>
+      </div>
+
+      <div class="dropdown">
+          <button class="btn bg-white border-left border-top border-top-sm-0 rounded-top-0 rounded-top-sm rounded-left-sm-0" data-toggle="dropdown" data-caret="false" style="border-radius:0px;background: #fff;width: 100%;height: 100%">
+             <i class="material-icons icon-30pt" style="color: #000">more_horiz</i>
+           </button> 
+          <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="javascript:;" onclick="adminBulkAction('approve','reel');" style="font-size: 13px;">
+                Approve <span data-selected-data-total></span> reel objects
+              </a>
+             
+              <div class="dropdown-divider"></div>                            
+              <a class="dropdown-item" href="javascript:;" onclick="adminBulkAction('delete','reel');" style="font-size: 13px;color: #b50000">
+                Delete <span data-selected-data-total></span> reel objects
+              </a>                                                 
+          </div>
+      </div>      
+  </div>
+
+  <div class="card card-form">
+      <div class="row no-gutters">
+          <div class="col-lg-12 col-md-12 col-sm-12 card-form__body" style="min-height: 700px">              
+              <div class="table-responsive border-bottom" data-search data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]' style="min-height: 700px" data-table="result">   
+
+
+                  <table class="table mb-0 thead-border-top-0" style="">
+                      <thead>
+                          <tr style="background: #fff">
+                              <th style="width: 120px;">Reel</th>                              
+                              <th style="width: 200px;">Caption <small>(editable)</small></th>
+                              <th style="width: 60px;">Price</th>
+                              <th style="width: 100px;">Status</th>
+                              <th style="width: 220px;">Views / Likes / Purchases</th>                              
+                              <th style="width: 150px;">Date</th>                            
+                              <th style="width: 200px;" id="userCol">User</th>
+                              <th style="width: 250px;">Rekognition</th>
+                              <th style="width: 24px;"></th>
+                          </tr>
+                      </thead>
+
+                      <tbody class="list" id="dataTable" style="overflow-y: scroll">
+                      </tbody>
+                  </table>
+              </div>
+ 
+              <div class="card-footer text-center">
+                <span class="text-muted">Showing </span>
+                <span data-current-view></span>
+                <span class="text-muted">of </span>
+                <span data-current-total-users></span> 
+                <span class="text-muted">results</span>
+                <a href="#results" data-nextPage-search>
+                  <i class="material-icons icon-muted float-right">arrow_forward</i>
+                </a>
+                <a href="#results" data-backPage-search style="display: none">
+
+                  <i class="material-icons icon-muted float-left" >arrow_backward</i>
+                </a>
+              </div> 
+
+          </div>                    
+      </div>
+  </div>    
+
+  <div class="v-wrapper">
+    <a href="#" class="btn btn-light ml-3" data-close-video><i class="material-icons mr-1">close</i> Close video</a>
+    <video id="playVideo" controls >
+      <source />
+    </video>
+  </div>
+</div>
+
+
+<style>
+    /* Reel Status Badge Styles - Remove all borders */
+    #dataTable .badge-success,
+    #dataTable [id^="reelStatus"].badge-success,
+    .badge-success[id^="reelStatus"],
+    span.badge-success[id^="reelStatus"] {
+        background-color: #28a745 !important;
+        border: none !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        border-color: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
+        color: #fff !important;
+    }
+    #dataTable .badge-warning,
+    #dataTable [id^="reelStatus"].badge-warning,
+    .badge-warning[id^="reelStatus"],
+    span.badge-warning[id^="reelStatus"] {
+        background-color: #ffc107 !important;
+        border: none !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        border-color: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
+        color: #000 !important;
+    }
+</style>
+<script>
+    var viewer;
+    var dataPerPage = 50;
+    var viewedData = 0;
+    var lastPageSearch = 0;
+    var search = {};
+    var searchData = [];
+    var checkedData = [];    
+    search['action'] = 'search_reel';
+
+    $('[data-sfpost]').each(function(){
+        var current = $(this).attr('data-sfpost');
+        search[current] = $(this).val();
+    });
+    $('[data-sfpost]').change(function(){
+        var current = $(this).attr('data-sfpost');
+        search[current] = $(this).val();
+        if($(this).val() == 'story'){
+          $('#reUploadStoryBulk').show();
+        } else {
+          $('#reUploadStoryBulk').hide();
+        }        
+    });
+
+    console.log(search);
+
+
+    function showReelAdmin(image){
+      $('#loadImage').attr('src',image);
+      $('#loadImageHref').attr('href',image);
+      var divWidth = $(".showImageClass").width();
+      var divHeight = $(".showImageClass").height();
+      $('#loadImage').css('max-width',divWidth+'px');  
+      $('#goToVerificationPlugin').hide();
+    }
+    //next result page
+     $('[data-nextPage-search]').click(function(e){
+    
+      $('#customCheckAll').prop("checked",false);         
+        if(searchData.length > viewedData){
+            $('#dataTable').html('');
+            var maxResult = viewedData+dataPerPage;
+
+            lastPageSearch = dataPerPage;
+            if(searchData.length <= maxResult ){
+                maxResult = searchData.length;
+                lastPageSearch = maxResult;
+            }                    
+            for (i = viewedData; i < maxResult; i++) {
+              viewedData++;
+              $('#dataTable').append(searchData[i]);
+              
+
+              
+            }
+            $('[data-current-view]').text(viewedData);  
+            $('[data-backPage-search]').fadeIn(); 
+            viewer = new slimLightbox();
+            checkIfChecked();  
+            tableDropdownEffect();               
+        }                
+     });  
+
+
+     //back page
+     $('[data-backPage-search]').click(function(e){
+        
+        $('#dataTable').html('');
+        $('#customCheckAll').prop("checked",false);
+        var firstBack = dataPerPage*2;
+        viewedData = viewedData-firstBack;
+        console.log(viewedData);
+        if(viewedData <= 0){
+            $('[data-backPage-search]').hide();
+            viewedData = 0;
+        } 
+        var maxResult = viewedData+dataPerPage;
+        if(searchData.length <= maxResult ){
+            maxResult = searchData.length;
+        }                                
+        for (i = viewedData; i < maxResult; i++) {
+          viewedData++;
+          $('#dataTable').append(searchData[i]);
+        }
+        $('[data-current-view]').text(viewedData); 
+        viewer = new slimLightbox();
+        checkIfChecked();  
+        tableDropdownEffect();                               
+     });  
+       
+
+    //load data
+    function loadDataReel(){
+      $('#dataTable').css('opacity','0.5');
+      
+      $.ajax({
+        url: request_source()+'/admin.php', 
+        data: search,  
+        type: "post",
+        dataType: 'JSON',        
+        success: function(response) {
+            $('#searchresultUserIcon').hide();
+            $('#searchreelByUserAction').hide();
+            $('#searchreelByUserActionDiv').hide();  
+            $('#searchreelByIdClose').hide();
+            $('#searchreelByIdUpload').hide();
+
+            $('#dataTable').html('');
+            $('#dataTable').css('opacity','1');
+            $('[data-search]').show();
+            $('[data-selected-data]').hide();
+            $('#customCheckAll').prop("checked",false);
+
+            if(response['searchUserId'] != ''){
+              console.log(response['searchUserPhoto']);
+              $('#searchreelByUserPhoto').attr('src',response['searchUserPhoto']);
+              $('#searchreelByIdName').html(response['searchUserName']);
+              $('#searchresultUserIcon').show();
+              $('#searchreelByUserAction').show();
+              $('#searchreelByUserActionDiv').show();
+              $('#searchreelByIdClose').show();
+              $('#searchreelByIdUpload').show();
+              $('[data-current-reel-user]').attr('data-current-reel-user',response['searchUserId']);
+              var onclick = 'adminUploadReel('+response['searchUserId']+','+response['searchGender']+',"'+response['searchUserPhoto']+'")';
+              $('#searchreelByIdUpload').attr('onclick',onclick);              
+            }
+
+            setTimeout(function(){
+              checkedData = [];
+            },1500);
+            searchData = response['data'];
+
+            for (i = 0; i < dataPerPage; i++) {
+              viewedData++; 
+              $('#dataTable').append(response['data'][i]);
+            }
+            $('#totalResult').text(response.total);
+
+            if(response['total'] < 49){
+              viewedData = response['total'];
+            }
+            var image = $('[data-reel-i=0]').attr('data-reel-src');
+            showReelAdmin(image);          
+            if(response['total'] == 0){
+               $('[data-table="result"]').hide();
+            }
+            viewer = new slimLightbox();
+            $('#searching').hide();
+            $('#searchComplete').show();
+            $('[data-current-total-users]').text(response.total);
+            $('[data-current-view]').text(viewedData);
+
+            tableDropdownEffect();                        
+        },
+      });
+    }
+
+   
+
+    $('[data-update-reel-search]').click(function(){
+        $('#dataTable').css('opacity','0.5');
+        checkedData = [];
+        $('#customCheckAll').prop("checked",false);
+        $('[data-selected-data]').hide();
+        $('#searching').show();
+        $('#searchComplete').hide();        
+        $.ajax({
+            url: request_source()+'/admin.php', 
+            data: search,  
+            type: "post",
+            dataType: 'JSON',    
+            beforeSend: function(){
+              $('[data-update-reel-search-btn]').addClass('is-loading');
+            },    
+            success: function(response) {
+              $('#searchresultUserIcon').hide();
+              $('#searchreelByUserAction').hide();
+              $('#searchreelByUserActionDiv').hide();
+              $('#searchreelByIdClose').hide();
+              $('#searchreelByIdUpload').hide();
+
+              $('#dataTable').css('opacity','1');
+              $('[data-search]').show();
+              $('#dataTable').html('');
+              $('#loadImage').attr('src','');
+              $('#loadImageHref').attr('href','');
+
+              if(response['searchUserId'] != ''){
+                console.log(response['searchUserPhoto']);
+                $('#searchreelByUserPhoto').attr('src',response['searchUserPhoto']);
+                $('#searchreelByIdName').html(response['searchUserName']);
+                $('#searchresultUserIcon').show();
+                $('#searchreelByUserAction').show();
+                $('#searchreelByUserActionDiv').show();
+                $('#searchreelByIdClose').show();
+                $('#searchreelByIdUpload').show();
+                var onclick = 'adminUploadReel('+response['searchUserId']+','+response['searchGender']+',"'+response['searchUserPhoto']+'")';
+                $('#searchreelByIdUpload').attr('onclick',onclick); 
+                $('[data-current-reel-user]').attr('data-current-reel-user',response['searchUserId']);
+              }
+              searchData = response['data'];
+              $('[data-update-reel-search-btn]').removeClass('is-loading');
+              viewedData = 0;
+              for (i = 0; i < dataPerPage; i++) {
+                viewedData++; 
+                $('#dataTable').append(response['data'][i]);
+              }
+              $('#totalResult').text(response.total);
+
+              if(response['total'] < 49){
+                viewedData = response['total'];
+              }
+              if(response['total'] == 0){
+                 $('[data-table="result"]').hide();
+              }
+              $('#searching').hide();
+              $('#searchComplete').show();
+              $('[data-current-total-users]').text(response.total);
+              $('[data-current-view]').text(viewedData);  
+              var image = $('[data-reel-i=0]').attr('data-reel-src');
+              showReelAdmin(image);
+              viewer = new slimLightbox();   
+              tableDropdownEffect();
+            },
+        });
+    })
+
+    //play video
+    function playVideo(video){    
+      var $video = $('#playVideo'),
+      videoSrc = $('source', $video).attr('src', video);
+      $video[0].load();
+      $('.v-wrapper').fadeIn();
+      $video[0].play();
+      $('html,body').scrollTop(0);
+    } 
+
+    //close video
+
+    $('[data-close-video]').click(function(e){
+      e.preventDefault();
+      var $video = $('#playVideo');
+      $video[0].pause();
+      $('.v-wrapper').hide();
+    });  
+    fullHeightElement('.v-wrapper',60);
+    fullHeightElement('#playVideo',60);
+    
+    document.onkeydown = checkKey;
+
+    function checkKey(e) {
+        e = e || window.event;
+        if (e.keyCode == '27') {
+          $('[data-close-video]').click();      
+        }    
+    }  
+
+    function searchReelById(id){
+      $('#filter_id').val(id);
+      search['search'] = id;
+      loadDataReel();
+      $('html,body').scrollTop(0);
+    }
+    
+    //loaddata
+    loadDataReel();
+</script>
+
+

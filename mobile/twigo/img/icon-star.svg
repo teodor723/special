@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.706" height="23.575" viewBox="0 0 24.706 23.575">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Star" d="M24.148,10.749a1.832,1.832,0,0,0-1.02-3.129l-6.112-.884a.367.367,0,0,1-.277-.2L14.006,1.023a1.846,1.846,0,0,0-3.305,0L7.967,6.536a.367.367,0,0,1-.277.2l-6.112.885a1.832,1.832,0,0,0-1.02,3.129l4.422,4.292a.366.366,0,0,1,.106.325L4.042,21.428a1.841,1.841,0,0,0,2.672,1.934L12.181,20.5a.37.37,0,0,1,.343,0l5.467,2.862a1.872,1.872,0,0,0,.859.211,1.849,1.849,0,0,0,1.082-.352,1.821,1.821,0,0,0,.733-1.794L19.62,15.366a.366.366,0,0,1,.106-.325Z" transform="translate(0 0)" stroke="#fff" stroke-linecap="square" stroke-linejoin="round" stroke-width="1"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="1.243" y1="-0.012" x2="-0.157" y2="1.119" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#00ca9d"/>
+      <stop offset="0.687" stop-color="#aeefaa"/>
+      <stop offset="1" stop-color="#fbffc1"/>
+    </linearGradient>
+  </defs>
+  <g id="icons_star" data-name="icons/star" clip-path="url(#clip-path)">
+    <g id="color_primary" data-name="color/primary" transform="translate(-4.297 -3.075)">
+      <g id="color_Green" data-name="color/Green" stroke="#fff" stroke-linecap="square" stroke-linejoin="round" stroke-width="1" fill="url(#linear-gradient)">
+        <rect width="32.226" height="30.748" stroke="none"/>
+        <rect x="0.5" y="0.5" width="31.226" height="29.748" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

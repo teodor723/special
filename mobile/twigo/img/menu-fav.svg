@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="23" height="23.001" viewBox="0 0 23 23.001">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Star" d="M22.48,10.488a1.832,1.832,0,0,0,.434-1.835,1.724,1.724,0,0,0-1.384-1.218l-5.69-.862a.343.343,0,0,1-.258-.2L13.039,1A1.685,1.685,0,0,0,9.962,1L7.417,6.377a.343.343,0,0,1-.258.2l-5.69.864A1.724,1.724,0,0,0,.085,8.654,1.832,1.832,0,0,0,.52,10.489l4.117,4.187a.368.368,0,0,1,.1.317l-.972,5.913a1.817,1.817,0,0,0,.682,1.751,1.643,1.643,0,0,0,1.805.137L11.34,20a.33.33,0,0,1,.319,0l5.089,2.792a1.651,1.651,0,0,0,1.807-.138,1.817,1.817,0,0,0,.682-1.751l-.972-5.913a.368.368,0,0,1,.1-.317Z" transform="translate(4 3)" stroke="#c1c0c9" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g transform="translate(-4 -3)" clip-path="url(#clip-path)">
+    <g id="color_primary" data-name="color/primary">
+      <g id="color_Title-text-light-gray" data-name="color/Title-text-light-gray" fill="#dad9e2" stroke="#c1c0c9" stroke-width="1">
+        <rect width="30" height="30" stroke="none"/>
+        <rect x="0.5" y="0.5" width="29" height="29" fill="none"/>
+      </g>
+      <g id="color_Title-text-light-gray-2" data-name="color/Title-text-light-gray" fill="#c1c0c9" stroke="#c1c0c9" stroke-width="1">
+        <rect width="30" height="30" stroke="none"/>
+        <rect x="0.5" y="0.5" width="29" height="29" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,46 @@
+<div class="modal profile-modal transparent">
+<div class="page overlay-page visible" style="z-index: 600;">
+    <div data-view-id="561">
+        <div class="layout layout--centered-content">
+            <div class="layout__content layout__content--vpadded layout__content--hpadded">
+                <center><div class="cta-box__header">
+
+                    <div class="brick" style="height:85px;width: 85px;">
+                        <div class="brick__image box-shadow-credits" ng-class="showStory ? 'storyOn' : ''" style="background-image: url('{{me.profile_photo}}');border-radius: 70px"></div>
+                    </div>                    
+                    <br><br>{{lang[595].text}} </div>
+                <div class="cta-box__content" style="margin-bottom: 25px;">{{lang[602].text}}</div></center>
+                <div class="sharing-media" ng-click="uploadVerificationImage()">
+                    <div class="sharing-media__multimedia vivify fadeIn delay-350">
+                        <div class="multimedia">
+                            <div class="multimedia__image box-shadow-credits " style="background-image: url('{{verificationImage}}');border:3px solid #333"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layout__content layout__content--vpadded layout__content--hpadded vivify fadeIn delay-450" style="margin-top:0">
+                <div class="cta-box">
+                    <div class="cta-box__header">{{lang[597].text}} </div>
+                    <div class="cta-box__content" style="margin-bottom: 15px;">{{lang[598].text}}</div>                    
+                    <div class="cta-box__buttons cta-box__buttons--wide">
+
+                    </div>
+                    <br>
+                    <div class="cta-box__buttons">
+                        <div class="button-wrapper">
+                            <div class="button-wrapper__item">
+                                <button class="inline-button" style="margin-bottom:25px;font-weight: bold;" ng-click="uploadVerificationImage();">
+                                    <span class="inline-button__text">{{alang[1].text}}</span>
+                                </button>                                
+                            	<button class="inline-button js-dismiss" ng-click="closeVerificationModal();">
+                            		<span class="inline-button__text">{{alang[2].text}}</span>
+                            	</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,167 @@
+<script>
+	url = "live-discover";
+</script>
+
+<?php if($sm['theme']['design_style_wide']['val'] == 'Yes'){ ?>
+	<div class="col s2 real padding-right-0">
+	<?php 
+		if($sm['plugins']['adsWeb']['enabled'] == 'Yes' && $sm['plugins']['adsWeb']['enable_160x600'] == "Yes"){ 
+			echo '<div class="ad-zone-vertical">'.$sm['plugins']['adsWeb']['160x600'].'</div>';
+		}
+	?>		
+	</div>
+	<div class="col s8 real mainContentBorderColor"  id="site-content" style="background: <?=$sm['theme']['wall_bg_discover']['val']; ?>;">
+<?php } else { ?>
+	<div class="col s8 real fix-width-content mainContentBorderColor padding-right-0" style="background: <?=$sm['theme']['wall_bg_discover']['val']; ?>;" id="site-content">
+<?php } ?>	
+<div class="main_player">
+  <div class="mp-wrap">
+    <div class="mp-remote-vid">
+
+	    <div class="live-mingle-header display-none">
+				<nav class="nav-swipe" >
+				    <button class="button-circular live-mingle-btn vivify popIn <?=$sm['theme']['icon_nolike_bg_discover']['val']; ?>" style="background: <?=$sm['theme']['icon_nolike_bg_discover']['val']; ?>" onclick="likeLiveMingleUser(0)">
+				        <svg class="icon" viewBox="0 0 60 60">
+				            <polygon fill="<?=$sm['theme']['icon_nolike_color_discover']['val']; ?>" points="45.82 16.12 43.7 14 29.91 27.79 16.12 14 14 16.12 27.79 29.91 14 43.7 16.12 45.82 29.91 32.03 43.7 45.82 45.82 43.7 32.03 29.91"></polygon>
+				        </svg>
+				    </button>
+				    <button class="button-circular live-mingle-btn vivify popIn <?=$sm['theme']['icon_like_bg_discover']['val']; ?>" style="background: <?=$sm['theme']['icon_like_bg_discover']['val']; ?>"  onclick="likeLiveMingleUser(1)">
+						<svg fill="<?=$sm['theme']['icon_like_color_discover']['val']; ?>" viewBox="0 0 32 32" width="100%" height="100%"><path d="M16 12.06a3.85 3.85 0 0 0-3.12-1.61 3.94 3.94 0 0 0-3.88 4c0 3.6 4.69 8.13 7 8.13 2.31 0 7-4.53 7-8.14 0-2.2-1.74-3.99-3.88-3.99-1.24 0-2.4.6-3.12 1.61z"></path></svg>
+				    </button>
+				</nav>
+			</div>  
+
+      <div class="mrv-video">
+        <video id="remoteVideo" class="display-none" autoplay="autoplay" playsinline="playsinline" loop muted ></video>
+        <div id="videoLoader">
+        	<img src="<?= randomPhotoUser($sm['user']['looking']); ?>" id="randomImageLoader" class="randomImagePreview">
+        </div>        
+
+        <div id="water_mrk" style="background: url(<?= $sm['config']['logo']; ?>) center/contain no-repeat;">
+        </div>
+
+        <div class="mrvv-center" id="liveMNC">
+        	<div class="spinner-live-mingle live-mingle-center"></div>
+          <div class="rlt-info-message display-block" id="liveMingleNotification"><?= $sm['lang'][890]['text']; ?></div>
+        </div>
+
+      </div>
+
+      <div class="mrv-cam-nav">
+        <div class="gndr_wrap mcn-wrap trns" onclick="toggleMingleFilter(this);">
+          <span id="gndr_sel"><?= $sm['lang'][910]['text']; ?>:</span>
+          <div class="mcnb-list trns">
+		        <span class="all-gndr" id="mingleFilterText">
+		          <?= $sm['lang'][389]['text']; ?>
+		        </span>
+            <div class="mcnb-dropdown">
+              <ul id="gndr_lst live-mingle-ul">
+              	<?php 
+              	foreach ($sm['genders'] as $g) { ?>
+                <li onclick="filterSearchMingle(<?= $g['id']; ?>,'<?= $g['text']; ?>')">
+                  <?= $g['text']; ?>
+                </li>	              		
+              	<?php } ?>
+              </ul>
+            </div>
+            <em class="mcnbl-cls ci ci-close"></em>
+          </div>
+        </div>        
+      </div>
+
+      <div class="mrv-mob-top">
+        <div class="mmt-select">
+          <div id="gndr_sel_mob" class="round-icon">
+            <span class="all_gndr"></span>
+          </div>
+          <div id="cntr_sel_mob" class="round-icon">
+            <span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mp-chat-wrap">
+      <div class="cw-local-vid live-mingle-local-vid">
+        <div class="clv-video">
+          <img class="live-mingle-local-vid-img" src="<?= $sm['user']['profile_photo_big']; ?>" id="localVideoPoster">
+          <video id="localVideo" autoplay="autoplay" src="" muted  loop playsinline="playsinline"></video>
+        </div>
+        <div class="clv-tokens" onclick="goTo('credits');">
+          <em class="gem-icon"></em>
+          <span class="rlt-token-balance"><?= $sm['user']['credits']; ?></span>
+          <em class="ci ci-plus-1 get-tokens trns"></em>
+        </div>
+        <div class="clv-control">
+          <span id="clv-toggle" class="ci ci-dots"></span>
+          <ul class="clvc-list">
+            <li id="video_button" class="off">
+              <em class="ci ci-video"></em>
+            </li>
+            <li id="audio_button" class="off">
+              <em class="ci ci-mic-cs"></em>
+            </li>
+            <li></li>
+            <li></li>
+            <li></li>                        
+          </ul>
+        </div>
+      </div>
+				<div class="chat-body display-none" id="mingleChatBody">
+				    <div class="chat-head">
+				        <div class="rv_head display-inline-block">
+				            <div id="rv_info">
+				            		<div class="profile-photo avatar box-shadow live-mingle-photo" id="liveMinglePhoto" ></div>
+				                <div class="flag live-mingle-name" id="liveMingleName"></div>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="msg_wrap">
+				        <div class="rlt-chat-container" id="mingleChatContainer"> 
+				        </div>
+				    </div>
+				    <div class="chat_input display-none" id="mingleChatInput">
+				        <form id="msg_form" class="box-shadow-credits" onsubmit="liveMingleChat(); return false;" autocomplete="off" novalidate="">
+				            <div class="msg-input">
+				                <input type="text" id="chatLiveMingle" class="chat-msg" placeholder="<?= $sm['lang'][89]['text']; ?>">
+				            </div>
+				            <button id="send_btn" class="btn trns gradient5 margin-0" type="submit"><?= $sm['lang'][90]['text']; ?></button>
+				        </form>
+				    </div>
+				</div>
+			</div>
+      <ul class="cw-controls">
+        <li id="cwc-play" class="ci ci-play-1"></li>
+        <li id="cwc-pause" class="ci ci-pause"></li>
+        <li class="mask-btn ci ci-mask-cs"></li>
+        <li class="gift-btn">
+          <div class="gift-box"></div>
+          <div class="gift-timer">
+            <div class="timer-right">
+              <div></div>
+            </div>
+            <div class="timer-left">
+              <div></div>
+            </div>
+          </div>
+        </li>
+        <li class="share-btn ci ci-share"></li>
+        <li class="chat-toggle ci ci-chat-cs"></li>
+      </ul>
+    </div>
+ </div>
+
+<?= getAbsolutePage('footer'); ?>				
+</div> 
+
+<?php if($sm['theme']['design_style_wide']['val'] == 'Yes'){ ?>
+	<div class="col s2 real relative">
+		<?php 
+			if($sm['plugins']['adsWeb']['enabled'] == 'Yes' && $sm['plugins']['adsWeb']['enable_160x600'] == "Yes"){ 
+				echo '<div class="ad-zone-vertical margin-left-80">'.$sm['plugins']['adsWeb']['160x600'].'</div>';
+			}
+		?>	
+	</div>
+<?php }?>	            
+

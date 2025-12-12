@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><?php echo $sm['metasettings']['website_title']; ?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="theme-color" content="#fff">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="<?php echo $sm['metasettings']['description']; ?>">
+<meta name="keywords" content="<?php echo $sm['metasettings']['keywords']; ?>">
+<meta name="author" content="<?php echo $sm['metasettings']['author']; ?>"/>
+<meta name="robots" content="<?php echo $sm['metasettings']['robots']; ?>">
+<link rel="canonical" href="<?php echo $sm['metasettings']['canonical']; ?>">
+<meta property="fb:app_id" content="<?= siteConfig('fb_app_id'); ?>" />
+
+<meta property="og:title" content="<?php echo $sm['metasettings']['og_title']; ?>" />
+<meta property="og:url" content="<?php echo $sm['metasettings']['og_url']; ?>" />
+<meta property="og:image" content="<?= $sm['metasettings']['og_image']; ?>" />
+<meta property="og:description" content="<?php echo $sm['metasettings']['og_description']; ?>" />
+<meta property="og:type" content="<?php echo $sm['metasettings']['og_type']; ?>" />
+<meta property="og:site_name" content="<?php echo $sm['metasettings']['og_site_name']; ?>" />
+
+<meta name="twitter:card" content="<?php echo $sm['metasettings']['twitter_card']; ?>">
+<meta name="twitter:title" content="<?php echo $sm['metasettings']['twitter_title']; ?>">
+<meta name="twitter:description" content="<?php echo $sm['metasettings']['twitter_description']; ?>">
+<meta name="twitter:image" content="<?php echo $sm['metasettings']['twitter_image']; ?>">
+<meta name="twitter:site" content="<?php echo $sm['metasettings']['twitter_site']; ?>">
+<meta name="twitter:creator" content="<?php echo $sm['metasettings']['twitter_creator']; ?>">
+<link rel="icon" type="image/png" href="<?php echo ($_SERVER['SERVER_NAME']=='special-dating.com')?$sm['metasettings']['website_favicon']:getvaluemetax('_domain_favicon',$_SERVER['SERVER_NAME']); ?>" sizes="32x32">
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,500&amp;subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="<?php echo $sm['config']['theme_url']; ?>/css/vendor/sweetalert.css">
+<link rel="stylesheet" href="<?php echo $sm['config']['theme_url_landing']; ?>/css/style.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="<?php echo $sm['config']['theme_url_landing']; ?>/css/custom.css" type="text/css" media="screen, projection" />
+<link href="<?php echo $sm['config']['theme_url']; ?>/css/crossplatform.css" rel="stylesheet" type="text/css" />
+<?php echo $sm['metasettings']['schema_markup']; ?>
+<?php if(!empty($sm['metasettings']['google_analytics_id'])){ ?>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $sm['metasettings']['google_analytics_id']; ?>"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '<?= $sm['metasettings']['google_analytics_id']; ?>');
+        </script>    
+    <?php } ?>
+<?php
+$site_lang = json_encode($sm['lang']);
+$site_config = json_encode($sm['config']);
+$sm['genders'] = siteGenders($_SESSION['lang']);
+echo 
+'<script>
+var url; 
+var site_config = '. $site_config  . ';
+var site_lang = '. $site_lang  . ';
+var current_login_url = "auth";
+
+function request_source(){
+    return \'' . $sm['config']['ajax_path'] . '\';
+}
+function site_title(){
+    return \'' . $sm['config']['title'] . '\';
+}   
+function theme_source(){
+    return \'' . $sm['config']['theme_url'] . '\';
+}
+function site_url(){
+    return \'' . $sm['config']['site_url'] . '\';
+}
+var geolocationKey = "'.$sm['plugins']['settings']['geolocation'].'";
+</script>';
+?>
+<style>
+
+.shado{
+    text-shadow: 0px 3px 2px rgba(0, 0, 0, 0.30);
+}
+	.google-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px 16px;
+      color: #444;
+      font-size: 16px;
+      text-decoration: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+      min-width: 240px;
+    }
+
+    .google-btn:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transform: translateY(-1px);
+    }
+
+    .google-btn img {
+      height: 20px;
+      margin-right: 10px;
+    }
+</style>
+<?php $fonts = getArrayDSelected('font','theme_preset_fonts','where preset = "'.$_SESSION['landingPreset'].'"');
+foreach ($fonts as $font) { 
+    $f = $font['font'];
+    $f = str_replace(' ','+', $f);
+    echo '<link href="https://fonts.googleapis.com/css?family='.$f.'" rel="stylesheet" type="text/css"/>';
+} ?>
+<style id="themeData">
+    <?= getLandingAbsolutePage('styles'); ?>
+</style>
+<script type="text/javascript">
+    function inIframe () {
+        try {
+          return window.self !== window.top;
+        } catch (e) {
+          return true;
+        }
+    }    
+    function detect_device() {
+        var w = window,
+            d = document,
+            e = d.documentElement,
+            g = d.getElementsByTagName('body')[0],
+            x = w.innerWidth || e.clientWidth || g.clientWidth,
+            y = w.innerHeight|| e.clientHeight|| g.clientHeight;    
+        if(x <= 768){
+            window.location= '<?= $sm['config']['site_url']; ?>mobile';
+        }
+    }
+    if(inIframe() !== true){
+        detect_device();
+        window.onresize = function() {
+            var w = window,
+                d = document,
+                e = d.documentElement,
+                g = d.getElementsByTagName('body')[0],
+                x = w.innerWidth || e.clientWidth || g.clientWidth,
+                y = w.innerHeight|| e.clientHeight|| g.clientHeight;    
+            if(x <= 768){
+                window.location= '<?= $sm['config']['site_url']; ?>mobile';   
+            }
+        };    
+    }
+    var current_login_url = "default";
+</script>
+    <?php
+    function getSiteLangsLanding1($start,$finish){
+        global $mysqli,$sm;
+        $ret = '';
+        $query = $mysqli->query("SELECT * FROM languages where visible = 1 ORDER BY id ASC LIMIT $start,$finish");
+        if($query->num_rows > 1) {
+            while($result = $query->fetch_object()){
+                $ret.='<li><a data-lang="'.$result->id.'" href="javascript:;">'.$result->name.'</a></li>';    
+            }
+        }
+        return $ret;    
+    }
+    $sm['genders'] = siteGenders($_SESSION['lang']);
+    $site_config = json_encode($sm['config']);
+    $site_theme = json_encode($sm['landing']);
+    $site_lang = json_encode($sm['lang']);
+    $filter_age = 0;
+    echo 
+    '<script>
+    var url;
+    var mobile = false;
+    var softwareVersion = "'.$sm['settings']['currentVersion'].'";
+    var site_config = '. $site_config  . ';
+    var site_lang = '. $site_lang  . ';
+    var site_theme = '. $site_theme  . ';    
+    function request_source(){
+        return \'' . $sm['config']['ajax_path'] . '\';
+    }
+    function site_title(){
+        return \'' . $sm['config']['title'] . '\';
+    }   
+    function theme_source(){
+        return \'' . $sm['config']['theme_url'] . '\';
+    }
+    function site_url(){
+        return \'' . $sm['config']['site_url'] . '\';
+    }   
+    var current_user_id = 0;
+    var user_name;  
+    </script>';
+    ?>
+
+<?php if(!empty($sm['plugins']['analytics']['ga_id'])){ ?>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $sm['plugins']['analytics']['ga_id']; ?>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '<?= $sm['plugins']['analytics']['ga_id']; ?>');
+    </script>    
+<?php } ?>
+
+<style>
+.avatarBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+img.user {
+  height: 80px;
+  width: 80px;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px #fff;
+  border-radius: 50%;
+  will-change: transform;
+}
+img.user:hover {
+  cursor: pointer;
+  -webkit-animation: bounceOut 0.4s linear;
+          animation: bounceOut 0.4s linear;
+}
+
+@-webkit-keyframes bounceOut {
+  0% {
+    box-shadow: 0 0 0 4px #fff;
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  25% {
+    box-shadow: 0 0 0 1px #fff;
+    opacity: 1;
+    -webkit-transform: scale(0.97);
+            transform: scale(0.97);
+  }
+  50% {
+    box-shadow: 0 0 0 7px #fff;
+    opacity: 1;
+    -webkit-transform: scale(1.01);
+            transform: scale(1.01);
+  }
+  75% {
+    box-shadow: 0 0 0 4px #fff;
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 0 5px #fff;
+    opacity: 1;
+  }
+}
+
+@keyframes bounceOut {
+  0% {
+    box-shadow: 0 0 0 4px #fff;
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  25% {
+    box-shadow: 0 0 0 1px #fff;
+    opacity: 1;
+    -webkit-transform: scale(0.97);
+            transform: scale(0.97);
+  }
+  50% {
+    box-shadow: 0 0 0 7px #fff;
+    opacity: 1;
+    -webkit-transform: scale(1.01);
+            transform: scale(1.01);
+  }
+  75% {
+    box-shadow: 0 0 0 4px #fff;
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 0 5px #fff;
+    opacity: 1;
+  }
+}
+.loginbox-tabset .log-tabs{background: rgba(0, 0, 0, 0.1) !important;opacity: 0.8;}
+.login-section-loginbox{margin-left:0px;}
+</style>
+<?= $sm['plugins']['customHtml']['landing_header']; ?>
+</head>
+<body class="bodyBg <?= $sm['landing']['background_color']['val']; ?>">
+<header id="header" class="headerStyle <?= $sm['landing']['header_bg']['val']; ?>">
+
+<div class="header-logo-1">
+    <a href="<?= $sm['config']['site_url']; ?>">
+        <img src="<?php echo $sm['metasettings']['website_mobile_logo'] ;?>" alt="<?= $sm['config']['name']; ?>" />
+    </a>
+</div>
+<div class="header-sign-area" >
+        <ul class="header-signin-list" style="position:fixed;top:30px;right: 60px">
+            <li><?= $sm['landingLang'][1]['text']; ?></li>
+            <li>
+                <a href="#" id="signin-btn-top" class="log-tabs header-login-btn" data-id="loginForm"><?= $sm['landingLang'][2]['text']; ?></a>
+            </li>
+        </ul>
+</div>
+</header>
+<div class="wrapper" >
+<div id="login-section" class="login-section" data-scroll="login-section" style="background-image: url('<?= $sm['landing']['background_image']['val']; ?>');">
+
+    <div class="login-section-holder">
+        <div class="container" style="background:#f2f2f2;border-radius:10px;">
+            <div style="text-align:center;margin-bottom:20px;margin-top:-15px;">
+            <img src="<?php echo $sm['metasettings']['website_mobile_logo'] ;?>" alt="<?= $sm['config']['name']; ?>" />
+            </div>
+            <p style="font-size: 15px !important;color: #222 !important;text-align: center;font-family: 'Rubik' !important;font-weight: 600;margin-bottom: 30px;"><?= $sm['landingLang'][3]['text']; ?></p>
+            <div class="login-section-loginbox">
+                    <div class="loginbox-tabset">
+                        <a class="log-tabs loginForm <?= $sm['landing']['form_bg']['val']; ?>" data-lid="1" data-id="loginForm"><?= $sm['lang'][13]['text']; ?></a>
+                        <a class="log-tabs regForm active <?= $sm['landing']['form_bg']['val']; ?>" data-lid="2" data-id="regForm"><?= $sm['lang'][8]['text']; ?></a>
+                    </div>
+                    <div class="loginbox-tab-container <?= $sm['landing']['form_bg']['val']; ?>">
+                        <div id="regForm" class="loginbox-tab-item form-reg-wrap active" data-lid="1">
+                            <form method="post" action="#" id="register" class="r s">
+                                    <?php if($sm['plugins']['facebook']['enabled'] == 'Yes' || $sm['plugins']['google']['enabled'] == 'Yes' || $sm['plugins']['instagram']['enabled'] == 'Yes' || $sm['plugins']['twitter']['enabled'] == 'Yes') { ?>
+                                    <div class="loginbox-title"><?= $sm['landingLang'][5]['text']; ?></div> 
+                                    
+                                    <div class="avatarBody" style="margin-top: 15px;margin-bottom: 15px;display: none" id="facebookPhoto">
+                                        <img src="" id="facebookPhotoSrc" class="user"/>
+                                    </div>
+                                    <div class="loginbox-form-row hide">
+                                        <div class="form-control name">
+                                            <input class="u v" id="name" type="text" placeholder="<?= $sm['lang'][27]['text']; ?>" id="name" name="name">
+                                        </div>
+                                        <div class="form-error error_name"></div>
+                                    </div>
+                                    <div class="loginbox-form-row mail-row">
+                                        <div class="form-control mail">
+                                            <input type="email" id="email" placeholder="<?= $sm['lang'][10]['text']; ?>" name="email">
+                                        </div>
+                                        <div class="form-error error_email"></div>
+                                    </div>
+                                    <div class="loginbox-form-row hide">
+                                        <div class="form-control pass">
+                                            <input type="password" id="pass" placeholder="<?= $sm['lang'][11]['text']; ?>" name="pass">
+                                        </div>
+                                        <div class="form-error error_password"></div>
+                                    </div>
+                                    <div class="loginbox-two-column-row hide">
+                                        <div class="loginbox-two-column-item" style="width: 23%">
+                                            <div class="form-control age">
+                                                <select name="day"  id="day" required>
+                                                    <option value="1" disabled selected><?= $sm['lang'][272]['text']; ?></option>
+                                                    <?= date_dropdown_landing(1,0,0); ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="loginbox-two-column-item" style="width: 46%">
+                                            <div class="form-control age">
+                                                <select name="month"  id="month" required>
+                                                    <option value="1" disabled selected><?= $sm['lang'][273]['text']; ?></option>
+                                                    <?= date_dropdown_landing(0,1,0); ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="loginbox-two-column-item" style="width: 23%">
+                                            <div class="form-control age" >
+                                                <select name="year" id="year" required >
+                                                    <option value="1995" disabled selected><?= $sm['lang'][274]['text']; ?></option>                         
+                                                    <?= date_dropdown_landing(0,0,1); ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="loginbox-form-row hide">
+                                        <div class="form-control mail" id="loc">
+                                        </div>
+                                        <div class="form-error error_email"></div>
+                                    </div>
+
+                                    <?php if($sm['settings']['selectGender'] == 'true'){ ?>
+                                        <div class="loginbox-form-row hide">
+                                            <div class="form-control gender">
+                                                <select name="gender" style="cursor:pointer;" id="gender" placeholder="<?= $sm['lang'][31]['text']; ?>">
+                                                    <option value="" disabled selected hidden><?= $sm['lang'][529]['text']; ?>...</option>
+                                                    <?php
+                                                        foreach($sm['genders'] as $entry){
+                                                            echo '<option value="'.$entry['id'].'" style="color:#000;">
+                                                            '.$sm['lang'][529]['text'].' '.strtolower($entry['text']).'</option>';
+                                                        }
+                                                    ?>
+                                                </select>
+                                                <div class="form-error error_gender"></div>
+                                            </div>
+                                        </div>
+                                        <div class="loginbox-form-row hide">
+                                            <div class="form-control age">
+                                                <select name="looking" style="cursor:pointer;" id="looking" placeholder="<?= $sm['lang'][31]['text']; ?>">
+                                                    <option value="" disabled selected hidden><?= $sm['lang'][530]['text']; ?>...</option>
+                                                    <?php
+                                                        foreach($sm['genders'] as $entry){
+                                                            echo '<option value="'.$entry['id'].'" style="color:#000;">
+                                                            '.$sm['lang'][530]['text'].' '.strtolower($entry['text']).'</option>';
+                                                        }
+                                                    ?>
+                                                </select>
+                                                <div class="form-error error_gender"></div>
+                                            </div>
+                                        </div>
+                                    <?php } else { ?>
+                                        <input type="hidden" name="gender" value="<?= $sm['settings']['selectGenderBase']; ?>" />
+                                        <input type="hidden" name="looking" value="<?= $sm['settings']['selectGenderTarget']; ?>" />
+                                    <?php } ?>
+
+                                    <?php if($sm['plugins']['settings']['showTermsCheckboxRegister'] == 'Yes'){ ?>
+                                    <div class="loginbox-form-row hide" >
+                                        <div class="form-control mail">
+                                           <input type="checkbox" required id="reg_checkbox" onchange="updateCheckbox('change')" style="position: absolute;top:30px;left: 8px">
+                                           <div class="loginbox-note" onclick="updateCheckbox('click');" style="margin-left: 25px;cursor: pointer;">
+                                                <?= $sm['lang'][42]['text']; ?> <a href="<?= $sm['config']['site_url']; ?>/index.php?page=tac" style="color:#aaa;" onclick="javascript:void window.open('<?= $sm['config']['site_url']; ?>index.php?page=tac','1430115090715','width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');return false;"><?= $sm['lang'][43]['text']; ?> </a> <?= $sm['lang'][44]['text']; ?> 
+                                                <a href="<?= $sm['config']['site_url']; ?>/index.php?page=pp" style="color:#aaa;" onclick="javascript:void window.open('<?= $sm['config']['site_url']; ?>index.php?page=pp','1430115090715','width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');return false;"><?= $sm['lang'][45]['text']; ?></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php } ?>
+                                    <input type="hidden" value="register" name="action" />
+                                    <?php
+                                    $ref = '';
+                                    if(isset($_COOKIE['ref'])){
+                                        $ref = $_COOKIE['ref'];
+                                    }
+                                    ?>
+                                    <input type="hidden" value="<?= $ref; ?>" name="ref" />
+                                    <input type="hidden" value="" name="photo" id="photo" />
+                                    <input type="hidden" name="city" id="locality" />
+                                    <input type="hidden" name="country" id="country" />
+                                    <input type="hidden" name="checkbox" id="checkboxVal" value="<?= $sm['plugins']['settings']['showTermsCheckboxRegister']; ?>" />
+                                    <input type="hidden" name="lat" id="lat" />
+                                    <input type="hidden" name="lng" id="lng"  />                                     
+                                    <button class="log-btn green <?= $sm['landing']['form_btn_bg']['val']; ?>" id="create-acc" type="button" data-buttontext="<?= $sm['lang'][8]['text']; ?>"><?= $sm['lang'][676]['text']; ?></button>
+
+								<ul class="social" style="margin: 10px 0px;width: 100%;padding: 0;">
+                                        <?php if($sm['plugins']['facebook']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button facebook" href="javascript:;" onclick="fbLogin()">Facebook</a>
+                                        </li>
+                                         <?php } if($sm['plugins']['google']['enabled'] == 'Yes') { ?>
+                                        <li style="padding: 0;margin: 0;width: 100%;position: relative;">
+											<a href="javascript:;" onclick="firebaseGoogleLogin();" class="google-btn" style="background: #fff;float: none;border-radius: 5px;width: 270px;height: 22px;margin: 0;cursor: pointer;">
+												<img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="float: left;position: absolute;left: 10px;">
+    <span>Sign in with Google</span>
+  </a>
+                                        </li>
+                                        <?php } if($sm['plugins']['instagram']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button ig" href="social.php?page=instagram">Instagram</a>
+                                        </li>
+                                        
+                                        <?php } if($sm['plugins']['twitter']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button tw" href="social.php?page=twitter">Twitter</a>
+                                        </li>
+                                        <?php } 
+                                        }?>                                        
+                                    </ul>
+                                    <?php 
+                                    if($sm['plugins']['settings']['showTermsCheckboxRegister'] == 'No'){ ?>
+                                    <div class="loginbox-note">
+                                        <?= $sm['lang'][42]['text']; ?> <a href="<?= $sm['config']['site_url']; ?>/index.php?page=tac" style="color:#aaa;" onclick="javascript:void window.open('<?= $sm['config']['site_url']; ?>index.php?page=tac','1430115090715','width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');return false;"><?= $sm['lang'][43]['text']; ?> </a> <?= $sm['lang'][44]['text']; ?> 
+                                    <a href="<?= $sm['config']['site_url']; ?>/index.php?page=pp" style="color:#aaa;" onclick="javascript:void window.open('<?= $sm['config']['site_url']; ?>index.php?page=pp','1430115090715','width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');return false;"><?= $sm['lang'][45]['text']; ?></a>
+                                    </div>
+                                    <?php } ?>
+                                </form>
+                        </div>
+                        <div id="forgetForm" class="loginbox-tab-item form-reg-wrap" data-lid="3" style="display: none">
+                            <span id="success"></span>
+                            <form method="post" action="#" id="recover" class="ag s">
+                                <?php if($sm['plugins']['facebook']['enabled'] == 'Yes' || $sm['plugins']['google']['enabled'] == 'Yes' || $sm['plugins']['instagram']['enabled'] == 'Yes' || $sm['plugins']['twitter']['enabled'] == 'Yes') { ?>
+                                <div class="loginbox-title"><?= $sm['landingLang'][5]['text']; ?></div> 
+                                
+                                <input type="hidden" value="recover" name="action" />
+                                <div class="loginbox-form-row">
+                                    <div class="form-control mail">
+                                        <input class="txt" type="email" name="recover_email" id="recover_email" required placeholder="<?= $sm['lang'][10]['text']; ?>">
+                                    </div>
+                                    <div class="form-error error_email error" id="recover-error"></div>
+                                </div>
+                                <button class="log-btn green <?= $sm['landing']['form_btn_bg']['val']; ?>" id="recover-now" type="submit"><?= $sm['lang'][15]['text']; ?></button>
+								<ul class="social" style="margin: 10px 0px;width: 100%;padding: 0;">
+                                        <?php if($sm['plugins']['facebook']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button facebook" href="javascript:;" onclick="fbLogin()">Facebook</a>
+                                        </li>
+                                         <?php } if($sm['plugins']['google']['enabled'] == 'Yes') { ?>
+                                        <li style="padding: 0;margin: 0;width: 100%;position: relative;">
+											<a href="javascript:;" onclick="firebaseGoogleLogin();" class="google-btn" style="background: #fff;float: none;border-radius: 5px;width: 270px;height: 22px;margin: 0;cursor: pointer;">
+												<img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="float: left;position: absolute;left: 10px;">
+    <span>Sign in with Google</span>
+  </a>
+                                        </li>
+                                        <?php } if($sm['plugins']['instagram']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button ig" href="social.php?page=instagram">Instagram</a>
+                                        </li>
+                                        
+                                        <?php } if($sm['plugins']['twitter']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button tw" href="social.php?page=twitter">Twitter</a>
+                                        </li>
+                                        <?php } 
+                                        }?>                                        
+                                    </ul>
+                            </form>
+                        </div>
+                        <div id="loginForm" class="loginbox-tab-item form-reg-wrap" data-lid="2">
+                            <span id="success"></span>
+                            <form method="post" action="#" id="login" class="ag s">
+                                <?php if($sm['plugins']['facebook']['enabled'] == 'Yes' || $sm['plugins']['google']['enabled'] == 'Yes' || $sm['plugins']['instagram']['enabled'] == 'Yes' || $sm['plugins']['twitter']['enabled'] == 'Yes') { ?>
+                                <div class="loginbox-title"><?= $sm['landingLang'][5]['text']; ?></div> 
+                                
+                                <input type="hidden" value="login" name="action" />
+                                <div class="loginbox-form-row">
+                                    <div class="form-control mail">
+                                        <input class="txt" type="email" name="login_email" id="login_email" required placeholder="<?= $sm['lang'][10]['text']; ?>">
+                                    </div>
+                                    <div class="form-error error_email"></div>
+                                </div>
+                                <div class="loginbox-form-row">
+                                    <div class="form-control pass">
+                                        <input class="txt" type="password" name="login_pass" id="login_pass" required placeholder="<?= $sm['lang'][11]['text']; ?>"  >
+                                    </div>
+                                    <div class="form-error error_pass"></div>
+                                </div>
+                                <button class="log-btn green <?= $sm['landing']['form_btn_bg']['val']; ?>" id="login-now" type="button" onclick="firebaseEmailLogin(); return false;"><?= $sm['lang'][13]['text']; ?></button>
+								<ul class="social" style="margin: 10px 0px;width: 100%;padding: 0;">
+                                        <?php if($sm['plugins']['facebook']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button facebook" href="javascript:;" onclick="fbLogin()">Facebook</a>
+                                        </li>
+                                         <?php } if($sm['plugins']['google']['enabled'] == 'Yes') { ?>
+                                        <li style="padding: 0;margin: 0;width: 100%;position: relative;">
+											<a href="javascript:;" onclick="firebaseGoogleLogin();" class="google-btn" style="background: #fff;float: none;border-radius: 5px;width: 270px;height: 22px;margin: 0;cursor: pointer;">
+												<img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="float: left;position: absolute;left: 10px;">
+    <span>Sign in with Google</span>
+  </a>
+                                        </li>
+                                        <?php } if($sm['plugins']['instagram']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button ig" href="social.php?page=instagram">Instagram</a>
+                                        </li>
+                                        
+                                        <?php } if($sm['plugins']['twitter']['enabled'] == 'Yes') { ?>
+                                        <li>
+                                            <a class="social-button tw" href="social.php?page=twitter">Twitter</a>
+                                        </li>
+                                        <?php } 
+                                        }?>                                        
+                                    </ul>
+                                <a href="javascript:;" class="user-recovery-pass" id="recover-pwd"><?= $sm['lang'][12]['text']; ?></a>
+                            </form>
+                        </div>                        
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="section" data-scroll="stats-section" >
+    <div class="stats-section-intro">
+        <h2 class="heading" style="color: <?= $sm['landing']['font_color']['val']; ?>">
+            Featured Members
+        </h2>        
+    </div>
+    <div class="page-container" >
+        <div class="stats-column-item">
+            <div class="people-wrapper">
+                <ul class="people">
+                    <li class="contact">
+                        <img class="people" src="<?php echo $sm['landing']['nearby_person1']['val'];?>">
+                        <div class="representation">Lovisa, 44</div>
+                        <div class="location">Norrköping, Sweden</div>
+                    </li>
+                    <li class="contact">
+                        <img class="people" src="<?php echo $sm['landing']['nearby_person2']['val'];?>">
+                        <div class="representation">Anna, 23</div>
+                        <div class="location">Tromsø, Norway</div>
+                    </li>
+                    <li class="contact">
+                        <img class="people" src="<?php echo $sm['landing']['nearby_person3']['val'];?>">
+                        <div class="representation">Camila, 27</div>
+                        <div class="location">Saskatoon, Canada</div>
+                    </li>
+                    <li class="contact">
+                        <img class="people" src="<?php echo $sm['landing']['nearby_person4']['val'];?>">
+                        <div class="representation">Wiktoria, 33</div>
+                        <div class="location">Kielce, Poland</div>
+                    </li>
+                    <li class="contact">
+                        <img class="people" src="<?php echo $sm['landing']['nearby_person5']['val'];?>">
+                        <div class="representation">Lilou, 31</div>
+                        <div class="location">Grenoble, France</div>
+                    </li>
+                    <li class="contact">
+                        <img class="people" src="<?php echo $sm['landing']['nearby_person6']['val'];?>">
+                        <div class="representation">Saga, 37</div>
+                        <div class="location">Västerås, Sweden</div>
+                    </li>
+                    <li class="contact">
+                        <img class="people" src="<?php echo $sm['landing']['nearby_person7']['val'];?>">
+                        <div class="representation">Jessica, 21</div>
+                        <div class="location">Rimini, Italy</div>
+                    </li>
+                    <li class="contact">
+                        <img class="people" src="<?php echo $sm['landing']['nearby_person8']['val'];?>">
+                        <div class="representation">Juliya, 26</div>
+                        <div class="location">Los Angeles, United States</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="stats-section container" data-scroll="stats-section" >
+    <div class="stats-section-intro">
+        <h2 class="heading" style="color: <?= $sm['landing']['font_color']['val']; ?>">
+            <?= $sm['landingLang'][6]['text']; ?></h2>
+        <p><?= $sm['landingLang'][7]['text']; ?></p>
+    </div>
+    <div class="stats-column" >
+        <div class="stats-column-item">
+            <div class="stats-value-box <?= $sm['landing']['content_totalusers_bg']['val']; ?>" style="background: <?= $sm['landing']['content_totalusers_bg']['val']; ?>;">
+                <?php 
+                    $total = $sm['landing']['content_totalusers_number']['val']; 
+                    $real = getTotalUsers(1);
+                    $total = $total + $real;
+                ?> 
+                <span style="color: <?= $sm['landing']['content_totalusers_color']['val']; ?>;"><?= number_format($total); ?></span>
+            </div>
+            <div class="stats-title"><?= $sm['landingLang'][8]['text']; ?></div>
+        </div>
+    </div>
+</div>
+
+<div class="section" data-scroll="stats-section" >
+    <div class="stats-section-intro">
+        <h2 class="heading" style="color: <?= $sm['landing']['font_color']['val']; ?>">
+             What Our Members Say About Us
+        </h2>        
+    </div>
+    <div class="page-container" >
+        <div class="stats-column-item">
+           <div class="customer_container">
+               <div class="customer_list swiper-wrapper"                     
+                    aria-live="polite">
+                    
+                   <?php $experts = array(
+                       array(
+                           'name' => 'Jordan, 41',
+                           'image' => $sm['landing']['discover_left_image']['val'],
+                           'description' => "Finding genuine matches on dating sites can be a challenge, but this platform really stands out. The matchmaking algorithm does an excellent job of pairing people with shared values and interests, which makes connecting with others feel more authentic. It’s been a pleasant surprise to meet individuals who are truly looking for meaningful relationships. This site has been a refreshing change from the usual superficial experiences found elsewhere."
+                       ),
+                       array(
+                           'name' => 'Emily R, 25',
+                           'image' => $sm['landing']['discover_main_image']['val'],
+                           'description' => "I’ve tried several dating apps, but this one stands out for its user-friendly interface and streamlined experience. The sign-up process was simple, and I love the variety of filters available to refine my search. The site’s layout is intuitive, making it easy to navigate through profiles and messages. Plus, the quality of conversations has been much better than on other platforms. It’s definitely one of the better options out there for anyone looking to meet like-minded people."
+                       ),
+                       array(
+                           'name' => 'Jenne Darc(Jenny), 38',
+                           'image' => $sm['landing']['discover_right_image']['val'],
+                           'description' => "I’ve been using this dating site for a few months, and what really stands out is the supportive community and excellent customer service. Whenever I’ve had questions, the team has been quick to respond and resolve issues. Additionally, I appreciate the site’s efforts to create a safe and respectful environment for everyone. It’s refreshing to find a platform where people are serious about finding meaningful connections. I’ve met some fantastic people here, and I’m excited to see where things go!"
+                       )
+                   );
+                   foreach ($experts as $expert) {
+                   ?>
+                   <div class="card"
+                        role="group"
+                        aria-label="<?= $expert['name']; ?>"
+                        style="">
+                       <h3 class="card_name">
+                           <?= $expert['name']; ?>
+                       </h3>
+                       <div class="card_image-container">
+                           <img data-defer-src="<?= $expert['image']; ?>" 
+                                alt="<?= $expert['name']; ?>" 
+                                class="main_experts__image" 
+                                src="<?= $expert['image']; ?>">
+                       </div>
+                       <div class="card_content">
+                           <p class="card_description">
+                               <?= $expert['description']; ?>
+                           </p>
+                       </div>
+                   </div>
+                   <?php } ?>
+               </div>               
+           </div>
+        </div>        
+    </div>
+</div>
+
+
+
+<?php if($sm['plugins']['iosApp']['enabled'] == 'Yes' || $sm['plugins']['androidApp']['enabled'] == "Yes"){ ?>
+<div class="app-section container" style="margin-bottom: 140px;margin-top:60px">
+
+    <div class="app-section-intro">
+        <h3 class="heading" style="color: <?= $sm['landing']['font_color']['val']; ?>">
+            <?= $sm['landingLang'][13]['text']; ?>
+        </h3><br>
+        <p><?= $sm['landingLang'][14]['text']; ?></p>
+    </div>
+
+    <div class="app-section-buttons" style="margin-bottom: 45px">
+        <?php if($sm['plugins']['androidApp']['enabled'] == 'Yes'){ ?>
+        <a href="<?= $sm['plugins']['androidApp']['link']; ?>" class="app-section-btn gplay">
+            <img src="<?= $sm['landing']['androidapp']['val']; ?>" alt="Google Play">
+        </a>
+        <?php } ?>
+        <?php if($sm['plugins']['iosApp']['enabled'] == 'Yes'){ ?>
+        <a href="<?= $sm['plugins']['iosApp']['link']; ?>" class="app-section-btn appstore">
+            <img src="<?= $sm['landing']['iosapp']['val']; ?>" alt="Appstore">
+        </a>
+        <?php } ?>
+    </div>
+</div>
+<?php } ?>
+
+<footer id="footer" class="footer-small <?= $sm['landing']['content_footer_bg']['val']; ?>" style="background:#3a3a3a">
+    <div class="">
+        <div class="container">
+            <?php
+            $footerMenuColumns = array(
+                array(
+                    array(
+                        'label' => 'About',
+                        'url' => $sm['config']['site_url']
+                    ),
+                    array(
+                        'label' => $sm['lang'][43]['text'],
+                        'url' => $sm['config']['site_url'] . '/index.php?page=tac',
+                        'target' => '_blank'
+                    )
+                ),
+                array(
+                    array(
+                        'label' => $sm['lang'][45]['text'],
+                        'url' => $sm['config']['site_url'] . '/index.php?page=pp',
+                        'target' => '_blank'
+                    ),
+                    array(
+                        'label' => 'Cookie Policy',
+                        'url' => $sm['config']['site_url'] . '/index.php?page=cookie-policy',
+                        'target' => '_blank'
+                    )
+                ),
+                array(
+                    array(
+                        'label' => 'Dating Securely',
+                        'url' => 'https://www.dating.com/en/safety/'
+                    ),
+                    array(
+                        'label' => 'Help Center',
+                        'url' => $sm['config']['site_url'] . '/index.php?page=contact'
+                    )
+                ),
+                array(
+                    array(
+                        'label' => 'Become A Partner',
+                        'url' => $sm['config']['site_url'] . '/index.php?page=partners'
+                    ),
+                    array(
+                        'label' => 'Investments / M&A',
+                        'url' => $sm['config']['site_url'] . '/index.php?page=investments'
+                    )
+                ),
+            );
+            ?>
+            <div class="footer-menu-grid">
+                <?php foreach ($footerMenuColumns as $column) { ?>
+                    <div class="footer-menu-column">
+                        <ul class="footer-nav">
+                            <?php foreach ($column as $item) { ?>
+                                <li>
+                                    <a href="<?= $item['url']; ?>"
+                                       <?= isset($item['target']) ? 'target="' . $item['target'] . '"' : ''; ?>>
+                                        <?= $item['label']; ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                <?php } ?>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-copyright">
+                Copyright <?= $sm['config']['name']; ?> <?= date('Y'); ?>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+
+<?php if($sm['plugins']['terms']['showCookies'] == 'Yes'){ ?>
+    <script type="text/javascript" id="cookieinfo"
+        src="<?php echo $sm['config']['theme_url']; ?>/js/vendor/cookieinfo.min.js">
+    </script>
+<?php } ?>
+
+<script src="<?php echo $sm['config']['theme_url_landing']; ?>/js/jquery.min.js"></script>
+<script src="<?php echo $sm['config']['theme_url']; ?>/js/vendor/sweetalert.min.js"></script> 
+<script src="https://unpkg.com/@geoapify/geocoder-autocomplete@^1/dist/index.min.js"></script>
+<script src="<?php echo $sm['config']['theme_url_landing']; ?>/js/init.js"></script>
+<script src="<?php echo $sm['config']['site_url']; ?>themes/default/js/login.js"></script>
+
+<?php if($sm['plugins']['facebook']['enabled'] == 'Yes'){ ?>
+<script>
+window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '<?= $sm['plugins']['facebook']['id']; ?>',
+      cookie     : true,
+      xfbml      : true,  
+      version    : 'v4.0' 
+    });
+};
+
+
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+
+function fbLogin() {
+    FB.login(function (response) {
+        if (response.authResponse) {
+            getFbUserData();
+        }
+    }, {scope: 'public_profile,email'});
+}
+
+function getFbUserData(){
+    FB.api('/me', {locale: 'en_US', fields: 'id,first_name,last_name,email,link,gender,locale,picture.width(400).height(400)'},
+    function (response) {
+        $('.social').hide();
+        var username = Math.floor((Math.random() * 1021423) + 1);
+        var name = response.first_name;
+        name = name.toLowerCase();
+        var last_name = response.last_name.toLowerCase();
+        last_name = last_name.toLowerCase();
+        $('#facebookPhoto').fadeIn();
+        $('#facebookPhotoSrc').attr('src',response.picture.data.url);
+        $('#photo').val(response.picture.data.url);
+        $('#email').val(response.email);
+        $('#name').val(response.first_name +' '+response.last_name);
+        $('#username').val(response.first_name+response.last_name+username);
+        $.ajax({
+            data:  {
+                action:'loginFB',
+                email:response.email
+            },
+            url:   request_source()+'/api.php',
+            type:  'post', 
+            dataType: 'JSON',       
+            success:  function (response) { 
+                if(response.valid == 'Yes'){
+                    window.location=site_config['site_url']+'meet';
+                } else {
+                    $('[data-lid="2"]').click();
+                }
+            }
+        });        
+    });
+}
+
+</script>
+<?php } ?>
+<script>
+
+$(window).load(function() {
+
+    var d = document.querySelectorAll(".log-tabs");
+    [].forEach.call(d, (function(t) {
+        t.onclick = e
+    }));     
+    function l() {
+        var e = window.pageYOffset || document.body.scrollTop,
+            t = parseInt(g.height()-320, 0),
+            a = parseInt(f.height(), 0),
+            o = parseInt(y.height(), 0),
+            l = parseInt(p.height(), 0);
+        e >= t - 51 ? m.addClass("scrolled") : m.removeClass("scrolled"), e >= t + a ? y.addClass("scrolled") : y.removeClass("scrolled"), e >= t + a + o? p.addClass("scrolled") : p.removeClass("scrolled")
+    }
+    
+    var m = $('#header'),
+        g = $("[data-scroll=login-section]"),
+        f = $("[data-scroll=stats-section]"),
+        y = $("[data-scroll=sympaty-section]"),
+        p = $("[data-scroll=radar-section]");
+    l(), window.addEventListener("scroll", l);
+
+    function e(e) {
+        var o = e.currentTarget || e.target,
+            l = o.getAttribute("data-id"),
+            r = document.querySelectorAll('[data-id="' + l + '"]');
+        t(), document.getElementById(l).style.display = "block";
+        if(l == 'loginForm'){
+            $('.loginForm').addClass('active');
+            $('.regForm').removeClass('active');
+        } else {
+            $('.loginForm').removeClass('active');
+            $('.regForm').addClass('active');            
+        }
+    }
+    function t() {
+        $('[data-lid]').removeClass("active");
+        $('#regForm').removeClass("active");
+        $('#loginForm').removeClass("active");
+        $('#regForm').hide();
+        $('#loginForm').hide();
+        $('#forgetForm').hide();
+    }   
+    $('#recover-pwd').click(function(){
+        $('#regForm').hide();
+        $('#loginForm').hide();
+        $('#forgetForm').show();
+    })
+});
+
+var clickedCheckbox = false;
+function updateCheckbox(type){
+    if(type == 'click'){
+        if(!clickedCheckbox){
+            clickedCheckbox = true;    
+            var $checkbox = $('#reg_checkbox').find(':checkbox');
+            var checkBoxes = $("input[type='checkbox']");
+            if(checkBoxes.prop("checked")==true){
+                checkBoxes.prop("checked", false); 
+                $('#checkboxVal').val('NO');
+            } else {
+                $('#checkboxVal').val('OK');
+                checkBoxes.prop("checked", true)        
+            }    
+        }
+        setTimeout(function(){
+            clickedCheckbox = false;
+        },20);
+    }
+
+    if(type == 'change'){
+        var $checkbox = $('#reg_checkbox').find(':checkbox');
+        var checkBoxes = $("input[type='checkbox']");
+        if(checkBoxes.prop("checked")==true){
+            $('#checkboxVal').val('OK');
+        } else {
+            $('#checkboxVal').val('NO');      
+        }    
+    }
+    console.log($('#checkboxVal').val());
+}
+</script>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile, deleteUser, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+ /* const firebaseConfig = {
+        apiKey: "AIzaSyD4stoi2V1sm8uNL3q0LjLac3A9lITBAk0",
+        authDomain: "special-ededd.firebaseapp.com",
+        projectId: "special-ededd",
+        storageBucket: "special-ededd.firebasestorage.app",
+        messagingSenderId: "901201940712",
+        appId: "1:901201940712:web:20efebd787a8e09c79395d"
+    };*/
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD3d2nGVAgcChfSvnDWT_r-r_Hvnm5FOZ8",
+        authDomain: "special-dating-479e7.firebaseapp.com",
+        projectId: "special-dating-479e7",
+        storageBucket: "special-dating-479e7.firebasestorage.app",
+        messagingSenderId: "685009420752",
+        appId: "1:685009420752:web:9e7e50f948d8170ae2f9d5"
+        };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+  googleProvider.addScope('profile');
+  googleProvider.addScope('email');
+  googleProvider.setCustomParameters({
+    'access_type': 'offline'
+  });
+
+  async function sendFirebaseTokenToBackend(token, userData = {}) {
+    try {
+      const formData = {
+        action: 'firebaseAuth',
+        token: token,
+        email: userData.email || '',
+        name: userData.name || '',
+        photo: userData.photo || '',
+        provider: userData.provider || 'email',
+        gender: userData.gender || '',
+        age: userData.age || '',
+        day: userData.day || '',
+        month: userData.month || '',
+        year: userData.year || '',
+        birthday: userData.birthday || '',
+        looking: userData.looking || '',
+        city: userData.city || '',
+        country: userData.country || '',
+        lat: userData.lat || '',
+        lng: userData.lng || '',
+        ref: userData.ref || '',
+        checkbox: userData.checkbox || ''
+      };
+      
+      const response = await fetch(request_source() + '/api-auth.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error sending token to backend:', error);
+      throw error;
+    }
+  }
+
+  window.firebaseEmailLogin = async function() {
+    const email = document.getElementById('login_email').value;
+    const password = document.getElementById('login_pass').value;
+
+    if (!email || !password) {
+      swal({
+        title: site_config.name,
+        text: 'Please enter email and password',
+        type: "error"
+      });
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+      const user = userCredential.user;
+
+      const result = await sendFirebaseTokenToBackend(token, {
+        email: user.email,
+        name: user.displayName || '',
+        photo: user.photoURL || '',
+        provider: 'email'
+      });
+
+      if (result.success || result.valid === 'Yes') {
+        window.location = site_config['site_url'] + 'meet';
+      } else {
+        swal({
+          title: site_config.name,
+          text: result.message || 'Login failed',
+          type: "error"
+        });
+      }
+    } catch (error) {      
+      let errorMessage = 'An error occurred during login';
+      if (error.code === 'auth/invalid-credential') {
+        errorMessage = 'Incorrect password or email';
+      }else if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      swal({
+        title: site_config.name,
+        text: errorMessage,
+        type: "error"
+      });
+    }
+  };
+
+  window.firebaseEmailRegister = async function() {
+    const emailEl = document.getElementById('email');
+    const passEl = document.getElementById('pass');
+    const nameEl = document.getElementById('name');
+    const dayEl = document.getElementById('day');
+    const monthEl = document.getElementById('month');
+    const yearEl = document.getElementById('year');
+    const genderEl = document.getElementById('gender');
+    const lookingEl = document.getElementById('looking');
+    const cityEl = document.getElementById('locality');
+    const countryEl = document.getElementById('country');
+    const latEl = document.getElementById('lat');
+    const lngEl = document.getElementById('lng');
+    const refEl = document.querySelector('input[name="ref"]');
+    const checkboxEl = document.getElementById('checkboxVal');
+    
+    const email = emailEl ? emailEl.value : '';
+    const password = passEl ? passEl.value : '';
+    const name = nameEl ? nameEl.value : '';
+    const day = dayEl ? dayEl.value : '';
+    const month = monthEl ? monthEl.value : '';
+    const year = yearEl ? yearEl.value : '';
+    const gender = genderEl ? genderEl.value : '';
+    const looking = lookingEl ? lookingEl.value : '';
+    const city = cityEl ? cityEl.value : '';
+    const country = countryEl ? countryEl.value : '';
+    const lat = latEl ? latEl.value : '';
+    const lng = lngEl ? lngEl.value : '';
+    const ref = refEl ? refEl.value : '';
+    const checkbox = checkboxEl ? checkboxEl.value : '';
+
+    if (!email) {
+      swal({
+        title: site_config.name,
+        text: 'Please enter your email',
+        type: "error"
+      });
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      swal({
+        title: site_config.name,
+        text: 'Password must be at least 6 characters',
+        type: "error"
+      });
+      return;
+    }
+
+    if (!day || !month || !year) {
+      swal({
+        title: 'uhm...',
+        text: site_lang[182].text,
+        type: "error"
+      });
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+      const user = userCredential.user;
+
+      if (name) {
+        await updateProfile(user, { displayName: name });
+      }
+
+      let birthday = '';
+      if (day && month && year) {
+        birthday = year + '-' + month + '-' + day;
+      }
+
+      const result = await sendFirebaseTokenToBackend(token, {
+        email: user.email,
+        name: name || user.displayName || '',
+        photo: user.photoURL || '',
+        provider: 'email',
+        day: day,
+        month: month,
+        year: year,
+        birthday: birthday,
+        gender: gender,
+        looking: looking,
+        city: city,
+        country: country,
+        lat: lat,
+        lng: lng,
+        ref: ref,
+        checkbox: checkbox
+      });
+
+      if (result.success || result.valid === 'Yes') {
+        window.location = site_config['site_url'] + 'meet';
+      } else {
+        try {
+          await deleteUser(user);
+        } catch (deleteError) {
+          console.error('Error deleting Firebase user:', deleteError);
+        }        
+        swal({
+          title: site_config.name,
+          text: result.message || 'Registration failed',
+          type: "error"
+        });
+      }
+    } catch (error) {
+      let errorMessage = 'An error occurred during registration';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'This email is already registered. Please login instead.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Password is too weak';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      try {
+         await deleteUser(user);
+      } catch (deleteError) {
+         console.error('Error deleting Firebase user:', deleteError);
+      }
+      swal({
+        title: site_config.name,
+        text: errorMessage,
+        type: "error"
+      });
+    }
+  };
+
+  window.firebaseGoogleLogin = async function() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log(result);
+      const user = result.user;
+      const token = await user.getIdToken();
+      
+      let gender = '';
+      let age = '';
+      
+      if (result.additionalUserInfo && result.additionalUserInfo.profile) {
+        const profile = result.additionalUserInfo.profile;
+        gender = profile.gender || '';
+      }
+
+      const backendResult = await sendFirebaseTokenToBackend(token, {
+        email: user.email,
+        name: user.displayName || '',
+        photo: user.photoURL || '',
+        provider: 'google',
+        gender: gender || '',
+        age: age || ''
+      });
+
+      if (backendResult.success || backendResult.valid === 'Yes') {
+        window.location = site_config['site_url'] + 'meet';
+      } else {
+        $('#email').val(user.email);
+        $('#name').val(user.displayName || '');
+        $('#photo').val(user.photoURL || '');
+        if (gender) {
+          const genderMap = { 'male': '1', 'female': '2', 'other': '3' };
+          const genderId = genderMap[gender.toLowerCase()] || '';
+          if (genderId) $('#gender').val(genderId);
+        }
+      }
+    } catch (error) {
+      let errorMessage = 'An error occurred during Google sign-in';
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = 'Sign-in popup was closed';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      swal({
+        title: site_config.name,
+        text: errorMessage,
+        type: "error"
+      });
+    }
+  };
+
+  window.firebasePasswordReset = async function(email) {
+    if (!email) {
+      swal({
+        title: site_config.name,
+        text: 'Please enter your email address',
+        type: "error"
+      });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      swal({
+        title: site_config.name,
+        text: 'Please enter a valid email address',
+        type: "error"
+      });
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      swal({
+        title: 'Success',
+        text: 'Password reset email sent. Please check your inbox.',
+        type: "success"
+      });      
+      $('#recover_email').val('');
+    } catch (error) {
+      let errorMessage = 'An error occurred while sending password reset email';
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email address';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many requests. Please try again later.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      swal({
+        title: site_config.name,
+        text: errorMessage,
+        type: "error"
+      });
+    }
+  };
+
+  console.log("Firebase initialized successfully");
+</script>
+
+<script>
+  $(document).ready(function() {
+    $('#recover').on('submit', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const email = $('#recover_email').val();
+      firebasePasswordReset(email);
+      
+      return false;
+    });
+  });
+</script>
+
+<?= $sm['plugins']['customHtml']['landing_footer']; ?>
+</body>
+</html>

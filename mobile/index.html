@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Meet new people around you and fall in love</title>
+    <!-- Uppy CSS is now imported via npm in main.tsx -->
+    <style>
+      .uppy-Dashboard-AddFiles-info{display:none !important;}
+    </style>
+    <script type="module" crossorigin src="/mobile/assets/index-D7GjWHuB.js"></script>
+    <link rel="stylesheet" crossorigin href="/mobile/assets/index-BlsKhbUs.css">
+  </head>
+  <body>
+    <div id="root"></div>
+
+
+
+
+    <!------------------------------------------------------------>
+    <div id="storytime" data-story="0"></div>
+    <div class="preload-photos" style="display:none"></div>     
+    <div id="upload-area" style="display: none">
+        <input type='file' id="uploadContent" style="display: none" />    
+    </div>
+    <div id="upload-reel" style="display: none">
+        <input type='file' id="uploadReelContent" style="display: none" />    
+        <button id="uppyModalOpener" style="display:none;">UpReal</button>        
+    </div>    
+    <div id="upload-story" style="display:none;">
+        <input type='file' id="uploadStoryContent">
+    </div>
+    <!------------------------------------------------------------>
+    <!-- Pusher SDK -->
+    <script src="https://js.pusher.com/8.0.1/pusher.min.js"></script>
+    
+    <script src="https://special-dating.com/mobile/lib/jquery/jquery.js"></script>
+    <script src="https://special-dating.com/themes/default/js/vendor/jquery.dm-uploader.min.js"></script>
+    <script src="https://special-dating.com/themes/default/js/vendor/action-sheet.js"></script>
+    
+    <script type="text/javascript">
+            var allG = "";
+            var user = "";  
+            var plugins = "";
+            var site_theme = "";  
+            var uploadStory = false;
+            var user_name;  
+            var current_user_id = 0;
+            var account_basic = "";
+            var ph = 0;
+            var upphotos = [];
+            var extFilter = ["jpg", "jpeg", "png", "mp4", "ogg", "webm"];
+            var storyAlbumFilter = ["video/3gpp", "video/mpeg", "video/mp4","video/webm","video/ogg"];   
+            var rnd_f_c = 0; 
+
+            var dating_plans = [];
+            var dating_plans_length = 0;
+            var dating_budgets = [];
+            var dating_types = [];
+            var dating_cities = [];
+            var ajax_path = "";
+            var gUrl = "";
+            var aUrl = "";
+            var url = "";
+            var upType  = 0;
+            var currentStory;
+            var socialStory;
+        
+            function request_source(){
+                return ajax_path || "";
+            };
+    </script>
+
+
+  </body>
+</html>

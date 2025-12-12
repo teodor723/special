@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="23" height="23" viewBox="0 0 23 23">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Shape" d="M11.5,23A11.5,11.5,0,1,1,23,11.5,11.513,11.513,0,0,1,11.5,23Zm0-14.376A2.879,2.879,0,0,0,8.625,11.5a.824.824,0,0,0,.009.108c0,.027.007.054.009.082L7.529,13.476,5.859,16.152a.712.712,0,0,0,.1.888.727.727,0,0,0,.509.21.714.714,0,0,0,.382-.11l2.676-1.67,1.786-1.114.07.008a.865.865,0,0,0,.118.011A2.878,2.878,0,0,0,14.375,11.5a.864.864,0,0,0-.011-.118c0-.023-.006-.046-.008-.07L15.47,9.527l1.67-2.677a.719.719,0,0,0-.991-.99L13.474,7.53,11.687,8.645l-.071-.009A.816.816,0,0,0,11.5,8.625Zm0,4.313A1.437,1.437,0,1,1,12.938,11.5,1.439,1.439,0,0,1,11.5,12.938Z" transform="translate(4 4)" stroke="rgba(255,255,255,0.98)" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="1"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="0.748" y1="0.265" x2="0" y2="0.772" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff8960"/>
+      <stop offset="1" stop-color="#ff62a5"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(-4 -4)">
+    <g clip-path="url(#clip-path)">
+      <g id="color_primary" data-name="color/primary">
+        <g id="color_primary-2" data-name="color/primary" stroke="rgba(255,255,255,0.98)" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="1" fill="url(#linear-gradient)">
+          <rect width="30" height="30" stroke="none"/>
+          <rect x="0.5" y="0.5" width="29" height="29" fill="none"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

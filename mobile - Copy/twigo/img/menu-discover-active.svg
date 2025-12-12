@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="19.999" height="23.81" viewBox="0 0 19.999 23.81">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Discover" d="M9.032,23.81a2.147,2.147,0,0,1-1.8-.968l8.341-1.634a3.435,3.435,0,0,0,2.679-4.016L15.7,3.764h2.4A1.924,1.924,0,0,1,20,5.689V21.9a1.9,1.9,0,0,1-1.9,1.911H9.032ZM4.944,21.541A1.91,1.91,0,0,1,3.069,19.98L.035,4.064A1.939,1.939,0,0,1,1.541,1.805l10-1.773a1.908,1.908,0,0,1,2.228,1.528L16.8,17.477a1.94,1.94,0,0,1-1.507,2.258l-10,1.773A1.926,1.926,0,0,1,4.944,21.541Z" transform="translate(5 3)" fill="#9b9b9b" stroke="#f8f8f8" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="1"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="0.748" y1="0.265" x2="0" y2="0.772" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff8960"/>
+      <stop offset="1" stop-color="#ff62a5"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(-5 -3)" clip-path="url(#clip-path)">
+    <g id="color_primary" data-name="color/primary">
+      <rect id="color_primary-2" data-name="color/primary" width="30" height="30" stroke="#f8f8f8" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="1" fill="url(#linear-gradient)"/>
+    </g>
+  </g>
+</svg>

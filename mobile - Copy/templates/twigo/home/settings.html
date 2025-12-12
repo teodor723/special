@@ -1,0 +1,101 @@
+<ion-view title="" hide-nav-bar="true">
+    <div class="content-header-main">
+        <div class="content-header-main-title">
+            <h2 class="twigo-font">{{alang[275].text}}</h2>
+        </div>
+        <div ng-click="goBackSettings();" class="content-header-main-right">
+            <span class="twigo-font">--{{alang[40].text}}---{{alang[40]|json}} {{alang[281].text}}</span>
+        </div>
+    </div>
+    <ion-content class="mt-85" scroll="false">
+        <div class="list m-n">
+            <div class="item b-t border-color-white" horizontal center>
+                <div class="row no-padder settings-t-list">
+                    <div class="comforta font-w-500 font-s-16">
+                        {{alang[278].text}}
+                    </div>
+                </div>
+
+                <div class="row no-padder settings-t-list-right" ng-click="updateGender()">
+                    <span class="settings-t-list-right-tl">
+                      {{alang[276].text}}
+                    </span>
+                    <span class="settings-t-list-right-tr">
+                    {{gender}}
+                  </span>
+                </div>
+            </div>
+
+            <div class="item b-t border-color-white" horizontal center>
+                <div class="row no-padder settings-t-list">
+                    <div class="comforta font-w-500 font-s-16">
+                        {{alang[279].text}}
+                    </div>
+                </div>
+
+                <div class="row no-padder settings-t-list-right" ng-click="openChangeLocModal()">
+                    <span class="settings-t-list-right-tl">
+                      {{alang[277].text}}
+                    </span>
+                    <span class="settings-t-list-right-tr">
+                      {{me.city}}
+                    </span>
+                    <div class="settings-t-list-right-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19.997" viewBox="0 0 20 19.997">
+                          <path id="locations" class="cls-1" d="M19.895,1.321,10.805,19.5A.833.833,0,0,1,10,20a1.2,1.2,0,0,1-.213-.028.857.857,0,0,1-.5-.32.9.9,0,0,1-.192-.561V10.908H.906a.9.9,0,0,1-.561-.192.857.857,0,0,1-.32-.5.92.92,0,0,1,.057-.6.858.858,0,0,1,.412-.426L18.673.1a.855.855,0,0,1,.412-.1.844.844,0,0,1,.639.27.847.847,0,0,1,.263.49A.863.863,0,0,1,19.895,1.321Z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="item b-t border-color-white" horizontal center>
+                <div class="row no-padder settings-t-list">
+                    <div class="comforta font-w-500 font-s-16">
+                        {{alang[280].text}}
+                    </div>
+                    <span class="settings-t-list-right-distance">
+                      {{distance}} {{distanceMeter}}
+                    </span>
+                </div>
+                <div class="range range-calm comforta" ng-init="distance = initDistance">
+                    <input type="range" name="distance" min="1" max="500" value="distance" ng-model="distance" ng-model-options="{ updateOn: 'change' }" ng-change="updateDistance(distance)" class="w-full">
+                </div>
+            </div>
+
+            <div class="item b-t border-color-white" horizontal center>
+                <div class="row no-padder settings-t-list">
+                    <div class="twigo-font font-s-16 font-w-500">
+                        {{alang[91].text}}
+                    </div>
+                    <span class="settings-t-list-right-distance">
+                      {{range.from}}-{{range.to}}
+                    </span>
+                </div>
+                <div class="range range-calm comforta" ng-init="distance = initDistance">
+                    <ui-multi-range ng-step="1" ng-min="ageMin" ng-max="ageMax" ng-model-min="range.from" ng-model-max="range.to" ng-change-min="updateAge(range.from,range.to)" ng-change-max="updateAge(range.from,range.to)"></ui-multi-range>
+                </div>
+            </div>
+
+
+            <div class="item item-toggle comforta twigo-gradient1 font-c-white font-w-500" ng-if="updateOnlineCheck">
+                1{{alang[92].text}}
+                <label class="toggle toggle-assertive">
+                  <input type="checkbox" ng-checked="online" ng-click="updateOnline()">
+                  <div class="track">
+                    <div class="handle"></div>
+                  </div>
+                </label>
+            </div>
+
+            <div class="item item-toggle comforta twigo-gradient1 font-c-white pointer-events-auto font-w-500" ng-if="!updateOnlineCheck" ng-click="openPremiumModal()">
+                2{{alang[92].text}}<br>
+                <small>{{lang[689].text}}</small>
+                <label class="toggle toggle-assertive margin-top-10">
+                  <input type="checkbox" disabled="">
+                  <div class="track">
+                    <div class="handle"></div>
+                  </div>
+              </label>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

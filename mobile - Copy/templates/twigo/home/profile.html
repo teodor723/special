@@ -1,0 +1,236 @@
+<ion-view title="" hide-nav-bar="true">
+
+<ion-content  delegate-handle="modalContent" scroll="true" class="zIndex-600">
+    <div class="twigo-navigation">
+        <div class="nav-left">
+            <h2 class="twigo-font">{{lang[46].text}}</h2>
+        </div>
+        <div class="nav-right-icon" ng-click="openEditProfileModal()">
+            <div class="icon" >
+                <svg class="icon__content icon__content--inactive icon-profile">
+                    <svg viewBox="0 0 64 64" width="100%" height="100%"><path fill="#fff" d="M29.44 29.44a11.52 11.52 0 1 0 0-23.04 11.52 11.52 0 0 0 0 23.04zm0 2.56a14.08 14.08 0 1 1 0-28.16 14.08 14.08 0 0 1 0 28.16zm13.24 4.65H16.07C8.1 36.65 0 45 0 54.13v3.47h2.56v-3.47c0-7.75 6.97-14.92 13.5-14.92H42.7v-2.56z"></path><path fill="#fff" d="M39.17 55.04c.23 0 .82-.24.97-.4l20.96-20.9a.69.69 0 0 0 0-.97l-5.36-5.36a.69.69 0 0 0-.98 0L34.01 48.16c-.15.15-.4.75-.4.96v5.92h5.56zm13.78-29.45a3.25 3.25 0 0 1 4.6 0l5.36 5.36a3.25 3.25 0 0 1 0 4.6l-20.95 20.9a4.52 4.52 0 0 1-2.78 1.15h-6.5a1.63 1.63 0 0 1-1.63-1.62v-6.86c0-.9.52-2.14 1.15-2.77l20.75-20.76z"></path><path fill="#fff" d="M46.54 33.48l7.56 7.66 1.82-1.8-7.56-7.66z"></path>
+                    </svg>
+                </svg>
+            </div>
+        </div>
+    </div>    
+    <div class="page own-profile visible ">
+        <div>
+            <div class="layout layout--centered-content h-tabbar-affected own-profile-abtest-control">
+                <div class="myprofile-bg twigo-gradient2"></div>   
+                           
+                <div class="layout__content box-shadow-credits myprofile-card">
+
+                    <div class="own-profile__userpic myphoto" ng-click="openProfileStory(me)">
+                        <div class="brick brick--stretch box-shadow">
+                            <div class="brick__image box-shadow-credits border-radius-50" ng-class="showStory ? 'storyOn' : ''" style="background-image: url('{{me.profile_photo}}');"></div>
+                        </div>                  
+                    </div> 
+
+                    <div class="own-profile__username twigo-font mt-50px myprofile-text" ng-click="openProfileStory(me)">
+                        <span class="myprofile-name-font">{{me.first_name}} <small>{{me.age}}</small></span>
+                        <span class="myprofile-loc-font">{{me.city}}, {{me.country}}</span>
+                    </div>
+                    <div class="myprofile-separator"></div>
+                    <div class="own-profile__payments">
+                        <div class="own-profile__payments-row">
+
+                            <div class="own-profile__payments-item" ng-click="goTo('home.match');">
+                                <div class="own-profile__payments-label twigo-font font-size-14px"><br>{{lang[22].text}}</div>
+                            </div>
+
+                            <div class="own-profile__payments-item" ng-click="openCreditsModal('{{me.profile_photo}}');">
+                                <div class="own-profile__payments-label twigo-font font-size-14px">
+                                    <br>{{alang[48].text}}</div>
+                            </div>
+
+                            <div class="own-profile__payments-item" ng-click="openPremiumModal();">
+                                <div class="own-profile__payments-label twigo-font font-size-14px" data-lid="438"></div>
+                            </div>
+                        </div>
+                        <div class="own-profile__payments-row">
+                            <div class="own-profile__payments-item" ng-click="goTo('home.match');">
+                                <div class="own-profile__payments-value">
+                                    {{me.totalMatches}}
+                                </div>                      
+                            </div>
+
+                            <div class="own-profile__payments-item" ng-click="openCreditsModal('{{me.profile_photo}}');">
+                                <div class="own-profile__payments-value">
+                                    {{me.credits}}
+                                </div>
+                            </div>
+                            <div class="own-profile__payments-item" ng-click="openPremiumModal();">
+                                <div class="own-profile__payments-value twigo-font" ng-if="me.premium == 0">{{alang[247].text}}</div>
+                                <div class="own-profile__payments-value twigo-font" ng-if="me.premium == 1">{{alang[248].text}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layout__footer layout__footer--hpadded layout__footer--vpadded mt-0">
+                   <div class="layout__content box-shadow-credits myprofile-menu">
+                        <div class="selector border-bottom-selector" ng-click="goTo('home.match');">
+                            <div class="selector__icon selector__icon--chevron-righ myprofile-menu-icon bg-ED4A47">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="#fff" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>                           
+                            </div>                            
+                            <div class="selector__label twigo-font" data-lid="22"></div>
+                            <div class="selector__icon mr-5px">
+                                <span>{{me.totalMatches}}</span>
+                            </div>
+                        </div>
+                        <div class="selector border-bottom-selector" ng-click="goTo('home.visitors');">
+                            <div class="selector__icon selector__icon--chevron-righ myprofile-menu-icon bg-50E3C2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>                            
+                            </div>                             
+                            <div class="selector__label twigo-font" data-lid="286"></div>
+                            <div class="selector__icon mr-5px">
+                                <small class="twigo-font bg-50E3C2 myprofile-new" ng-if="me.newVisits > 0"> {{alang[261].text}}
+                                </small>
+                                <span ng-if="me.newVisits == 0">{{me.totalVisits}}</span>
+                            </div>
+                        </div>  
+
+                        <div class="selector border-bottom-selector" ng-click="goTo('home.likesme');">
+                            <div class="selector__icon selector__icon--chevron-righ myprofile-menu-icon bg-9013FE">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>                                
+                            </div>                             
+                            <div class="selector__label comforta" data-lid="101"></div>
+                            <div class="selector__icon mr-5px">
+                                <small class="comforta bg-9013FE myprofile-new" ng-if="me.newFans > 0">{{alang[261].text}}</small>
+                                <span ng-if="me.newFans == 0">{{me.totalFans}}</span>
+                            </div>
+                        </div> 
+
+                        <div class="selector border-bottom-selector-last" ng-click="goTo('home.mylikes');">
+                            <div class="selector__icon selector__icon--chevron-righ myprofile-menu-icon bg-F05522">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>                                
+                            </div>                            
+                            <div class="selector__label comforta" data-lid="295"></div>
+                            <div class="selector__icon mr-5px">
+                                <span>{{me.totalMyLikes}}</span>
+                            </div>
+                        </div>
+                         
+                    </div>
+
+                   <div class="layout__content box-shadow-credits myprofile-menu-secondary" >
+
+                        <div class="selector border-bottom-selector" ng-click="openWithdrwal();" ng-if="cashout">
+                            <div class="selector__icon selector__icon--chevron-righ myprofile-menu-icon bg-92DA44">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>                                
+                            </div>                              
+                            <div class="selector__label comforta">{{alang[262].text}}</div>
+                            <div class="selector__icon ">
+                                <small class="comforta myprofile-new bg-92DA44">
+                                    {{currency}} {{me.payout}}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="selector border-bottom-selector" ng-if="referrals" onclick="referrals('show')">
+                            <div class="selector__icon selector__icon--chevron-righ myprofile-menu-icon bg-0c0f38 " >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>            
+                            </div>  
+                            <div class="selector__label comforta">{{lang[814].text}}</div>
+
+                        </div>                          
+                        <div class="selector border-bottom-selector hidden">
+                            <div class="selector__icon selector__icon--chevron-righ myprofile-menu-icon bg-4A4A4A " >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>             
+                            </div>  
+                            <div class="selector__label comforta" data-lid="707"></div>
+
+                        </div>                        
+                        <div class="selector border-bottom-selector-last" ng-click="goTo('home.settings');">
+                            <div class="selector__icon selector__icon--chevron-righ myprofile-menu-icon bg-DAD9E2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>                                
+                            </div>  
+                            <div class="selector__label comforta">{{alang[40].text}}</div>
+
+                        </div>                        
+                    </div>
+
+                   <div class="layout__content box-shadow-credits myprofile-menu-secondary" >
+                        <div class="btn-open-premium"  ng-if="me.premium == 0"  ng-click="openPremiumModal();">
+                            <div>{{alang[76].text}}</div>                           
+                        </div>                        
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div flow-init
+     flow-name="uploader.flow"
+     flow-files-added="processFiles($files)">
+  <button flow-btn type="file" id="uploadRegPhoto" style="display: none;">{{alang[221].text}}</button>
+ </div>        
+</ion-content>
+
+<div class="tabbar">
+    <div class="tabbar__items">
+
+        <div class="tabbar__item">
+            <div class="tabbar-item is-active"  ng-click="goTo('home.explore');">
+                <div class="tabbar-item__icon">
+                    <div class="icon icon--stretch mt-5px">
+                        <img src="{{siteUrl}}mobile/twigo/img/menu-discover.svg">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.meet');">
+                <div class="tabbar-item__icon">
+                    <div class="icon icon--stretch mt-5px" >
+                        <img src="{{siteUrl}}mobile/twigo/img/menu-meet.svg">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.stories');">
+                <div class="tabbar-item__icon">
+                    <div class="icon icon--stretch mt-5px" >
+                        <img src="{{siteUrl}}mobile/twigo/img/menu-stories.svg">
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.reels');">
+                <div class="tabbar-item__icon">
+                    <div class="icon icon--stretch mt-5px" >
+                        <svg aria-label="Reels" fill="#c1c0c9" width="23" height="23.961" viewBox="0 0 23 23.961" role="img"><line fill="none" stroke="#dad9e2" stroke-linejoin="round" stroke-width="1" x1="2.049" x2="21.95" y1="7.002" y2="7.002"></line><line fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" x1="13.504" x2="16.362" y1="2.001" y2="7.002"></line><line fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" x1="7.207" x2="10.002" y1="2.11" y2="7.002"></line><path d="M2 12.001v3.449c0 2.849.698 4.006 1.606 4.945.94.908 2.098 1.607 4.946 1.607h6.896c2.848 0 4.006-.699 4.946-1.607.908-.939 1.606-2.096 1.606-4.945V8.552c0-2.848-.698-4.006-1.606-4.945C19.454 2.699 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.546 2 5.704 2 8.552Z" fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path><path d="M9.763 17.664a.908.908 0 0 1-.454-.787V11.63a.909.909 0 0 1 1.364-.788l4.545 2.624a.909.909 0 0 1 0 1.575l-4.545 2.624a.91.91 0 0 1-.91 0Z" fill-rule="evenodd"></path></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.matches');">
+                <div class="tabbar-item__icon">
+                    <div class="icon icon--stretch mt-6px">
+                        <img src="{{siteUrl}}mobile/twigo/img/menu-chat.svg">
+                    </div>
+                    <div class="tabbar-item__icon-indicator is-shown" ng-if="unreadMessage"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.profile');">
+                <div class="tabbar-item__icon">
+                    <div class="icon icon--stretch mt-5px" >
+                        <img src="{{siteUrl}}mobile/twigo/img/menu-profile-active.svg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="refModal"></div>
+

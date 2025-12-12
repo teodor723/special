@@ -1,0 +1,90 @@
+<script>
+url = "date";
+</script>            
+	<?php if($sm['theme']['design_style_wide']['val'] == 'Yes'){ ?>
+		<div class="col s2 real" style="padding-right: 0px;" >
+		<?php 
+			if($sm['plugins']['adsWeb']['enabled'] == 'Yes' && $sm['plugins']['adsWeb']['enable_160x600'] == "Yes"){ 
+                if($sm['plugins']['adsWeb']['160x600'] == '[ADSMANAGER]'){
+                    $sm['plugins']['adsWeb']['160x600'] = getAD('160x600');
+                }                 
+				echo '<div class="ad-zone-vertical">'.$sm['plugins']['adsWeb']['160x600'].'</div>';
+			}
+		?>		
+		</div>
+		<div class="col s8 real mainContentBorderColor"  id="site-content" style="background: <?=$sm['theme']['search_card_wall']['val']; ?>;">
+	<?php } else { ?>
+		<div class="col s8 real fix-width-content mainContentBorderColor" style="padding-right: 0px;background: <?=$sm['theme']['search_card_wall']['val']; ?>;" id="site-content">
+	<?php } ?>
+    <div class="wall meetContent mainContentBorderColor" style="background: <?= $sm['theme']['search_card_wall']['val']; ?>;">      
+        <h2 class="montserrat vivify fadeIn" style="font-size: 32px;margin:0 auto;padding:25px;text-align:center;font-weight: bold;"><?= $sm['lang'][953]['text']; ?></h2> 
+
+        <div class="search-post" style="display: block;height: auto;padding-top:0px;border-radius:10px">               
+            <div class="coll">
+              <div class="search-title montserratRegular"><?= $sm['lang'][32]['text']; ?></div>
+                 <select class="input clever" id="dateFilterCity" style="margin-top:-5px;width: 90%" 
+                 onchange="loadDatesRequest('city')">
+                    <option value="ALL" style="color:#000;"><?= $sm['lang'][954]['text']; ?></option> 
+                    <?php 
+                        $countries = getArrayDSelected('city','users');
+                        foreach ($countries as $val) { ?>
+                        <option value="<?= $val['city']; ?>"><?= $val['city']; ?></option>
+                    <?php } ?>  
+               </select>    
+            </div>  
+
+            <div class="coll" style="padding-left: 25px">
+              <div class="search-title montserratRegular"><?= $sm['lang'][955]['text']; ?></div>
+                 <select class="input clever" id="dateFilterTime" style="margin-top:-5px;width: 90%" 
+                 onchange="loadDatesRequest('time')">
+                    <option value="month" style="color:#000;"><?= $sm['lang'][956]['text']; ?></option>                  
+                    <option value="week" style="color:#000;"><?= $sm['lang'][957]['text']; ?></option>                    
+                    <option value="today" style="color:#000;"><?= $sm['lang'][958]['text']; ?></option>
+               </select>                                                 
+            </div>                                  
+            <div class="coll" style="padding-left:25px;border:none">
+              <div class="search-title montserratRegular"><?= $sm['lang'][959]['text']; ?></div>
+                 <select class="input clever" id="dateFilterBudget" style="margin-top:-5px;width: 90%" 
+                 onchange="loadDatesRequest('budget')">
+                    <option value="ALL" style="color:#000;"><?= $sm['lang'][911]['text']; ?></option> 
+                    <?php
+                        $budget = explode( ',', $sm['plugins']['date']['budgetValues']);
+                        foreach($budget as $entry){
+                            echo '<option value="'.$entry.'">'.$sm['plugins']['settings']['currencySymbol'].' '.$entry.'</option>';    
+                        }
+                    ?> 
+               </select>                          
+            </div>                                               
+        </div>         
+		<div style="position:relative;margin-left:40px;" id="dateRequests">
+
+            <figure class="snip1336 vivify fadeIn" id="createDateRequest" onclick="openWidget('dateRequest')" style="display:none">
+                <img />
+                <figcaption>
+                    <img src="<?= profilePhoto($sm['user']['id']); ?>" class="profile" style="top:140px"/>
+                    <p style="font-size:14px;font-weight:700;text-align:center;margin-top: 250px;">
+                        <?= $sm['lang'][960]['text']; ?>
+                    </p>
+                </figcaption>
+                <div class="dating-btns">
+                    <a href="javascript:;" onclick="openWidget('dateRequest')" style="width:95%" class="follow"><?= $sm['lang'][960]['text']; ?></a>
+                </div>                
+            </figure>     
+
+        </div>
+		<?= getAbsolutePage('footer'); ?>					
+    </div>
+</div>      
+
+<?php if($sm['theme']['design_style_wide']['val'] == 'Yes'){ ?>
+	<div class="col s2 real" style="position: relative;">
+		<?php 
+			if($sm['plugins']['adsWeb']['enabled'] == 'Yes' && $sm['plugins']['adsWeb']['enable_160x600'] == "Yes"){ 
+                if($sm['plugins']['adsWeb']['160x600'] == '[ADSMANAGER]'){
+                    $sm['plugins']['adsWeb']['160x600'] = getAD('160x600');
+                }                 
+				echo '<div class="ad-zone-vertical" style="margin-left:79px;">'.$sm['plugins']['adsWeb']['160x600'].'</div>';
+			}
+		?>	
+	</div>
+<?php }?>

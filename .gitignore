@@ -1,0 +1,50 @@
+# Google Cloud Service Account credentials
+*service-account*.json
+seawaysvillas-*.json
+
+# Node modules
+mobile-react/node_modules/
+node_modules/
+
+# React build files
+mobile-react/build/
+mobile-react/dist/
+
+# Dependency directories
+vendor/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# OS generated files
+Thumbs.db
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Cache
+.cache/
+*.cache

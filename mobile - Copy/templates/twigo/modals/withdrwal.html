@@ -1,0 +1,114 @@
+<div class="modal profile-modal transparent scroll overflow-y-scroll">
+  <div class="floating-action vivify fadeInBottom delay-1600 zIndex-99" ng-if="proceedToWithdraw" id="proceedToWithdraw">
+    <div class="cta-box">
+      <div class="cta-box__content twigo-font">
+        <b class="fs-15rem">{{lang[564].text}}</b><br><br>
+        {{wmethod}}<br>
+        {{lang[586].text}} {{me.payout}} {{currency}}
+      </div>
+      <div class="cta-box__buttons">
+        <div class="button-wrapper">
+            <textarea ng-model="payout" class="twigo-font payout-input" name="payout" autocapitalize="off">
+                
+            </textarea>
+            <small>{{lang[798].text}} {{me.email}} {{lang[799].text}}</small>                 
+            <button class="button button--primary" ng-click="withdrawNow(payout)">
+                <div class="button__content"><span class="button__text">{{lang[564].text}}</span></div>
+            </button>
+            <button class="inline-button inline-button--primary inline-button--sm" ng-click="hideWithdraw()">
+                <span class="inline-button__text">{{alang[191].text}}</span>
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="overlay withdrawOverlay" ng-if="proceedToWithdraw"></div>
+  <div class="layout layout--centered-content">
+    <div class="layout__content margin-10">
+      <div class="wallet-iphone">
+        <div class="wallet-header twigo-gradient4 w-wallet-header">
+          <div class="wallet-header-summary">
+            <div class="wallet-summary-text fc-fff">
+              {{lang[700].text}}
+            </div>
+            <div class="wallet-summary-text-2 fc-fff">
+              {{me.credits}} {{lang[73].text}}
+            </div>
+            <div class="wallet-summary-balance w-wallet-balance">
+              {{currency}} {{me.payout}}
+            </div>
+          </div>
+          <div class="wallet-user-profile ">
+            <div class="wallet-user-photo box-shadow-left-profile profile-photo" 
+              style="background-image: url({{me.profile_photo}});"></div>
+          </div>
+        </div>
+        <div class="wallet-content w-wallet-c">
+          <div class="wallet-transactions mr-0">
+            <span class="wallet-t-desc text-center" style="color: {{theme.btn_color.val}}">
+            {{lang[699].text}}
+            </span>
+            <div class="wallet-transaction pt-80" ng-if="me.pendingPayout == 1">
+              <div class="wallet-t-details text-center">
+                <div class="wallet-t-title text-center">{{lang[537].text}}</div>
+              </div>
+            </div>
+            <div class="wallet-transaction mb-10" ng-repeat="p in payouts" ng-if="me.pendingPayout == 0" ng-click="showWithdraw(strReplace(p,'(e)',''))">
+              <div class="wallet-t-details">
+                <div class="wallet-t-title">{{strReplace(p,'(e)','')}}</div>
+              </div>
+              <div class="wallet-t-amount">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0e0e0e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layout__content">
+      <div class="cta-box" ng-if="payoutHistory.length > 0">
+        <div class="cta-box__header comforta payouts-list-title">
+          {{lang[797].text}}
+        </div>
+        <div class="cta-box__content comforta">
+          <div class="layout__content box-shadow-credits myprofile-menu-secondary">
+            <div class="selector border-bottom-selector payouts-list" ng-repeat="h in payoutHistory">
+              <div class="selector__label comforta fs-13">
+                <div class="float-left"><strong>{{currency}} {{h.withdraw_amount}}</strong><br>{{h.withdraw_method}}</div>
+                <div class="float-right"><strong style="color: {{h.color}}">{{h.status}}</strong><br>
+                  <small>{{h.withdraw_sent}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cta-box">
+        <div class="cta-box__header comforta payouts-list-title">
+          {{lang[554].text}}
+        </div>
+        <div class="cta-box__content comforta">
+          <center>
+            <p class="payment-promo__txt payout-info">
+              {{lang[560].text}} <b>{{currency}} {{payoutMin}}</b>.<br><br>
+              {{lang[561].text}} <b>{{payoutMin}} {{currency}}</b> {{lang[562].text}} {{site_name}} {{lang[563].text}}.<br>
+            </p>
+          </center>
+          <div class="cta-box__content cta-box__content--vpadded cta-box__content--hpadded">
+            <div class="cta-box__buttons mt-20px">
+              <div class="button-wrapper">
+                <div class="button-wrapper__item">
+                  <button class="inline-button" ng-click="closeWithdrwal();">
+                  <span class="inline-button__text comforta fc-000"><strong>{{alang[264].text}}</strong></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

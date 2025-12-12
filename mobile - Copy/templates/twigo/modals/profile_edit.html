@@ -1,0 +1,239 @@
+<ion-modal-view>
+   <div class="header-modal">
+      <div class="header-title">
+         <h2 class="twigo-font" data-lid="135">{{lang[135].text}}</h2>
+      </div>
+      <div ng-click="closeEditProfileModal();" class="header-right">
+         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+         </svg>
+      </div>
+   </div>
+   <ion-content class="profile mt-45px">
+      <div class="photos edit-photos">
+         <div class="row">
+            <div class="col col-66">
+               <div class="photo-pickable" ng-if="uphotos[0] == null" >
+                  <div class="w-full r-3x profileP photo1" ng-click="pick()" ></div>
+               </div>
+               <div class="photo-pickable" ng-if="uphotos[0] != null">
+                  <div class="w-full r-3x profileP photo1" 
+                     style="background-image:url({{trustPhoto(uphotos[0].photo)}})"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>1</span>
+                  </div>
+               </div>
+            </div>
+            <div class="col col-33">
+               <div class="photo-pickable" ng-if="uphotos[1] == null" >
+                  <div class="w-full r-3x m-b-xs profileP photo2" ng-click="pick(2)" id="photo2"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>2</span>
+                  </div>
+               </div>
+               <div class="photo-pickable" ng-if="uphotos[1] != null" >
+                  <div class="w-full r-3x m-b-xs profileP photo2" ng-click="showPhotoOptions(2,uphotos[1].id,uphotos[1].blocked,uphotos[1].profile)" style="background-image:url({{trustPhoto(uphotos[1].photo)}})"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>2</span>
+                  </div>
+               </div>
+               <div class="photo-pickable mt-15px" ng-if="uphotos[2] == null" ng-click="pick(3)">
+                  <div class="w-full r-3x profileP photo2" id="photo3"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>3</span>
+                  </div>
+               </div>
+               <div class="photo-pickable mt-15px" ng-if="uphotos[2] != null">
+                  <div class="w-full r-3x profileP photo2" ng-click="showPhotoOptions(3,uphotos[2].id,uphotos[2].blocked,uphotos[2].profile)" style="background-image:url({{trustPhoto(uphotos[2].photo)}})"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>3</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row mt-2px">
+            <div class="col col-33">
+               <div class="photo-pickable" ng-if="uphotos[3] == null" ng-click="pick(4)">
+                  <div class="w-full r-3x profileP photo2"  id="photo4"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>4</span>
+                  </div>
+               </div>
+               <div class="photo-pickable" ng-if="uphotos[3] != null">
+                  <div class="w-full r-3x profileP photo2" ng-click="showPhotoOptions(4,uphotos[3].id,uphotos[3].blocked,uphotos[3].profile)" style="background-image:url({{trustPhoto(uphotos[3].photo)}})"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>4</span>
+                  </div>
+               </div>
+            </div>
+            <div class="col col-33">
+               <div class="photo-pickable" ng-if="uphotos[4] == null" ng-click="pick(5)" >
+                  <div class="w-full r-3x profileP photo2" id="photo5"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>5</span>
+                  </div>
+               </div>
+               <div class="photo-pickable" ng-if="uphotos[4] != null">
+                  <div class="w-full r-3x profileP photo2" ng-click="showPhotoOptions(5,uphotos[4].id,uphotos[4].blocked,uphotos[4].profile)" style="background-image:url({{trustPhoto(uphotos[4].photo)}})"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>5</span>
+                  </div>
+               </div>
+            </div>
+            <div class="col col-33">
+               <div class="photo-pickable" ng-if="uphotos[5] == null" ng-click="pick(6)" >
+                  <div class="w-full r-3x profileP photo2" id="photo6"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>6</span>
+                  </div>
+               </div>
+               <div class="photo-pickable" ng-if="uphotos[5] != null">
+                  <div class="w-full r-3x profileP photo2" ng-click="showPhotoOptions(6,uphotos[5].id,uphotos[5].blocked,uphotos[5].profile)" style="background-image:url({{trustPhoto(uphotos[5].photo)}})"></div>
+                  <div class="edit-profile-photo-number">
+                     <span>6</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="list m-n profile-edit-list">
+         <div class="item border-t-white" >
+            <span data-lid="331" class="fs-15"></span>
+            <input class="profile-edit-input" data-update-profile="username" value="{{me.username}}"/>
+         </div>
+         <div class="item">
+            <span data-lid="28" class="fs-15"></span>
+            <input class="profile-edit-input" data-update-profile="email" value="{{me.email}}"/>
+         </div>
+         <div class="item">
+            <h2 class="twigo-font profile-edit-h2" data-lid="132"></h2>
+         </div>
+         <div class="item border-t-white">
+            <span data-lid="26" class="fs-15"></span>
+            <input class="profile-edit-input" id="userName" value="{{name}}"/>
+         </div>
+         <div class="item" >
+            <span data-lid="300" class="fs-15"></span>
+            <input class="profile-edit-input" id="userAge" value="{{age}}"/>
+         </div>
+         <div class="item item-toggle" ng-click="updateUserGender()">
+            <span data-lid="34" class="fs-15"></span>
+            <label class="toggle profile-edit-toggle" >
+            <span>{{gender}}</span>
+            </label>
+         </div>
+         <div class="item">
+            <h2 class="twigo-font profile-edit-h2" data-lid="117"></h2>
+            <textarea id="userBio" class="profile-edit-textarea" ng-bind-html="unEntity(bio) | nl2br"></textarea>
+         </div>
+         <div class="item item-toggle" ng-repeat="q in questions"  ng-click="updateUserQuestion(q,q.answers)" ng-if="q.method == 'select'">
+            <span class="fs-15">{{q.question}}</span>
+            <label class="toggle fs-15c-444">
+            <span ng-if="q.userAnswer != ''" class="userAnswer{{q.id}} c-888">{{q.userAnswer}}</span>
+            <span ng-if="q.userAnswer == ''" class="userAnswer{{q.id}} c-aaa">{{noData}}</span>
+            </label> 
+         </div>
+         <div class="list m-n " ng-repeat="q in questions"  ng-click="updateUserQuestion(q,q.answers)" ng-if="q.method == 'text'">
+            <div class="item item-divider b-none"></div>
+            <div class="item item-divider b-none text-u-c comforta fs-15" >{{q.question}}</div>
+            <div class="item">
+               <textarea class="edit-asnwer">{{q.userAnswer}}</textarea>
+            </div>
+         </div>
+      </div>
+      <div class="item border-c-item">
+         <h2 class="twigo-font profile-edit-h2" data-lid="276"></h2>
+      </div>
+      <div class="row i-row">
+         <div class="col col-25" ng-repeat="i in interests"  ng-click="selectInterest(i.id)">
+            <div class="w-full r-3x profileP {{i.selected}} i-image" data-interest-action="{{i.action}}" id="interest{{i.id}}" style="background-image:url({{trustPhoto(i.icon)}});"></div>
+         </div>
+      </div>
+      <div class="item border-c-item" ng-if="languages.length > 1">
+         <h2 class="twigo-font profile-edit-h2" data-lid="459"></h2>
+      </div>
+      <div class="item item-toggle border-none" ng-if="languages.length > 1" ng-click="updateUserLanguage()">
+         <span>{{lang}}</span>
+         <label class="toggle profile-edit-toggle">
+         {{userLang}}
+         </label>
+      </div>
+      <div class="list m-n mt-25px">
+         <div class="item border-c-item">
+            <h2 class="twigo-font profile-edit-h2">{{alang[93].text}}
+            </h2>
+         </div>
+         <div class="item item-toggle comforta border-c-item fs-15">
+            {{alang[94].text}}
+            <label class="toggle toggle-assertive">
+               <input type="checkbox" ng-checked="matches" ng-model="matches"  ng-click="updateNotification('match_me',matches)">
+               <div class="track">
+                  <div class="handle"></div>
+               </div>
+            </label>
+         </div>
+         <div class="item item-toggle comforta border-c-item fs-15" >
+            {{alang[95].text}}
+            <label class="toggle toggle-assertive">
+               <input type="checkbox" ng-checked="fans" ng-model="fans"  ng-click="updateNotification('fan',fans)">
+               <div class="track">
+                  <div class="handle"></div>
+               </div>
+            </label>
+         </div>
+         <div class="item item-toggle comforta border-c-item fs-15" >
+            {{alang[96].text}}
+            <label class="toggle toggle-assertive">
+               <input type="checkbox" ng-checked="messages" ng-model="messages"  ng-click="updateNotification('message',messages)">
+               <div class="track">
+                  <div class="handle"></div>
+               </div>
+            </label>
+         </div>
+         <div class="item item-toggle comforta border-c-item fs-15" >
+            {{alang[207].text}}
+            <label class="toggle toggle-assertive">
+               <input type="checkbox" ng-checked="near_me" ng-model="near_me"  ng-click="updateNotification('near_me',near_me)">
+               <div class="track">
+                  <div class="handle"></div>
+               </div>
+            </label>
+         </div>
+      </div>
+      <div class="list m-n">
+         <div class="item border-c-white">
+            <h2 class="twigo-font profile-edit-h2">{{alang[98].text}}
+            </h2>
+         </div>
+         <div class="item comforta border-c-item fs-15" ng-click="openPrivacy()" >
+            {{alang[100].text}}
+            <span class="item-note">
+            <i class="icon ion-chevron-right"></i>
+            </span>
+         </div>
+         <div class="item comforta border-c-item fs-15"  ng-click="openTerms()" >
+            {{alang[101].text}}
+            <span class="item-note">
+            <i class="icon ion-chevron-right"></i>
+            </span>
+         </div>
+         <div class="item comforta border-c-item fs-15 edit-profile-logout"  ng-click="logout()">
+            {{alang[42].text}}
+            <span class="item-note">
+            <i class="icon ion-chevron-right"></i>
+            </span>
+         </div>
+      </div>
+      <div flow-init
+         flow-name="uploader.flow"
+         flow-files-added="processUserFiles($files)">
+         <button flow-btn type="file" id="uploadUserPhoto" style="display: none;">Upload Images</button>
+      </div>
+      <div class="item item-divider b-none background-white"></div>
+   </ion-content>
+   <ion-footer class="gradient3">
+      <button class="button button-clear comforta close-credits-modal" ng-click="closeEditProfileModal()">{{alang[44].text}}</button>
+   </ion-footer>
+</ion-modal-view>

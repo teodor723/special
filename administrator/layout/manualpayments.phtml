@@ -1,0 +1,281 @@
+<?php
+  if($sm['admin_ajax'] == false){
+    header('Location:'.$sm['config']['site_url'].'index.php?page=admin');
+  }
+?>
+<script>
+  aurl = 'manualpayments';
+  currentMenu = '';
+  currentMenuCollapse = ''; 
+</script>
+<!-- SECTION CONTENT -->
+<div class="container-fluid page__container" id="mediaContainer" style="padding-top:25px;min-height: 800px ">
+
+  <div class="card-header card-header-large bg-light" data-user-search-result="" style="position: relative;height:60px;margin-bottom:25px;border:none">
+     <button type="button" class="btn btn-warning" onclick="openCPModal()" style="float:right;">
+        <i class="material-icons mr-1">attach_money</i> Create Custom Payment
+     </button>    
+     <button type="button" class="btn btn-light" onclick="goTo('revieworders','','Premium Plugins');" style="float:right;margin-right: 25px;">
+       <?= selectC('orders','where order_status = "pending" and order_custom = 1'); ?> order proof for review
+     </button>            
+  </div>
+  <div class="card card-form" id="createCustomPayment" style="display:none">
+      <div class="card-form__body card-body-form-group ">
+        <form id="custom_payment_form" method="post" action="">
+          <div class="row">
+              <div class="col-lg-12 card-body" style="padding: 15px;">
+                  <h4>
+                      <strong class="headings-color">Create new custom payment</strong>
+                  </h4>
+                  <p class="text-muted" id="ad-modal-desc"></p>
+              </div>
+
+              <div class="col-lg-6" style="padding: 15px">
+
+                  <div class="form-group">
+                      <label>Payment name</label>
+                      <div class="input-group mb-2">
+                          <input name="p_name" required="" type="text" class="form-control" placeholder="Set the payment name">
+                      </div> 
+                  </div>    
+
+                  <div class="form-group">
+                  <label>Payment logo</label><br>
+                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAADFklEQVR4Xu3dv2sTYRwG8HtJGpqhP9LBUYqDUBCc1cVGHDpoaUsR7aCG7u4OHfoHCO5B65BWCYltRYIUmkGwY0YFBzs4FW3OtBJNc4m8OYNnvLvg+zR9X83TqZA8yfc++b73/iCl4v2Hj00r5OfOvaXhsMdXHi5X+jUvr11cup4aCgPgY8ECBAS7g4AEBAXAODuQgKAAGGcHHgegXAd2W+uB7/NfxwUBsc+XgJifRUACggJgnB1IQFAAjLMDUUAeZ6kLcieibtdKEpCAoAAYZwcSEBQA4+xAAoICYLzVgTzOwhQJiPnxOAv0I+A/C7i4MLssi09n8kvoRejMa7sHEhD82AmoANhGC4rK4Rz2nC8HX59nN1+VFN66Z5ET/XobCigVTELUupULGsLdkP9opYawy5/K+dzW9m7P2izghY0B/Gu0zgtqCDu9lntAQEBAx3JIawd6rTo70HHq7yqfD9+0h+Xc1eT48NhIMhIV42ETEOCvFNUKGDRswyaJhfnpyXgsMul3tX3XgX6AsvMeP91cPXP2dPzi+XOXB6PxCYlV/f6tlMm/LMrf796YSfl1IgEtyyrv2Y/ksL09f21qIDZwwdtpR7WjnSfZFwU5nBOnRlOdXagNUNd5oF8HthEWb83ct4QY/A3JM9OGZZVuZkBI+17YW3sooCXsdMZdqhAwAKE9hP0mi2rNKWayG8W5qSsTibGRmyYMYVmDUR1Ybzberqyur8nC3PtgzJ1EavWSxDNtEjEOUBZ0cFgtPNso7PjdlkxbxhgJKIty6s5uZX9/O7f1urW/dRfSQ8lINGLUQtpYQJVJUccyRi+g31JFRa6V+TVDK7+EYvBEzwO9NboL4sSsZTVHFWv/GRN2ea8Pj7MwNDPSWg8TzCDAqiAg5sdvqIJ+BCQgKgDmeQ88DkBd54Fg7cbEtZ3GGCMAFkJAAoICYJwdSEBQAIyzAwkICoBxbeeBYN1GxLkTAT8GAhIQFADj7EACggJgnB1IQFAAjPPvhUFAGedWDkQkIAFBATDODiQgKADG2YG9Buznf3chbbtd/w/ymnhcw6b3MQAAAABJRU5ErkJggg==" 
+                  id="p_logo_img" class="rounded"   style="max-width: 220px">
+                      <div class="media-body" style="margin-top: 20px">
+                          <button type="button" class="btn btn-sm btn-dark" onclick="uploadImage(this)" data-uptype="payment_logo"  data-src="">Choose payment logo</button>
+                      </div>
+                  </div> 
+
+                  <div class="form-group">
+                      <label>Payment instructions</label>
+                      <textarea rows="6" name="p_description" required class="form-control" placeholder="Guide the user how to pay with this custom payment,for example for a wire transfer write here you bank account information where the client has to send the money"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                      <label>Payment proof placeholder</label>
+                      <div class="input-group mb-2">
+                          <textarea rows="5" name="p_proof" required="" type="text" class="form-control" placeholder="Text to ask proof information to client, for example ask for transaction id or national id or anything that helps you to indentify the payment"></textarea>
+                      </div> 
+                  </div>   
+                                                  
+              </div>
+
+              <div class="col-lg-5" style="padding: 15px">
+
+                  <div class="form-group">
+                      <label>EXTERNAL URL <small style="font-size:0.6rem">optional</small></label>
+                      <div class="input-group mb-2">
+                          <input type="text" class="form-control" name="p_external_url" placeholder="Write here the external url">
+                      </div>
+                      <small class="form-text text-muted" style="font-size: 0.64rem;">If you have a payment provider that gives you custom payment url, you can use this to send your clients there and once the payment is complete they can come back and send the proof that the payment is done</small>                                        
+                  </div>
+
+
+                  <div class="form-group">
+                      <label>Country</label><br>
+                      <select name="p_country" class="custom-select">
+                          <option value="">All countries</option>
+                          <?php 
+                          $countries = getArrayDSelected('country_code','users');
+                          foreach ($countries as $val) { 
+                              if(empty($val['country_code'])){
+                                  continue;
+                              }
+                              if(!empty($val['country_code'])){
+                                  if($val['country_code'] == 'undefined'){
+                                      continue;
+                                  }
+                              }
+                          ?>
+                            <option value="<?= $val['country_code']; ?>"><?= $val['country_code']; ?></option>
+                          <?php } ?>                                            
+                      </select>
+                      <small class="form-text text-muted" style="font-size: 0.64rem;">Make this payment visible ONLY to clients from the selected country code.</small>
+                  </div>
+
+                  <div class="form-group">
+                      <label>Purchase type</label><br>
+                      <select name="p_type" class="custom-select">
+                          <option value="1">Credits and Premium</option>
+                          <option value="2">Only Credits</option>
+                          <option value="3">Only Premium</option>       
+                      </select>
+                      <small class="form-text text-muted" style="font-size: 0.64rem;">Make this payment visible ONLY to specific purchase action.</small>
+                  </div> 
+
+                  <div class="form-group">
+                      <label>Purchase Package</label><br>
+                      <select name="p_package" class="custom-select">
+                          <option value="9">All packages</option>
+                          <option value="0">Cheapest package</option>
+                          <option value="1">Middle package</option>
+                          <option value="2">Expensive package</option>       
+                      </select>
+                      <small class="form-text text-muted" style="font-size: 0.64rem;">Both credits and premium has 3 packages, for example if you want to show this payment option only to the expensive package choose that option.</small>
+                  </div>                                                                        
+                  <div class="form-group">
+                      <label>Review time</label>
+                      <div class="input-group mb-2">
+                          <input name="p_review_time" required="" type="number" class="form-control" value="24" style="max-width:60px">
+                      </div> 
+                      <small class="form-text text-muted" style="font-size: 0.64rem;">Set how much time in HS the client has to wait till his payment proof is reviewed.</small>                                        
+                  </div>  
+
+                  <input type="hidden" name="action" value="create_custom_payment">
+                  <input type="hidden" id="p_logo" name="p_logo" value="">
+                  <button type="submit" class="btn btn-success" style="float:right">
+                    Create Payment
+                  </button>                
+                  <button  class="btn btn-secondary" onclick="openCPModal()" style="float:left">
+                    Cancel
+                  </button>                             
+              </div> 
+          </div>   
+        </form>                                                     
+      </div>   
+  </div>
+
+  <div class="card card-form">
+      <div class="row no-gutters">
+          <div class="col-lg-12 col-md-12 col-sm-12 card-form__body" style="min-height: 700px">              
+              <div class="table-responsive border-bottom" data-search data-toggle="lists" style="min-height: 700px" data-table="result">   
+                  <table class="table mb-0 thead-border-top-0" style="">
+                      <thead>
+                          <tr style="background: #fff">
+                              <th style="width: 120px;">Logo</th>
+                              <th style="width: 90px;">Name</th>
+                              <th style="width: 280px;">Description</th>
+                              <th style="width: 120px;">Placeholder</th>                              
+                              <th style="width: 70px;">Type</th>
+                              <th style="width: 70px;">Package</th>
+                              <th style="width: 70px;">Country</th>
+                              <th style="width: 70px;">External URL</th>
+                              <th style="width: 70px;">Review</th>
+                              <th style="width: 120px;">Status</th>
+                              <th style="width: 24px;"></th>
+                          </tr>
+                      </thead>
+
+                      <tbody class="list" id="dataTable" style="overflow-y: scroll">
+                      </tbody>
+                  </table>
+              </div>
+ 
+              <div class="card-footer text-center">
+                <span class="text-muted">Showing </span>
+                <span data-current-view></span>
+                <span class="text-muted">of </span>
+                <span data-current-total-users></span> 
+                <span class="text-muted">results</span>
+                <a href="#results" data-nextPage-search>
+                  <i class="material-icons icon-muted float-right">arrow_forward</i>
+                </a>
+                <a href="#results" data-backPage-search style="display: none">
+
+                  <i class="material-icons icon-muted float-left" >arrow_backward</i>
+                </a>
+              </div> 
+
+          </div>                    
+      </div>
+  </div>    
+
+  <div class="v-wrapper">
+    <a href="#" class="btn btn-light ml-3" data-close-video><i class="material-icons mr-1">close</i> Close video</a>
+    <video id="playVideo" controls >
+      <source />
+    </video>
+  </div>
+</div>
+
+
+<script>
+    var viewer;
+    var dataPerPage = 150;
+    var viewedData = 0;
+    var lastPageSearch = 0;
+    var search = {};
+    var searchData = [];
+    var checkedData = [];    
+    search['action'] = 'search_cp';
+    search['orderby'] = 'id';
+    setTimeout(function(){
+
+    //load data
+    function loadDataAds(){
+      $('#dataTable').css('opacity','0.5');
+      
+      $.ajax({
+        url: request_source()+'/admin.php', 
+        data: search,  
+        type: "post",
+        dataType: 'JSON',        
+        success: function(response) {
+
+            $('#dataTable').html('');
+            $('#dataTable').css('opacity','1');
+            $('[data-search]').show();
+
+            setTimeout(function(){
+              checkedData = [];
+            },500);
+            searchData = response['data'];
+
+            for (i = 0; i < dataPerPage; i++) {
+              viewedData++; 
+              $('#dataTable').append(response['data'][i]);
+            }
+
+            $('#totalResult').text(response.total);
+
+            if(response['total'] < 49){
+              viewedData = response['total'];
+            }
+       
+            if(response['total'] == 0){
+               $('[data-table="result"]').hide();
+            }
+            viewer = new slimLightbox();
+            $('#searching').hide();
+            $('#searchComplete').show();
+            $('[data-current-total-users]').text(response.total);
+            $('[data-current-view]').text(viewedData);
+
+            tableDropdownEffect();                        
+        },
+      });
+    }
+
+    
+    loadDataAds();
+    
+
+    $('[data-update-media-search]').click(function(){
+        $('#dataTable').css('opacity','0.5');
+        checkedData = [];
+        viewedData = 0;
+        searchData = [];
+        loadDataAds();        
+    })
+
+
+    $('#custom_payment_form').on('submit', function(e){
+        e.preventDefault();
+        $('#createCustomPayment').toggle();        
+        $.ajax({ 
+            type: "POST", 
+            url: "<?=$sm['config']['site_url']; ?>requests/admin.php",
+            data: $(this).serialize(),
+            dataType:'JSON',
+            success: function(response){
+              loadDataAds();
+            }
+        });
+    
+    });    
+
+    },10);
+
+</script>

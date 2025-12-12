@@ -1,0 +1,305 @@
+<ion-view title="" hide-nav-bar="true">
+    <div class="page mutual-attraction visible vivify fadeIn zIndex-bg-white" ng-if="itsaMatch">
+        <div class="page-promo-match">
+            <div class="promo-match">
+                <div class="cta-box__media">
+                    <div class="promo-match-photos">
+                        <div class="promo-match-photos__image promo-match-photos__image--left" style="background-image: url({{cu3.photo}})"></div>
+                        <div class="promo-match-photos__image promo-match-photos__image--right" style="background-image: url({{me.profile_photo}})"></div>
+                        <div class="promo-match-photos__icon vivify popIn delay-350 ml-40-top-35">
+                            <div class="icon icon--stretch">
+                                <svg class="icon__content">
+                                    <svg viewBox="0 0 64 64" id="icon-floating-like" width="100%" height="100%"><circle cx="32" cy="32" r="32" fill="#FF661B"></circle><path d="M38.41 22.4c4.4 0 7.99 3.54 7.99 7.9 0 7.14-9.64 16.1-14.4 16.1s-14.4-8.96-14.4-16.1c0-4.36 3.58-7.9 7.99-7.9a8.04 8.04 0 0 1 5.35 2.04A7.93 7.93 0 0 1 32 25.58a7.93 7.93 0 0 1 1.35-1.4 8.04 8.04 0 0 1 5.06-1.79z" fill="#FFF" fill-rule="nonzero"></path></svg>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-box animated fadeInUp">
+                    <div class="cta-box__header qa-title">{{alang[142].text}}</div>
+                    <div class="cta-box__content qa-message">
+                        <b>{{alang[143].text}} {{cu3.name}}</b> {{alang[144].text}}<br>
+                        {{alang[160].text}}
+                    </div>
+                </div>
+                <div class="promo-match__buttons animated fadeIn">
+                    <div class="promo-match__button" ng-click="closeMatchModal();">
+                        <div class="promo-match-button promo-match-button--sm">
+                            <div class="promo-match-button__icon">
+                                <i class="icon-svg promo-match-button__icon_">
+                                    <img src="img/goBack.png" class="width-30">
+                                </i>
+                            </div>
+                            <div class="promo-match-button__label">{{alang[146].text}}</div>
+                        </div>
+                    </div>
+                    <div class="promo-match__button">
+                        <div class="promo-match-button promo-match-button--chat" ng-click="goToChatGlobal('home.messaging','left',cu3)">
+                            <div class="promo-match-button__icon">
+                                <i class="icon-svg promo-match-button__icon_">
+                                <img src="img/goChat.png" class="width-60">
+                            </i>
+                            </div>
+                            <div class="promo-match-button__label">{{alang[145].text}}</div>
+                        </div>
+                    </div>
+                    <div class="promo-match__button">
+                        <div class="promo-match-button promo-match-button--sm" ng-click="goToChatGlobal('home.messaging','left',cu3,'Gift')">
+                            <div class="promo-match-button__icon">
+                                <i class="icon-svg promo-match-button__icon_">
+                                    <svg class="icon-svg_">
+                                        <img src="img/icon-circle-smiley.png" class="width-30">
+                                    </svg>
+                                </i>
+                            </div>
+                            <div class="promo-match-button__label">{{alang[161].text}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ion-content scroll="false" class="twigo-gradient2 mt--20">
+        <div class="page-container twigo-gradient1">
+            <div class="page encounters visible bg-none">
+                <div class="view-title">
+                    <div class="landing-logo">
+                        <img width="130" />
+                      </div>
+                </div>
+
+                <div ng-click="goTo('home.settings');" class="view-title-icon">
+                    <img src="{{siteUrl}}mobile/twigo/img/btn-filter.svg">
+                </div>
+
+                <div class="profile-parent-view vivify fadeIn">
+                    <div class="encounters__card exploreNoResultText" style="height: {{h}}px;" ng-if="!exploreResult">
+                        <div class="encounters-message">
+                            <h1 class="comforta exploreNoResultText-h1">{{alang[162].text}}</h1>
+                            <span class="exploreNoResultText-span">{{alang[163].text}}.<br>
+                            {{alang[164].text}}?</span>
+                            <button class="button btn-primary exploreNoResultText-btn" ng-click="goTo('home.settings','left');">
+                                <div class="button__content">
+                                    <span class="button__text comforta">{{alang[165].text}}</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="encounters__card exploreRewardCard" ng-click="getRegisterReward()" 
+                    style="height: {{h+200}}px;" ng-if="registerReward">
+                        <div class="encounters-message exploreRewardCard-inter">
+                            <div class='coin exploreRewardCard-coin'>
+                                <div class='front jump' id="coinJump">
+                                    <div class='star'></div>
+                                    <span class='creditsAmount'>{{creditsRewardRegister}}</span>
+                                    <div class='shapes'>
+                                        <div class='shape_l'></div>
+                                        <div class='shape_r'></div>
+                                        <span class='top'></span>
+                                        <span class='bottom'>{{site_name}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="comforta exploreRewardCard-span">{{lang[519].text}} {{site_name}}, 
+                                {{lang[520].text}}  <strong>{{creditsRewardRegister}}</strong> {{lang[73].text}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profiles-wrapper vivify exploreResultOK" ng-show="exploreResult">
+                    <div class="encounters__card exploreResultOK-card" style="height: {{h-70}}px;">
+                        <div class="box-shadow-credits vivify fadeIn delay-150 exploreResultOK-shadow" id="discoverOpacityBg1"></div>
+                        <div class="box-shadow-credits vivify fadeIn delay-300 exploreResultOK-shadow2" id="discoverOpacityBg2"></div>
+                        <div class="profile-action vivify popInRight delay-300 box-shadow-credits exploreResultOK-btn-like" id="likeBtn" ng-if="!loading" ng-click="like();">
+                            <i class="icon-svg icon-svg--stretch">
+                                <svg viewBox="0 0 64 64" id="icon-floating-yes" width="72px" height="72px"><circle fill="#fff" cx="32" cy="32" r="32"></circle><path d="M18.5 29.7c0-4.25 3.43-7.7 7.65-7.7A7.67 7.67 0 0 1 32 24.73 7.67 7.67 0 0 1 37.85 22a7.68 7.68 0 0 1 7.65 7.7C45.5 36.57 36.46 45 32 45s-13.5-8.42-13.5-15.3z" fill="#fe8565"></path></svg>
+                            </i>
+                        </div>
+
+                        <div class="profile-action vivify popInLeft delay-300 box-shadow-credits exploreResultOK-btn-nolike" id="nolikeBtn" ng-if="!loading" ng-click="nolike();">
+                            <i class="icon-svg icon-svg--stretch">
+                                <svg viewBox="0 0 64 64" id="icon-floating-no" width="72px" height="72px"><circle fill="rgba(255,255,255,1)" cx="32" cy="32" r="32"></circle><path d="M32 29.82l-7.37-7.37a1.54 1.54 0 1 0-2.18 2.18L29.83 32l-7.38 7.37a1.54 1.54 0 1 0 2.18 2.18L32 34.17l7.37 7.38a1.54 1.54 0 1 0 2.18-2.18L34.17 32l7.38-7.37a1.54 1.54 0 1 0-2.18-2.18L32 29.83z" fill="#C4C4C4"></path></svg>
+                            </i>
+                        </div>
+
+                        <div class="profile-action vivify popInRight box-shadow-credits delay-150 exploreResultOK-btn-chat" ng-if="!loading" 
+                            ng-click="goToChatGlobal('home.messaging','left',exploreUser);">
+                            <i class="icon-svg icon-svg--stretch">
+                                <svg class="icon__content icon__content--inactive">
+                                    <svg viewBox="0 0 64 64" id="icon-floating-chat" width="100%" height="100%"><circle fill="#FFF" cx="32" cy="32" r="32"></circle><path d="M45 45c-1.5 0-4.59-.26-7.6-1.17A12.95 12.95 0 0 1 32 45a13 13 0 1 1 10.2-4.93A9.22 9.22 0 0 0 45 45zM27 33.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill="#1AB0FF" fill-rule="nonzero"></path></svg>
+                                </svg>
+                            </i>
+                        </div>
+                        <div class="encounters-card" id="discoverGame">
+                            <div class="encounters-card__photos" id="discoverPhotos" ng-click="openProfileExplore(cards[0])">
+                                <div class="slider-gallery">
+                                    <div class="loader large grey centered " ng-if="loading">
+                                        <div class="first dot"></div>
+                                        <div class="second dot"></div>
+                                        <div class="third dot"></div>
+                                    </div>
+                                    <div class="slider-gallery__pages transform-0">
+                                        <div class="slider-gallery__page is-active">
+                                            <div class="multimedia" ng-show="!loading">
+                                                <div class="multimedia__image profilePhoto bg-fafafa" style="background-image: url({{cards[0].discoverPhoto}});"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="encounters-card__floating" id="discoverNameContainer" ng-show="!loading">
+                                <div class="encounters-card__info box-shadow-credits" ng-click="openProfileExplore(cards[0])">
+                                    <div class="encounters-card__name">
+                                        <div class="profile-user-info">
+                                            <div class="profile-user-info__text twigo-font">
+                                                <span class="profile-user-info__name twigo-font">
+                                                {{cards[0].full.name}}</span>
+                                            </div>
+                                            <div class="profile-user-info__meta twigo-font ml-10" >
+                                                <svg xmlns="http://www.w3.org/2000/svg" ng-if="cards[0].full.gender == 2" xmlns:xlink="http://www.w3.org/1999/xlink" width="37" height="16" viewBox="0 0 37 16">
+                                                  <defs>
+                                                    <linearGradient id="linear-gradient" x1="1" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                                                      <stop offset="0" stop-color="#ff8960"/>
+                                                      <stop offset="1" stop-color="#ff62a5"/>
+                                                    </linearGradient>
+                                                    <clipPath id="clip-path">
+                                                      <rect id="Rectangle" width="37" height="16" rx="8" fill="url(#linear-gradient)"/>
+                                                    </clipPath>
+                                                    <linearGradient id="linear-gradient-2" x1="0.748" y1="0.265" y2="0.772" xlink:href="#linear-gradient"/>
+                                                  </defs>
+                                                  <g clip-path="url(#clip-path)">
+                                                    <g id="color_primary_3" data-name="color/primary 3">
+                                                      <rect id="color_primary" data-name="color/primary" width="37" height="16" fill="url(#linear-gradient-2)"/>
+                                                    </g>
+                                                    <text id="_23" data-name="23" transform="translate(17 13)" fill="#fff" font-size="10" font-family="SegoeUI, Segoe UI" letter-spacing="0.009em"><tspan x="0" y="0">{{cards[0].full.age}}</tspan></text>
+                                                    <g id="woman" transform="translate(6 3)">
+                                                      <rect id="Gender_woman_background" data-name="Gender/woman background" width="10" height="10" fill="none"/>
+                                                      <path id="Oval_2" data-name="Oval 2" d="M2.857,10V9.285H1.428V7.857H2.857V7.071a3.571,3.571,0,1,1,1.429,0v.786H5.714V9.285H4.286V10ZM1.428,3.572A2.143,2.143,0,1,0,3.572,1.428,2.145,2.145,0,0,0,1.428,3.572Z" transform="translate(1.429)" fill="#fff"/>
+                                                    </g>
+                                                  </g>
+                                                </svg>
+
+                                                <svg xmlns="http://www.w3.org/2000/svg" ng-if="cards[0].full.gender == 1" xmlns:xlink="http://www.w3.org/1999/xlink" width="37" height="16" viewBox="0 0 37 16">
+                                                  <defs>
+                                                    <linearGradient id="linear-gradient" x1="1" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                                                      <stop offset="0" stop-color="#ff8960"/>
+                                                      <stop offset="1" stop-color="#ff62a5"/>
+                                                    </linearGradient>
+                                                    <clipPath id="clip-path">
+                                                      <rect id="Rectangle" width="37" height="16" rx="8" fill="url(#linear-gradient)"/>
+                                                    </clipPath>
+                                                    <linearGradient id="linear-gradient-3" x1="0.22" y1="0.738" x2="1" gradientUnits="objectBoundingBox">
+                                                      <stop offset="0" stop-color="#3a63ff"/>
+                                                      <stop offset="1" stop-color="#62f9ff"/>
+                                                    </linearGradient>
+                                                  </defs>
+                                                  <g>
+                                                    <rect id="Rectangle-2" data-name="Rectangle" width="37" height="16" rx="8" fill="url(#linear-gradient)"/>
+                                                    <g clip-path="url(#clip-path)">
+                                                      <g id="color_primary_3" data-name="color/primary 3">
+                                                        <rect id="color_primary" data-name="color/primary" width="37" height="16" fill="url(#linear-gradient-3)"/>
+                                                      </g>
+                                                      <text id="_23" data-name="23" transform="translate(17 13)" fill="#fff" font-size="10" font-family="SegoeUI, Segoe UI" letter-spacing="0.009em"><tspan x="0" y="0">{{cards[0].full.age}}</tspan></text>
+                                                      <g id="woman" transform="translate(6 3)">
+                                                        <rect id="Gender_man_background" data-name="Gender/man background" width="10" height="10" fill="none"/>
+                                                        <path id="Oval_2" data-name="Oval 2" d="M2.786,11.286V7.056a3.571,3.571,0,1,1,1.542.006l-.008,4.259ZM1.428,3.572A2.143,2.143,0,1,0,3.572,1.428,2.145,2.145,0,0,0,1.428,3.572Z" transform="translate(3.99 11.061) rotate(-135)" fill="#fff"/>
+                                                        <rect id="Rectangle_3" data-name="Rectangle 3" width="4.286" height="1.429" transform="translate(5.714)" fill="#fff"/>
+                                                        <rect id="Rectangle_3-2" data-name="Rectangle 3" width="4.286" height="1.429" transform="translate(10) rotate(90)" fill="#fff"/>
+                                                      </g>
+                                                    </g>
+                                                  </g>
+                                                </svg>
+                                            </div>
+                                            <div class="profile-user-info__status">
+                                                <div class="csms-online-status csms-online-status--online ml-5" ng-if="cards[0].status == 1"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="encounters-card__announce">
+                                        <div>{{cards[0].full.city}}, {{cards[0].full.country}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="encounters-card__floating explore-mobile-ad" id="discoverAdContainer" ng-show="!loading" ng-if="showMobileAd">
+                                <div class="encounters-card__info bg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="open-live-explorer vivify swoopInTop delay-1500" ng-if="liveMingle" ng-click="openLiveMingle()">
+            <div class="btn-open-live">
+                <div>
+                    {{lang[795].text}}
+                </div>
+            </div>
+        </div>
+    </ion-content>
+    <!--- BOTTOM MENU -->
+    <div class="tabbar">
+        <div class="tabbar__items">
+
+            <div class="tabbar__item">
+                <div class="tabbar-item " ng-click="goTo('home.explore');">
+                    <div class="tabbar-item__icon ">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-discover-active.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="tabbar__item">
+                <div class="tabbar-item is-active" ng-click="goTo('home.meet');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-meet.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.stories');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-stories.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.reels');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px" >
+                            <svg aria-label="Reels" fill="#c1c0c9" width="23" height="23.961" viewBox="0 0 23 23.961" role="img"><line fill="none" stroke="#dad9e2" stroke-linejoin="round" stroke-width="1" x1="2.049" x2="21.95" y1="7.002" y2="7.002"></line><line fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" x1="13.504" x2="16.362" y1="2.001" y2="7.002"></line><line fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" x1="7.207" x2="10.002" y1="2.11" y2="7.002"></line><path d="M2 12.001v3.449c0 2.849.698 4.006 1.606 4.945.94.908 2.098 1.607 4.946 1.607h6.896c2.848 0 4.006-.699 4.946-1.607.908-.939 1.606-2.096 1.606-4.945V8.552c0-2.848-.698-4.006-1.606-4.945C19.454 2.699 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.546 2 5.704 2 8.552Z" fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path><path d="M9.763 17.664a.908.908 0 0 1-.454-.787V11.63a.909.909 0 0 1 1.364-.788l4.545 2.624a.909.909 0 0 1 0 1.575l-4.545 2.624a.91.91 0 0 1-.91 0Z" fill-rule="evenodd"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.matches');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-6px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-chat.svg">
+                        </div>
+                        <div class="tabbar-item__icon-indicator is-shown" ng-if="unreadMessage"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.profile');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-profile.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

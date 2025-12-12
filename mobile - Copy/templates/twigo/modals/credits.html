@@ -1,0 +1,53 @@
+<ion-modal-view>
+  <ion-content class="mi-violetita twigo-bg">
+	<div class="credits-modal-bg" style="background: url('{{siteUrl}}mobile/twigo/img/credits.png') no-repeat top center" ></div>	    
+	<div class="credits-modal-photo" style="background-image: url('{{me.profile_photo}}');" ></div>
+	<div class="credits-separator"></div>
+	<ion-slide-box show-pager="true" class="slider-pager credits-slider">
+		<ion-slide ng-repeat="i in [1,2,3,4,5,6,7] track by $index" class="credits-slider-items">
+			<div ng-if="$index == 0" class="credit-slide">
+				<h2 class="comforta">{{alang[225].text}}<h2>
+				<p class="comforta">{{alang[226].text}}</p>
+			</div>
+			<div ng-if="$index == 1" class="credit-slide">
+				<h2 class="comforta" >{{alang[227].text}}<h2>
+				<p class="comforta" >{{alang[228].text}}</p>
+			</div>
+			<div ng-if="$index == 2"  class="credit-slide">
+				<h2 class="comforta" >{{alang[229].text}}<h2>
+				<p class="comforta" >{{alang[230].text}}</p>
+			</div>	
+			<div ng-if="$index == 3" class="credit-slide">
+				<h2 class="comforta" >{{alang[231].text}}<h2>
+				<p class="comforta" >{{alang[232].text}}</p>
+			</div>
+			<div ng-if="$index == 4" class="credit-slide">
+				<h2 class="comforta" >{{alang[45].text}}<h2>
+				<p class="comforta" >{{alang[46].text}} <b>{{dchat}}</b> {{alang[47].text}} <b>{{dchatprice}}</b> {{alang[48].text}}</p>
+			</div>
+			<div ng-if="$index == 5" class="credit-slide">		
+				<h2 class="comforta" >{{alang[49].text}}<h2>
+				<p class="comforta" >{{alang[50].text}}.</p>
+			</div>
+			<div ng-if="$index == 6" class="credit-slide">		
+				<h2 class="comforta" >{{alang[51].text}}<h2>
+				<p class="comforta" >{{alang[52].text}}</p>
+			</div>			
+		</ion-slide>
+	</ion-slide-box	>  
+		<div class="text-muted border-none">
+		  <div class="item item-divider b-none text-center gradient7 credits-header">{{alang[53].text}}</div>
+			<div class="list credits-prices" ng-repeat="i in cp track by $index" ng-click="selectCredit(i.quantity,i.price,$index)" >
+			  <div class="item premium-bg comforta div-c1">
+				<div >
+					<span class="ml-5 text-gray-777">{{i.quantity}} {{alang[48].text}}</span>
+					<span class="credits-price">{{i.price}} {{currency}}</span>
+				</div>									
+			  </div>
+			</div>				  
+		</div>					
+  </ion-content>
+  <ion-footer>
+	<button class="button button-clear comforta close-credits-modal" ng-click="closeCreditsModal()">{{alang[44].text}}</button>
+  </ion-footer>  
+</ion-modal-view>

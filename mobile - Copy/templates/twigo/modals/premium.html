@@ -1,0 +1,279 @@
+<ion-modal-view>
+  <ion-content class="premium-modal-content" scroll="false">
+    <!-- Top Section with Gradient Background -->
+    <div class="premium-header-section">
+      <div class="premium-gradient-bg">
+        <!-- Decorative Elements -->
+        <div class="premium-decorative-elements">
+          <div class="decorative-star star-1">★</div>
+          <div class="decorative-star star-2">★</div>
+          <div class="decorative-circle circle-1"></div>
+          <div class="decorative-circle circle-2"></div>
+          <div class="decorative-dash dash-1"></div>
+          <div class="decorative-dash dash-2"></div>
+        </div>
+        
+        <!-- Not Now Button -->
+        <button class="premium-not-now-btn" ng-click="closePremiumModal()">Not now</button>
+        
+        <!-- Central Avatar with Crown -->
+        <div class="premium-avatar-container">
+          <div class="premium-avatar-dashed-ring"></div>
+          <div class="premium-avatar-frame">
+            <div class="premium-avatar" ng-style="{'background-image': 'url(' + (me.profile_photo || (siteUrl + 'mobile/twigo/img/default-avatar.png')) + ')'}"></div>
+            <div class="premium-crown">👑</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle Section - Feature Description -->
+    <div class="premium-feature-section">
+      <div class="premium-feature-content">
+        <h2 class="premium-feature-title">{{pchat}} Daily chat</h2>
+        <p class="premium-feature-description">Connect with more people is the clue for a good start.</p>
+        
+        <!-- Pagination Dots -->
+        <div class="premium-pagination-dots">
+          <span class="pagination-dot" ng-class="{'active': $index === 0}" ng-repeat="i in premiumSlide track by $index"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section - Premium Packages -->
+    <div class="premium-packages-section">
+      <div class="premium-packages-header">
+        <span>Premium packages</span>
+      </div>
+      
+      <div class="premium-packages-list">
+        <div class="premium-package-item" ng-repeat="package in cp track by $index" ng-click="buyPremium(package.quantity, package.price, $index)">
+          <div class="package-content">
+            <span class="package-days">{{package.quantity}} Days</span>
+            <span class="package-price">{{package.price}} {{currency}}</span>
+          </div>
+          <div class="package-divider" ng-if="!$last"></div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>
+
+<style>
+.premium-modal-content {
+  background: #ffffff;
+}
+
+.premium-header-section {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+}
+
+.premium-gradient-bg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ff6b9d 0%, #ffa500 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.premium-decorative-elements {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.decorative-star {
+  position: absolute;
+  color: #ffd700;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.star-1 { top: 15%; left: 20%; }
+.star-2 { top: 25%; right: 15%; }
+
+.decorative-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  width: 8px;
+  height: 8px;
+}
+
+.circle-1 { top: 30%; left: 10%; }
+.circle-2 { top: 20%; right: 25%; }
+
+.decorative-dash {
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.dash-1 { top: 35%; left: 15%; transform: rotate(45deg); }
+.dash-2 { top: 40%; right: 20%; transform: rotate(-45deg); }
+
+.premium-not-now-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 10;
+  padding: 8px 12px;
+}
+
+.premium-avatar-container {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premium-avatar-frame {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e0e0e0;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.premium-avatar {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.premium-crown {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  font-size: 24px;
+  z-index: 6;
+}
+
+.premium-avatar-dashed-ring {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  z-index: 4;
+}
+
+.premium-feature-section {
+  padding: 30px 20px 20px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.premium-feature-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.premium-feature-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333333;
+  margin: 0 0 10px 0;
+}
+
+.premium-feature-description {
+  font-size: 14px;
+  color: #888888;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.premium-pagination-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.pagination-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1.5px solid #d0d0d0;
+}
+
+.pagination-dot.active {
+  background: #ffffff;
+  border: 1.5px solid #d0d0d0;
+  box-shadow: inset 0 0 0 2px #e8e8e8;
+}
+
+.premium-packages-section {
+  margin-top: 10px;
+  background: #ffffff;
+}
+
+.premium-packages-header {
+  background: linear-gradient(135deg, #ff6b9d 0%, #ffa500 100%);
+  color: #ffffff;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.premium-packages-list {
+  background: #ffffff;
+}
+
+.premium-package-item {
+  padding: 0;
+  cursor: pointer;
+}
+
+.package-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #ffffff;
+}
+
+.package-days {
+  font-size: 16px;
+  color: #333333;
+  font-weight: 500;
+}
+
+.package-price {
+  font-size: 16px;
+  color: #333333;
+  font-weight: 500;
+}
+
+.package-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0 20px;
+}
+
+.premium-package-item:active {
+  background-color: #f5f5f5;
+}
+</style>

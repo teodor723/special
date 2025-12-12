@@ -1,0 +1,32 @@
+<ion-view hide-nav-bar="true" nav-transition="none">
+<ion-content nav-transition="none" scroll="false" ng-style="{height: iframeHeight + 'px'}" class="bg-FF661B">
+  <div class="wrapper nop-nom" fit vertical layout justified>
+	<div class="login-form animated fadeIn pt-10p">
+		<center>
+			<h2 class="comforta pt-10px" data-alid="28"><h2>
+			<p data-alid="29" class="comforta"></p>	
+			<div class="twig-register-page2">
+				<div class="select-gender">
+					<img ng-if="!boy"  ng-click="selectBoy()" ng-src="img/boys.png" width="110px">
+					<img ng-if="boy"  ng-click="selectBoy()" ng-src="img/boys_a.png"  width="110px">
+				</div>
+				<div>
+					<img ng-if="!girl" ng-click="selectGirl()" ng-src="img/girls.png"  width="110px">
+					<img ng-if="girl" ng-click="selectGirl()" ng-src="img/girls_a.png" width="110px">
+				</div>	
+			</div>
+		</center>
+		<div class="login-btn" ng-class="{active: isActive}" ng-if="!regBtn" ng-click="send()">
+			<span><center>{{nexttext}}</center></span>
+		</div>
+		<center><h2 ng-if="regBtn" data-alid="30"><h2></center>
+		<div class="login-loader" ng-if="regBtn">
+			<center><div class="loader02"></div></center>
+		</div>		
+	</div>
+	<div class="login-footer" nav-transition="none" ui-sref="home.welcome">
+		<p><span data-alid="27"></span> <b data-lid="1"></b></p>
+	</div>
+  </div>
+  </ion-content>
+</ion-view>

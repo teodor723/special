@@ -1,0 +1,87 @@
+<ion-modal-view>
+  <ion-content class="mi-violetita">
+	<div class="main_player">
+	  <div class="mp-wrap">
+	    <div class="mp-remote-vid">
+	      <div class="mrv-video">
+	        <video class="display-none" id="remoteVideo" autoplay="autoplay" playsinline="playsinline" loop muted ></video>
+	        <div id="videoLoader">
+	        	<img id="randomImageLoader" class="randomImagePreview">
+	        </div>        
+	        <div class="mrvv-center" id="liveMNC">
+	        	<div class="spinner-live-mingle live-mingle-center"></div>
+	          <div class="rlt-info-message live-mingle-notification-center" id="liveMingleNotification">
+	          {{searchingText}}</div>
+	        </div>
+	      </div>
+	      </div>
+	      <div class="mrv-mob-top">
+	        <div class="mmt-buttons">
+	          <div class="mobile-private">
+						<div ng-click="closeLiveDiscoverModal()" class="round-icon ci ci-close margin-left-10" ></div>	
+	          </div>
+	        </div>
+	        <div class="mmt-select">      	
+	          <div id="gndr_sel_mob" ng-click="filterLiveMingleGender()" class="round-icon">
+	            <span class="all_gndr"></span>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="border-right-none" ng-class="showLiveMingleChat > 0 ? 'mp-chat-wrap show-input' : 'mp-chat-wrap'">
+	      <div class="cw-local-vid">
+	        <div class="clv-video">
+	          <video id="localVideo" autoplay="autoplay" muted playsinline="playsinline"></video>
+	        </div>
+	        <div class="clv-tokens">
+	          <em class="gem-icon"></em>
+	          <span class="rlt-token-balance">{{me.credits}}</span>
+	        </div>
+	        <div class="clv-control">
+	          <span id="clv-toggle" class="ci ci-dots"></span>
+
+	          <ul class="clvc-list" >
+	            <li id="video_button" class="off">
+	              <em class="ci ci-video"></em>
+	            </li>
+	            <li id="audio_button" class="off">
+	              <em class="ci ci-mic-cs"></em>
+	            </li>
+	          </ul>
+	        </div>
+	      </div>
+				<div class="chat-body live-mingle-chat-c">
+				    <div class="chat-head live-mingle-chat-h">
+				        <div class="rv_head display-inline-block">
+				            <div id="rv_info">
+				            		<div class="profile-photo avatar box-shadow live-mingle-photo-mobile" id="liveMinglePhoto" ></div>
+				                <div class="flag live-mingle-name-mobile" id="liveMingleName"></div>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="msg_wrap">
+				        <div class="rlt-chat-container" id="mingleChatContainer"> 
+				        </div>
+				    </div>
+				    <div class="chat_input" id="mingleChatInput">
+				        <form id="msg_form" class="box-shadow-credits" onsubmit="liveMingleChat(); return false;" autocomplete="off" novalidate="">
+				            <div class="msg-input">
+				                <input type="text" id="chatLiveMingle" class="chat-msg padding-left-10" placeholder="{{lang[90].text}}">
+				            </div>
+				            <button id="send_btn" class="btn trns gradient5 margin-0" type="submit">{{lang[90].text}}</button>
+				        </form>
+				    </div>
+				</div>
+	      <ul class="cw-controls gradient32">
+					<li class="ci ci-user-1" ng-click="openProfileFromMingle()"></li>	      	
+	        <li class="ci ci-heart-1"></li>
+	        <li class="ci ci-cancel live-mingle-cancel"></li>	        
+	        <li class="chat-toggle ci ci-chat-cs" ng-click="toggleLiveMingleChat()"></li>
+	      </ul>
+	    </div>
+	  </div>
+	</div>
+  </ion-content>
+  <ion-footer>
+  </ion-footer>  
+</ion-modal-view>

@@ -1,0 +1,195 @@
+.stream-slider__item:not(:nth-child(5n+1)) {
+    margin-left: 10px !important;
+}
+
+.stream-slider__item{
+    margin-left: 15px !important;
+    margin-top: 10px;
+    flex: 1 0 auto;
+}
+
+.stream{
+    z-index: 999  !important;
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    padding: 0 !important;
+}
+
+.stream__canvas {
+    position: relative;
+    -webkit-flex: 1;
+    flex: 1;
+    min-width: 100vw !important;
+    width: 100vw !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    background-color: #0e0e0e;
+}
+
+.stream__chat {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100vw !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    background: none !important;
+    color: #fff !important;
+    z-index: 1000;
+}
+
+.stream__comment-field {
+    position: relative;
+    z-index: 2;
+    padding: 0 24px 16px;
+    background: none;
+}
+
+.stream__meta {
+    top: 16px;
+}
+
+.stream__info {
+    box-shadow: none;
+}
+
+.stream-author{
+    padding-left: 50px;
+    padding-top: 25px;
+}
+
+.stream-message--gift, .stream-message--gift .stream-message__title, .stream-message--system, .stream-message--system .stream-message__title {
+    color: #d8ff00d9;
+}
+
+.icon{
+    display: block !important;
+}
+
+.profile-view-story-text {
+    position: absolute;
+    height: 15px !important;
+    width: 80%;
+    text-align: center;
+    border-radius: 3px;
+    top: 55px !important;
+    z-index: 2;
+    margin-left: 0px !important; 
+}
+
+.profile-view-story-text span {
+    color: #fff;
+    font-weight: 400;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    line-height: 15px;
+    letter-spacing: 0.9px;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.stream__comment-overlay{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;   
+    background: rgb(0,0,0,0.1);
+    background: linear-gradient(0deg, rgba(0,0,0,0.5522584033613445) 0%, rgba(255,255,255,0) 42%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.stream__comment-field{
+    position: absolute !important;
+    bottom: 55px !important;
+    height: 60px !important;
+    width: 100vw !important;
+    overflow: hidden !important;
+    z-index: 2;
+}
+
+.bg-white{
+    background: rgba(255, 255, 255, 1.0) !important;
+}
+
+.stream-comment-field {
+    position: relative;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    width: 80%;
+    height: 50px;
+    border-radius: 25px;
+    background: rgba(225,225,225,.15)!important;
+    transition: background .2s ease-in-out
+}
+
+.stream-comment-field.is-disabled {
+    pointer-events: none
+}
+
+.stream-comment-field:hover {
+    background: rgba(118, 118, 118, .16)
+}
+
+.stream-comment-field__input {
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    margin-right: 16px
+}
+
+.stream-comment-field__input .text-field__input {
+    height: 48px;
+    padding-right: 0;
+    padding-left: 16px;
+    border: 0;
+    background: 0 0;
+    font-size: 14px;
+    color: #fff !important;
+
+}
+
+.stream-comment-field__input .text-field__input::-webkit-input-placeholder {
+    color: #767676
+}
+
+.stream-comment-field__input .text-field__input:-moz-placeholder,
+.stream-comment-field__input .text-field__input::-moz-placeholder {
+    color: #767676
+}
+
+.stream-comment-field__input .text-field__input:-ms-input-placeholder {
+    color: #767676
+}
+
+.stream-comment-field__send {
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+    margin-right: 16px;
+    color: #783bf9;
+    font-size: 14px;
+    cursor: pointer
+}
+
+.stream__message{
+    margin-top: 2px !important;
+}
+
+.stream-video, .stream-video__video {
+    object-fit: cover;
+    margin-top: -10px;
+}
+
+.stream__message-list{
+    position: absolute !important;
+    bottom: 125px !important;
+    padding-bottom: 120px !important;
+    height: 40vh !important;
+    width: 100vw !important;
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+    padding-bottom: 5px !important;
+}

@@ -1,0 +1,456 @@
+<ion-view title="" hide-nav-bar="true">
+    <div class="content-header-meet">
+        <div class="content-header-messages-title">
+            <h2 class="twigo-font">{{storiesTitle}}</h2>
+        </div>
+        <div ng-click="goTo('home.settings');" class="content-header-meet-right">
+            <svg id="Filters_btn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="38.667" viewBox="0 0 40 38.667">
+            <defs>
+              <clipPath id="clip-path">
+                <ellipse id="Oval" cx="20" cy="19.333" rx="20" ry="19.333" fill="rgba(0,0,0,0.1)"/>
+              </clipPath>
+            </defs>
+            <ellipse id="Oval-2" data-name="Oval" cx="20" cy="19.333" rx="20" ry="19.333" fill="rgba(0,0,0,0.1)"/>
+            <path id="Filters" d="M5.45,14.5a1.45,1.45,0,1,1,0-2.9h9.1a1.45,1.45,0,0,1,0,2.9Zm-2-5.8a1.45,1.45,0,0,1,0-2.9h13.1a1.45,1.45,0,0,1,0,2.9Zm-2-5.8a1.45,1.45,0,1,1,0-2.9h17.1a1.45,1.45,0,0,1,0,2.9Z" transform="translate(10 12.567)" fill="#fff"/>
+          </svg>
+        </div>
+
+        <div class="tabs tabs-top visible meet-tabs-select">
+            <div class="tab {{tab1}} ng-empty meet-tabs" ng-model="tabNEARBY" ng-click="onTabShow(1)">
+                <div class="tab__label comforta ng-binding stories-tab">
+                    {{alang[259].text}}
+                    
+                </div>
+            </div>
+
+            <div class="tab {{tab2}} ng-empty meet-tabs-live" ng-show="liveEnabled" 
+            ng-model="tabLive" ng-click="onTabShow(2)">
+                <div class="tab__label comforta ng-binding stories-tab">
+                    {{lang[765].text}}
+                    <span class="badge badge-tab">{{streams.length}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ion-content scroll="true" class="vivify fadeIn meet-content" style="padding-bottom:0px;margin-bottom: 70px;">
+        <div class="page-content stories-page">
+            <div class="stories-feed-layout stories-discover stories-list" ng-if="storyAll" 
+            data-stories-discover>
+                <div class="stories-feed stories-discover-feed stories-list-feed" style="height:inherit;position:relative;display:block;margin-bottom: 70px;overflow: auto;text-align:center;">
+                    <div id="storiesMobile">
+                        <div class="story-container" ng-click="userStoriesMenu()">
+                            <div class="story-preview vivify stories-my-story">
+                                <div class="story-preview-background profile-photo" data-discover-upload-story="1" style="background-image:url({{me.profile_photo}})"></div>
+                                <div class="story-preview-mask-me"></div>
+                                <p class="story-preview-name" id="uploadStoryMobile" data-upload-story onclick="upStoryMobile()">
+                                    <span>{{lang[618].text}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div ng-show="exploreStories" ng-repeat="story in stories track by $index" class="story-container vivify fadeIn delay-{{story.fadeDelay}} ml-4" id="story{{$index}}" data-current-story-position="{{$index}}" ng-click="openStoryDiscover($index,story.id)">
+                            <div class="story-preview">
+                                <div class="backgroundAnimation sloader" style="display:none"></div>
+                                <div class="story-preview-background profile-photo discoverStoryPhoto" ng-if="story.video == 1" style="background-image:url({{story.profile_photo}})"></div>
+                                <div class="story-preview-mask"></div>
+                                <div class="story-preview-background profile-photo discoverStoryPhoto" ng-if="story.video == 0" style="background-image:url({{story.profile_photo}})"></div>
+                                <div class="story-preview-mask"></div>
+                                <div id="storyUser{{story.id}}" class="stories-user-open" ng-click="openProfileStory(story)"></div>
+                                <p class="story-preview-name">
+                                    <span>{{story.name}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary load_more_stories hide_el" onclick="load_more_stories()" type="button" id="load_more_stories" style="color: #fff;background: #191919;padding: 2px 10px;height: 30px;border-radius: 5px;font-weight: 600;font-size: 12px;display: block;margin: 0 auto;">{{alang[304].text}}</button>
+                </div>
+            </div>
+
+            <div class="stream-page__content" ng-if="liveStreams">
+                <div class="stream-page__section">
+                    <section class="stream-list" ng-if="streams.length > 0">
+                        <div class="stream-list__content">
+                            <section class="stream-slider">
+                                <div class="stream-slider__scroll">
+                                    <div class="stream-slider__items vivify fadeIn">
+                                        <div class="stream-slider__item" ng-repeat="stream in streams track by $index">
+                                            <div class="stream-card">
+                                                <figure class="user-card" id="figure1" data-qa="user-card" ng-click="watchLiveMobile(stream.full.uid,'{{stream.streamPhoto}}',stream.full.uid,'{{stream.streamName}}',stream.streamAge,'{{stream.streamTimeCounter}}','{{stream.streamCustomTxt}}',stream.streamTimeM,stream.full.viewers,stream.full.credits,'{{stream.full.in_private}}',stream.full.private_price)">
+                                                    <div class="user-card__content">
+                                                        <div class="user-card__photo">
+                                                            <img class="user-card__img" id="live_preview{{stream.full.id}}" src="{{stream.full.live_preview}}">
+                                                        </div>
+
+                                                        <div class="icon icon--block icon--xsm stories-icon" ng-if="stream.full.in_private == 'Yes'">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                                        </div>
+
+                                                        <div class="user-card__slot-bottom">
+                                                            <div class="user-card-stack">
+                                                                <div class="user-card-stack__left">
+                                                                    <div class="user-card-stack__item">
+                                                                        <div class="user-card-caption">
+                                                                            <div class="user-card-caption__main">
+                                                                                <div class="user-card-caption__account">
+                                                                                    <div class="user-card-caption__name" title="asds" dir="auto">{{stream.streamName}}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="user-card-caption__additional hidden">
+                                                                                <div class="user-card-subcaption">
+                                                                                    <span class="user-card-subcaption__text">{{stream.full.viewers}}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="user-card-stack__right">
+                                                                    <div class="user-card-stack__item">
+                                                                        <div class="stream-card__follow-toggle">
+                                                                            <div class="icon icon--block icon--xsm">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+                    <div class="credits-section text-center mt-25" ng-if="streams.length < 1">
+                        <div class="wrapper text-center">
+                            <div class="pos-rlt bg-none">
+                                <div class="thumb-xl">
+                                    <img src="{{noStreams}}" />
+                                </div>
+                            </div>
+                        </div>
+                        <h1 class="font-bold ng-binding fs-18">{{lang[734].text}}</h1>
+                        <h4 class="font-bold ng-binding fs-13-color">{{lang[735].text}}
+                            <br>{{lang[592].text}}</h4>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+
+    <div ng-show="liveStreams" ng-if="liveStreams" class="vivify swoopInBottom lives-content" >
+        <div class="box-shadow twigo-gradient4 lives-open-live" onclick="openLive()">
+            <span class="comforta">{{lang[736].text}}</span>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabbar">
+
+        <div class="tabbar__items">
+            <div class="tabbar__item">
+                <div class="tabbar-item is-active" ng-click="goTo('home.explore');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-discover.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.meet');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-meet.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.stories');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-stories.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.reels');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px" >
+                            <svg aria-label="Reels" fill="#c1c0c9" width="23" height="23.961" viewBox="0 0 23 23.961" role="img"><line fill="none" stroke="#dad9e2" stroke-linejoin="round" stroke-width="1" x1="2.049" x2="21.95" y1="7.002" y2="7.002"></line><line fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" x1="13.504" x2="16.362" y1="2.001" y2="7.002"></line><line fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" x1="7.207" x2="10.002" y1="2.11" y2="7.002"></line><path d="M2 12.001v3.449c0 2.849.698 4.006 1.606 4.945.94.908 2.098 1.607 4.946 1.607h6.896c2.848 0 4.006-.699 4.946-1.607.908-.939 1.606-2.096 1.606-4.945V8.552c0-2.848-.698-4.006-1.606-4.945C19.454 2.699 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.546 2 5.704 2 8.552Z" fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path><path d="M9.763 17.664a.908.908 0 0 1-.454-.787V11.63a.909.909 0 0 1 1.364-.788l4.545 2.624a.909.909 0 0 1 0 1.575l-4.545 2.624a.91.91 0 0 1-.91 0Z" fill-rule="evenodd"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.matches');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-chat.svg">
+                        </div>
+                        <div class="tabbar-item__icon-indicator is-shown" ng-if="unreadMessage"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tabbar__item">
+                <div class="tabbar-item" ng-click="goTo('home.profile');">
+                    <div class="tabbar-item__icon">
+                        <div class="icon icon--stretch mt-5px">
+                            <img src="{{siteUrl}}mobile/twigo/img/menu-profile.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stream-container-preview" ng-show="liveEnabled" style="display: none;">
+        <div class="stream streams-content">
+            <div id="currentStreamPreview" class="current-stream-preview"></div>
+            <div class="stream__canvas">
+                <div class="stream-media">
+                    <div class="stream-media__back" id="streamBgLoaderPreview" style="background-image: url('{{me.profile_photo_big}}');"></div>
+                    <div class="stream-media__video">
+                        <div class="stream-video">
+                            <video class="stream-video__video" id="liveVideoPreview" playsinline autoplay loop>
+                            </video>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-reward">
+                    <div class="modal-reward modal--congratulations vivify fadeIn box-shadow-credits stream-reward-modal">
+                        <div class="modal-reward-top boostRiseUp bg-none">
+                            <img class="modal-reward-icon u-imgResponsive animated fadeInUp rounded profileP tream-modal-reward-icon" style="background-image:url({{me.profile_photo}});">
+                            <div class="modal-reward-header animated fadeInUp comforta fs-15">{{lang[739].text}}</div>
+                        </div>
+
+                        <div class="stream-comment-field stream-comment-content">
+                            <div class="stream-comment-field__input">
+                                <div class="text-field text-field--md" data-qa-role="text-field">
+                                    <input type="text" placeholder="{{lang[748].text}}" class="text-field__input stream-msg-input" autocomplete="off" id="customLiveMessage" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-reward-bottom stream-reward-modal-bottom">
+                            <button class="modal-reward-btn u-btn u-btn--danger comforta twigo-gradient4 stream-reward-modal-bottom-btn"
+                             onclick="goLive()">{{lang[736].text}}</button>
+                            <div class="stream-not-going-live-now">
+                                <a href="javascript:;" onclick="closeLivePreview()">
+                              {{lang[740].text}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream__notice" id="streamPreviewNotice" style="display: none">
+                    <div class="stream-notice">
+                        <div class="stream-notice__content">
+                            <div class="stream-notice__title" id="streamPreviewNoticeTitle">
+                            </div>
+                            <h2 class="stream-notice__title" id="streamPreviewNoticeText">
+                                {{lang[733].text}}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="stream-container" ng-show="liveEnabled" style="display:none">
+        <div class="stream" style="">
+            <div id="currentStream" class="current-stream-view"></div>
+            <div class="stream__canvas">
+                <div class="stream-media">
+                    <div class="stream-media__back" id="streamBgLoader"></div>
+                    <div class="stream-media__video">
+                        <div class="stream-video" id="streamVideoContainer">
+
+                            <video class="stream-video__video" id="streamCurrentVideo" playsinline autoplay loop>
+                          </video>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream__notice" id="streamEnded" style="display: none">
+                    <div class="stream-notice">
+                        <div class="stream-notice__content">
+                            <div class="stream-notice__title">
+                            </div>
+                            <h2 class="stream-notice__title">
+                                {{lang[733].text}}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream__notice" id="streamBanned" style="display: none">
+                    <div class="stream-notice">
+                        <div class="stream-notice__content">
+                            <div class="stream-notice__title">
+                                {{lang[757].text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream__notice" id="streamOnlyVerified" style="display: none">
+                    <div class="stream-notice">
+                        <div class="stream-notice__content">
+                            <div class="stream-notice__title">
+                            </div>
+                            <h2 class="stream-notice__title fs-24">
+                                {{lang[753].text}}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream__notice" id="streamOnlyPremium" style="display: none">
+                    <div class="stream-notice">
+                        <div class="stream-notice__content">
+                            <div class="stream-notice__title">
+                            </div>
+                            <h2 class="stream-notice__title fs-24">
+                                {{lang[754].text}}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream__notice" id="streamPrivate zIndex-999" style="display: none;">
+                    <div class="stream-notice">
+                        <div class="stream-notice__content">
+                            <div class="stream-notice__title"></div>
+                            <h2 class="stream-notice__title">
+                                {{lang[765].text}} {{lang[745].text}}
+                                <br> {{lang[746].text}}
+                                <span data-private-stream-credits></span> {{lang[73].text}}
+                            </h2>
+                            <br>
+                            <div class="btn btn-stream-notice" onclick="accessPrivateStream()">
+                                <span class="btn-txt montserrat">
+                                    {{lang[744].text}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream__notice" id="streamLoading" style="display: none">
+                    <div class="stream-notice">
+                        <div class="stream-notice__content">
+                            <div class="stream-notice__title"></div>
+                            <h2 class="stream-notice__title">
+                                <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle class="line-loading1-a anim-d-1-4" cx="84" cy="50" r="8" fill="rgba(197,197,197,1)" stroke="rgba(197,197,197,1)" stroke-width="1.0px"></circle><circle class="line-loading1-b anim-d-1-4" cx="50" cy="50" r="8" fill="rgba(197,197,197,1)" stroke="rgba(197,197,197,1)" stroke-width="1.0px"></circle><circle class="line-loading1-c anim-d-1-4" cx="16" cy="50" r="8" fill="rgba(197,197,197,1)" stroke="rgba(197,197,197,1)" stroke-width="1.0px"></circle></svg>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream__meta top-120" style="display: none">
+                    <div class="stream-data">
+                        <div class="stream-data__item stream-in-private-msg-div" id="streamInPrivate" style="display:none;">
+                            <div class="stream-data__item-content">{{lang[760].text}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="stream__chat" id="streamChat">
+                <div class="stream__info">
+                    <div class="stream-author pl-0">
+                        <a class="stream-author__avatar streamer-avatar-div" href="javascript:;">
+                            <img id="streamProfilePhoto" src="{{me.profile_photo}}">
+                            <div class="vivify fadeIn delay-150 box-shadow profile-view-story-text stream-story-view-msg">
+                                <span class="twigo-font">{{lang[765].text}}</span>
+                            </div>
+                        </a>
+                        <div class="stream-author__link">
+
+                            <div class="stream-author__name comforta streamer-name" id="streamProfileName"></div>
+                            <div class="stream-data__item-icon stream-data-icon1">
+                                <div class="icon icon--block">
+                                    <svg class="icon__svg">
+                                      <svg id="icon-stream-spectators" viewBox="0 0 16 16"><path d="M13.26 5.53A6.92 6.92 0 008 3a7 7 0 00-5.27 2.54c-.76.85-1.43 1.93-1.66 2.44a11.56 11.56 0 001.7 2.48C4.22 12.06 5.97 13 8 13c2.03 0 3.78-.94 5.23-2.54a11.1 11.1 0 001.7-2.48c-.23-.51-.9-1.6-1.67-2.45zM8 14C2.66 14 .07 8.36 0 8c.07-.36 2.57-5.98 8-6 5.43-.02 7.93 5.64 8 6-.07.36-2.66 6-8 6z"></path><path d="M8 10a2 2 0 100-4 2 2 0 000 4zm0 1a3 3 0 110-6 3 3 0 010 6z"></path></svg>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="stream-data__item-text stream-data-viewers" id="streamViewers"></div>
+                            <div class="stream-data__item-icon stream-data-icon2">
+                                <div class="icon icon--block">
+                                      <svg class="icon__svg">
+                                          <svg id="icon-stream-points" viewBox="0 0 16 16"><path d="M8.93 5.83c.43.43.27 1.28-.35 1.9-1.01 1.02-3.23 1.35-3.7.9-.46-.47-.12-2.69.9-3.7.48-.49 1.12-.7 1.6-.53.46.16.66.67.47 1.26.43-.14.83-.08 1.08.17z"></path><path d="M9.63 9.62c2.41-2.4 3-5.54 1.56-6.97-1.43-1.43-4.6-.85-7 1.55-2.42 2.4-3 5.55-1.57 6.98 1.44 1.43 4.6.84 7.01-1.56zM4.4 12.93l.42.42c1.43 1.43 4.6.85 7-1.55 2.42-2.4 3-5.55 1.57-6.98l-.43-.42c.13 1.87-.8 4.12-2.61 5.93-1.82 1.81-4.08 2.73-5.95 2.6zm-2.47-1.05C.02 10 .72 6.24 3.48 3.5 6.23.75 10 .05 11.9 1.94l2.18 2.18c1.9 1.88 1.2 5.64-1.56 8.39C9.77 15.25 6 15.95 4.1 14.06l-2.18-2.18z"></path></svg>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="stream-data__item-text stream-data-credits" id="streamCredit"></div>
+                            <div class="stream-data__item-text stream-data-time" id="streamTime"></div>
+                            <div class="stream-data__item stream-data-end-stream" id="endStream" ng-click="endStream()">
+                                <div class="stream-data__item-content">{{lang[769].text}}</div>
+                            </div>
+                            <div class="stream-data__item strema-data-close" id="streamClose" ng-click="streamClose()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stream__message-list" ng-show="!isGiftShown" id="liveChatMsgList">
+                    <div class="stream__message-scroller" id="liveChatContainer">
+                    </div>
+                </div>
+
+                <div class="stream__comment-overlay"></div>
+                <div class="stream__comment-field">
+                    <div class="stream-comment-field box-shadow">
+                        <div class="stream-comment-field__input">
+                            <div class="text-field text-field--md" data-qa-role="text-field">
+                                <input type="text" name="stream" placeholder="{{lang[741].text}}" class="text-field__input stream-msg-text-input" autocomplete="off" id="sendLiveMessage" value="">
+                            </div>
+                        </div>
+                        <div class="stream-comment-field__send" onclick="sendLiveMessage()">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 172 172" style="fill:#000000;"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#f0f0f0"><path d="M34.4,17.2c-6.33287,0 -11.46667,5.1338 -11.46667,11.46667v34.4c0.00765,4.86729 3.08727,9.19941 7.68177,10.80599c1.21549,0.43153 2.49509,0.65489 3.7849,0.66067c0.04106,0.00022 0.08212,0.00022 0.12318,0l68.67682,11.46667l-68.67682,11.47786c-0.04104,-0.00395 -0.0821,-0.00769 -0.12318,-0.0112c-1.29357,0.00453 -2.57705,0.2279 -3.79609,0.66067c-4.59008,1.61037 -7.6646,5.94162 -7.67057,10.80599v34.4c0,6.33287 5.1338,11.46667 11.46667,11.46667c1.99642,-0.00378 3.95727,-0.52873 5.68854,-1.52292h0.0112l116.93984,-61.99167l0.0112,-0.02239c2.10882,-0.90013 3.47854,-2.97014 3.48255,-5.26302c0.00305,-2.30372 -1.37306,-4.38553 -3.49375,-5.28542l-116.93984,-61.99167c-1.73457,-0.99608 -3.69952,-1.52109 -5.69974,-1.52292z"></path></g></g></svg>
+                        </div>
+                    </div>
+                    <div class="stream-gifts-btn" ng-click="showGifts()" ng-class="isGiftShown ? 'bg-white' : ''" class="box-shadow"
+                        ng-click="showGifts">
+                        <img class="mt-3" src="https://img.icons8.com/emoji/34/000000/teddy-bear-.png" />
+                    </div>
+                </div>
+
+                <div class="giphy-container stream-gifts-div" ng-if="isGiftShown">
+                    <ion-scroll direction="x" class="scroll-horizontal">
+                        <div class="text-center scroll-item" ng-repeat="gift in gifts track by $index" ng-click="sendGift(gift.icon,gift.price)">
+                            <img ng-src="{{gift.icon}}" class="stream-gift-img">
+                        </div>
+                    </ion-scroll>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-reward" ng-show="sendGiftShow">
+        <div class="modal-reward modal--congratulations  animated fadeIn">
+            <div class="modal-reward-top">
+                <div class="klose animated fadeInUp" ng-click="cancelGift()">
+                    <i class="icon ion-close-round close-gift-modal"></i>
+                </div>
+                <img class="modal-reward-icon u-imgResponsive animated fadeInUp" src="{{gift_icon}}">
+                <div class="modal-reward-header animated fadeInUp comforta">{{alang[108].text}} {{name}}</div>
+                <div class="modal-reward-subheader animated fadeInUp comforta">{{alang[109].text}} <strong>{{gift_price}}</strong> {{alang[48].text}}</div>
+            </div>
+            <div class="modal-reward-bottom" ng-click="sendGiftBtn(gift_icon,gift_price);cancelGift();">
+                <button class="modal-reward-btn u-btn u-btn--danger mi-pollita gradient32 comforta font-w-700">{{alang[110].text}}</button>
+            </div>
+        </div>
+    </div>
+    <div id="openCreditsModal" style="display: none" ng-click="openCreditsModal(me.profile_photo)"></div>
+</ion-view>

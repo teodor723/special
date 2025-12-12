@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="23.25" height="23.25" viewBox="0 0 23.25 23.25">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Fill_1" data-name="Fill 1" d="M11.63,0A11.172,11.172,0,0,0,1.6,5.959L0,3.709l.538,6.353,5.843-.9L3.633,7.988a9.113,9.113,0,0,1,8-5.078,8.715,8.715,0,0,1,0,17.431,8.506,8.506,0,0,1-6.542-3.05L2.91,19.178a11.332,11.332,0,0,0,8.72,4.072A11.625,11.625,0,0,0,11.63,0" fill="#fff"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="-0.595" y1="1.095" x2="1.241" y2="0.121" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#fee140" stop-opacity="0.788"/>
+      <stop offset="1" stop-color="#f05522"/>
+    </linearGradient>
+  </defs>
+  <g id="icons_star" data-name="icons/star" clip-path="url(#clip-path)">
+    <g id="color_primary" data-name="color/primary" transform="translate(-3 -3)">
+      <rect id="color_Orange" data-name="color/Orange" width="28.5" height="28.5" fill="url(#linear-gradient)"/>
+      <rect id="color_Orange-2" data-name="color/Orange" width="28.5" height="28.5" fill="url(#linear-gradient)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><?php echo $sm['seoLang']['landing'][1]['text']; ?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+<meta name="description" content="<?php echo $sm['seoLang']['landing'][2]['text']; ?>">
+<meta name="keywords" content="<?php echo $sm['seoLang']['landing'][3]['text']; ?>">
+<meta name="author" content="<?php echo $sm['config']['name']; ?>">
+<link rel="icon" type="image/png" href="<?= $sm['landing']['favicon']['val']; ?>" sizes="32x32">
+
+<link rel="stylesheet" href="<?php echo $sm['config']['theme_url_landing']; ?>/css/libs.bundle.css">
+<link rel="stylesheet" href="<?php echo $sm['config']['theme_url_landing']; ?>/css/index.bundle.css">
+
+<link href="<?php echo $sm['config']['theme_url']; ?>/css/vendor/autocomplete.css" rel="stylesheet" type="text/css" />
+<?php $fonts = getArrayDSelected('font','theme_preset_fonts','where preset = "'.$_SESSION['landingPreset'].'"');
+foreach ($fonts as $font) { 
+    $f = $font['font'];
+    $f = str_replace(' ','+', $f);
+    echo '<link href="https://fonts.googleapis.com/css?family='.$f.'" rel="stylesheet" type="text/css"/>';
+} ?>
+<style id="themeData">
+    <?= getLandingAbsolutePage('styles'); ?>
+</style>
+<script type="text/javascript">
+function inIframe () {
+    try {
+      return window.self !== window.top;
+    } catch (e) {
+      return true;
+    }
+}    
+function detect_device() {
+    var w = window,
+        d = document,
+        e = d.documentElement,
+        g = d.getElementsByTagName('body')[0],
+        x = w.innerWidth || e.clientWidth || g.clientWidth,
+        y = w.innerHeight|| e.clientHeight|| g.clientHeight;    
+    if(x <= 768){
+        window.location= '<?= $sm['config']['site_url']; ?>mobile';
+    }
+}
+<?php if($sm['landing']['show_mobile']['val'] == 'No'){ ?>
+  if(inIframe() !== true){
+      detect_device();
+      window.onresize = function() {
+          var w = window,
+              d = document,
+              e = d.documentElement,
+              g = d.getElementsByTagName('body')[0],
+              x = w.innerWidth || e.clientWidth || g.clientWidth,
+              y = w.innerHeight|| e.clientHeight|| g.clientHeight;    
+          if(x <= 768){
+              window.location= '<?= $sm['config']['site_url']; ?>mobile';   
+          }
+      };    
+  }
+<?php } ?>
+</script>
+<?php
+function getSiteLangsLanding($start,$finish){
+    global $mysqli,$sm;
+    $ret = '';
+    $query = $mysqli->query("SELECT * FROM languages where visible = 1 ORDER BY id ASC LIMIT $start,$finish");
+    if($query->num_rows > 1) {
+        while($result = $query->fetch_object()){
+            $ret.='<li class="drop-menu-item"><a data-lang="'.$result->id.'" href="index.php?lang='.$result->id.'">'.$result->name.'</a>
+            </li>';    
+        }
+    }
+    return $ret;    
+}
+$sm['genders'] = siteGenders($_SESSION['lang']);
+$site_config = json_encode($sm['config']);
+$site_theme = json_encode($sm['landing']);
+$site_lang = json_encode($sm['lang']);
+$filter_age = 0;
+echo 
+'<script>
+var url;
+var mobile = false;
+var softwareVersion = "'.$sm['settings']['currentVersion'].'";
+var site_config = '. $site_config  . ';
+var site_lang = '. $site_lang  . ';
+var site_theme = '. $site_theme  . ';  
+
+function request_source(){
+    return \'' . $sm['config']['ajax_path'] . '\';
+}
+function site_title(){
+    return \'' . $sm['config']['title'] . '\';
+}   
+function theme_source(){
+    return \'' . $sm['config']['theme_url'] . '\';
+}
+function site_url(){
+    return \'' . $sm['config']['site_url'] . '\';
+}   
+var current_user_id = 0;
+var user_name;  
+</script>';
+?>
+
+<?php if(!empty($sm['plugins']['analytics']['ga_id'])){ ?>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?= $sm['plugins']['analytics']['ga_id']; ?>"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '<?= $sm['plugins']['analytics']['ga_id']; ?>');
+</script>    
+<?php } ?>
+
+<?= $sm['plugins']['customHtml']['landing_header']; ?>
+<style>
+  .cities-list{
+    display:inline-table;width: 19%;
+  }
+  @media only screen and (max-width: 600px) {
+    .cities-list{
+      width: 49%;
+    }
+  }
+.twigo-gradient1{
+    background: -moz-linear-gradient(95deg, rgba(255,98,165,1) 0%, rgba(255,98,165,1) 22%, rgba(255,137,97,1) 100%)!important; /* ff3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255,137,97,1)), color-stop(78%, rgba(255,98,165,1)), color-stop(100%, rgba(255,98,165,1)))!important; /* safari4+,chrome */
+    background: -webkit-linear-gradient(95deg, rgba(255,98,165,1) 0%, rgba(255,98,165,1) 22%, rgba(255,137,97,1) 100%)!important; /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(95deg, rgba(255,98,165,1) 0%, rgba(255,98,165,1) 22%, rgba(255,137,97,1) 100%)!important; /* opera 11.10+ */
+    background: -ms-linear-gradient(95deg, rgba(255,98,165,1) 0%, rgba(255,98,165,1) 22%, rgba(255,137,97,1) 100%)!important; /* ie10+ */
+    background: linear-gradient(355deg, rgba(255,98,165,1) 0%, rgba(255,98,165,1) 22%, rgba(255,137,97,1) 100%)!important; /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff8961', endColorstr='#ff62a5',GradientType=0 ); /* ie6-9 */
+    border-radius: 25px !important;
+    font-weight: bold;
+    letter-spacing: 2px;
+    border: none;
+}   
+</style>
+</head>
+
+<body style="overflow-x: hidden;">
+
+  <nav id="mainNav" class="navbar navbar-expand-lg navbar-sticky navbar-dark">
+    <div class="container">
+      <a href="<?= $sm['config']['site_url']; ?>" class="navbar-brand"><img src="<?= $sm['landing']['logo']['val']; ?>" alt="Logo"></a>
+  
+      <!-- secondary -->
+      <ul class="navbar-nav navbar-nav-secondary order-lg-3">
+        <li class="nav-item d-none d-lg-block">
+          <a href="<?= $sm['config']['site_url']; ?>register" class="btn btn-outline-white rounded-pill ms-2">
+            <?= $sm['lang'][8]['text']; ?>
+          </a>
+        </li>
+        <li class="nav-item d-lg-block">
+          <a href="<?= $sm['config']['site_url']; ?>login" class="btn ms-2 text-white">
+            <?= $sm['lang'][1]['text']; ?>
+          </a>
+        </li>               
+      </ul>
+  
+    </div>
+  </nav>
+  
+
+  <!-- hero -->
+  <section class="cover overflow-hidden bg-black inverted">
+    <div class="d-flex flex-column py-20 min-vh-100 container foreground">
+      <div class="row justify-content-center my-auto">
+        <div class="col-md-8 text-center">
+          <h1 class="fw-bold display-1"><?= $sm['landingLang'][1]['text'];?></h1>
+          <a href="<?= $sm['config']['site_url']; ?>register" class="btn btn-white rounded-pill twigo-gradient1 text-white"><?= $sm['landingLang'][2]['text'];?></a>
+        </div>
+      </div>
+    </div>
+    <div class="background background-overlay text-black" data-aos="zoom-out" data-aos-delay="200">
+      <video playsinline="" autoplay="" muted="" loop="" data-video="">
+        <source src="<?= $sm['landing']['bg_video']['val']; ?>" type="video/mp4">
+      </video>
+    </div>
+    <span class="scroll-down"></span>
+  </section>
+
+
+  <!-- features -->
+  <section class="py-15 py-xl-20 overflow-hidden">
+    <div class="container">
+      <div class="row justify-content-center position-relative">
+        <div class="col-xl-10">
+          <p class="fs-4"><?= $sm['config']['name']; ?> <?= $sm['landingLang'][3]['text'];?></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-2">
+    <div class="container">
+      <div class="row g-4 g-lg-5 mb-10">
+
+        <div class="col-md-12 text-center text-md-start">
+          <ul class="list-unstyled text-center">
+            <?php $cities = getArrayDSelected('city','users'); 
+            foreach ($cities as $c) { 
+              if($c['city'] == ''){
+                continue;
+              }
+            ?>
+            <li class="mb-1 cities-list">
+              <a href="<?= $sm['config']['site_url']; ?>register" class="text-reset text-primary-hover text-gray"><?= $c['city']; ?></a>
+            </li>
+            <?php } ?>
+          </ul>            
+        </div>                
+      </div>
+      <div class="row align-items-center g-1 g-lg-6 text-muted">
+        <div class="col-md-6 col-lg-3 order-lg-2 text-center text-md-start">
+        </div>
+        <div class="col-md-6 col-lg-6 text-center text-md-end order-lg-2" style="padding-right:125px">
+          <ul class="list-inline small">
+              <li class="list-inline-item">
+                  <a class="text-reset text-primary-hover" href="mailto:<?= $sm['config']['email']; ?>">
+                      <?= $sm['lang'][64]['text']; ?>
+                  </a>
+              </li>
+              <li class="list-inline-item ms-1">
+                  <a class="text-reset text-primary-hover" class="text-rest" href="<?= $sm['config']['site_url']; ?>/index.php?page=tac" target="_blank">
+                      <?= $sm['lang'][43]['text']; ?>
+                  </a>
+              </li>
+              <li class="list-inline-item ms-1">
+                  <a class="text-reset text-primary-hover" href="<?= $sm['config']['site_url']; ?>/index.php?page=pp" target="_blank">
+                      <?= $sm['lang'][45]['text']; ?>    
+                  </a>
+              </li>
+            </ul>
+        </div>
+        <div class="col-lg-3 order-lg-1 text-center text-md-start" style="padding-left: 115px;">
+          <p class="small">&copy; <?= date('Y'); ?> <?= $sm['config']['name']; ?></p>
+        </div>
+      </div>
+    </div>
+  </footer> 
+
+
+
+
+<script src="<?php echo $sm['config']['theme_url_landing']; ?>/js/vendor.bundle.js"></script>
+<script src="<?php echo $sm['config']['theme_url_landing']; ?>/js/index.bundle.js"></script></body>
+
+<?= $sm['plugins']['customHtml']['landing_footer']; ?>
+</body>
+
+</html>
+
+

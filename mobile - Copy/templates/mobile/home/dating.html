@@ -1,0 +1,120 @@
+<ion-view title="">
+  <ion-nav-title >
+    <div class="navigation-bar  navigation-bar--no-shadow  has-wide-sides ">
+        <div class="navigation-bar__primary">
+            <div class="navigation-bar__icon js-goto" ng-click="goBackSettings();">
+                <div class="icon" style="left: 0px;">
+                        <svg class="icon__content icon__content--inactive">
+<svg viewBox="0 0 64 64" id="navigation-bar-back" width="100%" height="100%"><path d="M12.05 33.28l13.83 13.83-1.81 1.81L7.4 32.25l.26-.26-.23-.24 16.6-16.67 1.82 1.81-13.78 13.83h44.25v2.56H12.05z"></path></svg>
+                    </svg>
+                </div>
+            </div>
+        </div>
+       <div class="navigation-bar__main" style="margin-top: -4px;">
+            <div class="navigation-bar__logo">
+                <span class="comforta">{{dateTitle}}</span>
+            </div>
+        </div>
+        <div class="navigation-bar__secondary"></div>     
+    </div>    
+  </ion-nav-title>
+  
+  <ion-content class="vivify fadeIn" scroll="true" delegate-handle="userMessageScroll">
+    <div class="overlay" ng-if="showCreateDate" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 9;"></div>
+
+    <div class="floating-action vivify fadeIn" ng-if="showCreateDate" style="z-index: 1000;position: fixed;top: 0px;height: 100%;">
+        <div class="cta-box">
+            <div class="cta-box__content twigo-font" style="text-align:center;">
+                <form id="">
+                <label style="margin-top: 15px;float: left;margin-left:5px">{{lang[962].text}}</label>
+                <textarea ng-model="dating.description" class="twigo-font" name="description" autocapitalize="off" style="background: #fafafa;border-radius: 8px;padding: 10px;width: 100%;height: 80px;margin-bottom: 10px"></textarea>   
+
+                <label style="margin-top: 15px;float: left;margin-left:5px">{{lang[32].text}}</label>
+                <select ng-model="dating.city" class="twigo-font" name="city" autocapitalize="off" style="background: #fafafa;border-radius: 8px;padding: 10px;width: 100%;height: 40px;margin-bottom: 10px;border:none">
+                    <option ng-repeat="c in datingCities track by $index" value="{{c.city}}">{{c.city}}</option>
+                </select>   
+
+                <label style="margin-top: 15px;float: left;margin-left:5px">{{lang[964].text}}</label>
+                <select ng-model="dating.type" class="twigo-font" name="type" autocapitalize="off" style="background: #fafafa;border-radius: 8px;padding: 10px;width: 100%;height: 40px;margin-bottom: 10px;border:none">
+                    <option ng-repeat="d in datingTypes track by $index" value="{{d}}">{{d}}</option>
+                </select>
+
+                <label style="margin-top: 15px;float: left;margin-left:5px">{{lang[966].text}}</label>
+                <input ng-model="dating.place" type="text" class="twigo-font" name="place" autocapitalize="off" style="background: #fafafa;border-radius: 8px;padding: 10px;width: 100%;height: 40px;margin-bottom: 10px;border:none"/> 
+
+                <label style="margin-top: 15px;float: left;margin-left:5px;display: block;width:100%;text-align:left;">{{lang[955].text}}</label>
+                <input ng-model="dating.when1" type="date" min="{{today}}"  class="twigo-font" name="when1" autocapitalize="off" style="background: #fafafa;border-radius: 8px;padding: 10px;width: 45%;height: 40px;margin-bottom: 10px;border:none;display: inline-table;float: left;"/> 
+                <input ng-model="dating.when2" type="time" class="twigo-font" name="when2" autocapitalize="off" style="background: #fafafa;border-radius: 8px;padding: 10px;width: 45%;height: 40px;margin-bottom: 10px;border:none;display: inline-table;float: right;"/>
+
+                <label style="margin-top: 15px;float: left;margin-left:5px">{{lang[967].text}}</label>
+                <select ng-model="dating.budget" class="twigo-font" name="budget" autocapitalize="off" style="background: #fafafa;border-radius: 8px;padding: 10px;width: 100%;height: 40px;margin-bottom: 10px;border:none">
+                    <option ng-repeat="b in datingBudgets track by $index" value="{{b}}">{{b}}</option>
+                </select>
+
+                </form>
+            </div>
+            <div class="cta-box__buttons">
+                <div class="button-wrapper">
+                    <button class="button button--primary" style="background:#cf2929!important;" ng-click="createDateRequest(dating)">
+                        <div class="button__content"><span class="button__text">{{lang[960].text}}</span></div>
+                    </button>
+                    <button class="inline-button inline-button--primary inline-button--sm" ng-click="hideCreateDateForm()"><span class="inline-button__text">{{alang[191].text}}</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <div class="people-nearby-banner" style="display:none" id="createDateRequest">
+        <div class="people-nearby-banner__curve"></div>
+        <div class="cta-box">
+            <div class="cta-box__content">
+                <div class="brick-group brick-group--promo">
+                    <div class="brick brick--sm vivify popInBottom delay-100" >
+                        <div class="brick__image" style="background-image: url('img/gata0.jpg')"></div>
+                    </div>
+                    <div class="brick vivify popInBottom delay-100">
+                        <div class="brick__image" style="background-image: url('{{me.profile_photo}}')"></div>
+                    </div>
+                    <div class="brick brick--sm vivify popInBottom delay-100">
+                        <div class="brick__image" style="background-image: url('img/gata1.jpg')"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="cta-box__content vivify fadeIn delay-400">{{lang[953].text}}</div>
+            <div class="cta-box__buttons vivify fadeIn delay-500" style="width: 90%">
+                <div class="button-wrapper">
+                    <button class="button" ng-click="showCreateDateForm()" style="background:#cf2929!important;border-radius: 25px;">
+                        <div class="button__content"><span class="button__text comforta" style="color:#fff">{{lang[960].text}}</span></div>
+                    </button>
+                </div>
+            </div>
+            <div class="cta-box__additional hidden"></div>
+        </div>
+    </div>    
+    <div id="dateRequests">
+        <figure ng-repeat="d in dates track by $index" ng-if="showDates" class="snip1336" data-uid="{{d.uid}}" data-index="{{$index}}">
+            <img class="bg-image" src="{{d.photo}}" ng-click="openProfileModal({{d.uid}},'{{d.name}}','{{d.photo}}','{{d.age}}','{{d.city}}',1)" />
+            <figcaption >
+                <h2>{{d.name}}<span>{{d.city}}</span></h2>
+                <p style="font-size:14px;font-weight:700";>{{d.dating_description}}</p>
+                <p style="margin-top:25px">Date: <strong>{{d.dating_when}}</strong></p>         
+                <p>Place: <strong>{{d.dating_place}}</strong></p>
+                <p>Budget: <strong>{{currency}} {{d.dating_budget}}</strong></p>
+            </figcaption>
+            <div class="dating-btns">
+                <a href="javascript:;" ng-if="d.applyRequest == 'noData'" ng-click="applyForDate(d.uid,d.id,$index)" id="applyRequest{{$index}}" class="follow">{{lang[973].text}}</a>
+
+                <a href="javascript:;" ng-if="d.applyRequest != 'noData'">{{lang[972].text}}</a>
+
+                <a href="javascript:;" id="applyRequestSent{{$index}}" style="display: none;">{{lang[972].text}}</a>   
+
+                <a href="javascript:;" id="removeRequest{{$index}}" ng-click="removeDateRequest({{$index}})" style="width:95%;display: none" class="remove">{{lang[971].text}}</a>
+
+                <a href="javascript:;" id="openProfile{{$index}}" ng-click="openProfileModal({{d.uid}},'{{d.name}}','{{d.photo}}','{{d.age}}','{{d.city}}',1)" class="info">{{lang[970].text}}</a>                
+            </div>        
+        </figure>'        
+    </div>      
+  </ion-content>
+    
+
+</ion-view>

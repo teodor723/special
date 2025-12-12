@@ -1,0 +1,58 @@
+<ion-view title="" hide-nav-bar="true">
+    <ion-content class="vivify fadeIn pt-80" delegate-handle="userMessageScroll">
+        <div class="content-header-div">
+            <div class="content-header-div-title">
+                <h2 class="twigo-font" ng-click="goBackSettings();">{{lang[295].text}}</h2>
+            </div>
+            <div class="content-header-div-right" ng-click="goBackSettings();">
+                <span class="twigo-font">
+                	{{alang[264].text}}
+				  			</span>
+            </div>
+        </div>
+        <ion-list ng-if="show == 1">
+            <div ng-show="noLikes">
+                <div class="credits-section text-center">
+                    <h5 class="comforta font-bold fc-color-BFC5D5">{{alang[70].text}}</h5>
+                    <div class="wrapper text-center">
+                        <div class="pos-rlt">
+                            <div class="thumb-xxl rounded profileP border-profile" 
+                            	style="background-image:url({{photo}});height:{{w}}px;width:{{w}}px;"></div>
+                        </div>
+                    </div>
+                    <h1 class="font-bold">{{alang[229].text}}</h1>
+                    <h4 class="font-bold">{{alang[230].text}}</h4>
+                    <center>
+                    	<span class="first-me first-me-btn" ng-click="openModalBoost(1)">{{alang[233].text}}</span></center>
+                    <br>
+                    <h4>{{alang[208].text}} <b>{{firstmeprice}}</b> {{alang[203].text}}</h4>
+                </div>
+            </div>
+            <ion-item class="border-none pt-5" ng-repeat="p in mylikes track by $index">
+                <div class="thumb-md rounded pull-left m-l m-r-md profileP list-thumb-user-photo" style="background-image:url('{{p.photo}}');" ng-class="p.story > 0 ? 'storyOn' : ''" ng-click="openStory(p.id,p.story)"></div>
+                <div class="text-lg b-b b-light clear padder-v" ng-click="openProfileStory(p)">
+                    <div class="text-c chat-name display-inline-table">{{p.name}} <span class="chat-status bg-51B80E" ng-if="p.status == 1"></span></div>
+                    <div class="text-xs text-muted text-right list-user-msg-time">{{p.last_m_time}}</div>
+                    <div class="list-user-last-msg">
+                        <p class="text-muted chat-last-m paQueRespete">{{p.last_m}}</p>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div class="wrapper-reward" ng-if="modalBoost">
+            <div class="modal-reward modal--congratulations  vivify fadeIn">
+                <div class="modal-reward-top">
+                    <div class="klose animated fadeInUp bg-333" ng-click="closeModalBoost()">
+                        <i class="icon ion-close-round close-modal-boost"></i>
+                    </div>
+                    <img class="modal-reward-icon u-imgResponsive animated fadeInUp rounded profileP modal-user-photo" style="background-image:url({{me.profile_photo}});">
+                    <div class="modal-reward-header animated fadeInUp">{{boostTitle}}</div>
+                    <div class="modal-reward-subheader animated fadeInUp comforta fs-15">{{boostDesc}}<br>{{alang[121].text}} <strong>{{boostPrice}}</strong> {{alang[48].text}}</div>
+                </div>
+                <div class="modal-reward-bottom " ng-click="boostBtn();closeModalBoost();">
+                    <button class="modal-reward-btn u-btn u-btn--danger comforta">{{boostBtnText}}</button>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

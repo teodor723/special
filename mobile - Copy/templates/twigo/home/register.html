@@ -1,0 +1,153 @@
+<ion-view title="" hide-nav-bar="true">
+  <div class="twigo-register-header">
+    <div class="content-header-div-title">
+        <div class="navigation-bar__logo zIndex-999" style="display:inline;">
+          <img src="{{logo}}" />
+        </div>
+    </div>
+    <div class="content-header-div-right" sltyle="display:flex;right: 5px;width: 145px;">
+        <button  class="inline-button twigo-landing-btn" ng-click="openLanguagesModal('Visitor')" style="color: #fff;background: #191919;padding: 7px 10px;height: 35px;border-radius: 5px;margin-right: 0px;"><img src="twigo/img/world.png" width="20" /></button>
+        <button ng-click="goTo('home.welcome','left','')" id="signin_reg_btn" class="inline-button twigo-landing-btn" style="color: #fff;background: #191919;padding: 2px 20px;height: 35px;border-radius: 5px;margin-right: 0;font-weight: 600;">
+            {{alang[290].text}}
+        </button>
+    </div>
+  </div>
+  <ion-content  scroll="false" ng-style="{height: iframeHeight + 'px'}" class="bg-fff">
+    <div class="page landing visible zIndex-600">
+    <div class="flexible-page" id="regf_landing">
+      <div class="page-content">
+        <div class="landing-decorations twigo-landing"></div>
+        <div class="landing-wrapper">
+          
+          <div class="landing-actions mt-80px">
+            <div class="cta-box">
+              <div class="cta-box__buttons">
+                <ul class="list-view ">
+                  <li class="list-item-form border-none" id="reg_name_div" style="display:none;">
+    
+                    <input ng-model="user.reg_name" placeholder="{{alang[158].text}}" name="name" type="text" autocapitalize="off" class="register-twigo-input" />
+                  </li>
+                  <li class="list-item-form border-none">
+
+                    <input ng-model="user.reg_email" placeholder="{{alang[149].text}}" id="regemail" name="email" type="email"  autocapitalize="off" class="register-twigo-input">
+                  </li>
+                  <li class="list-item-form border-none" id="reg_pass_div" style="display:none;">
+
+                    <input type="password" placeholder="{{alang[150].text}}" id="regpass" ng-model="user.reg_pass" ng-keyup="count = $count + 1" ng-init="count=0" ng-minlength="4" class="register-twigo-input" required>
+                  </li>
+                </ul>
+                <div class="button-wrapper mt-25px">
+                  <div class="login-loader mb-40" ng-if="regBtn">
+                    <center>
+                      <div class="loader02"></div>
+                    </center>
+                  </div>
+                  <button class="button button--secundary a" ng-class="{active: isActive}" ng-if="!regBtn" ng-click="next(user)">
+                    <div class="button__content"><span class="button__text">{{nexttext}}</span></div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div flow-init
+      flow-name="uploader.flow"
+      flow-files-added="processFiles($files)">
+      <button flow-btn type="file" id="uploadRegPhoto" style="display: none;">Upload Images</button>
+    </div>
+    <div class="featured-members-section">
+        <style>
+        .member-card img {
+            border-radius: 50%;
+            width: 150px;
+        }
+        .additional-sections{
+            background: #f8f8f8;
+            margin: 20px auto 0px auto;
+            padding: 24px 10px;
+        }
+        .testimonial {
+            margin-top: 30px;
+        }
+        .testimonial img {
+            border-radius: 50%;
+            width: 100px;
+        }
+        .site-footer {
+            background: url(img/bg1.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            padding: 30px 10px;
+        }
+        .twigo-register-header{position:relative !important;}
+        </style>
+        <div class="container">            
+            <h2 class="section-title">{{alang[289].text}}</h2>
+            <div class="members-grid" style="display:ruby;">
+                <div class="member-card">
+                    <img src="img/1.jpg" alt="Profile picture of Member 1" />
+                    <h4>Dongfang(Vina) , 36</h4>
+                    <p>Shanghai, China</p>
+                </div>
+                <div class="member-card">
+                    <img src="img/2.jpg" alt="Profile picture of Member 2" />
+                    <h4>Esther mine, 22</h4>
+                    <p>Lagos, Nigeria</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="additional-sections">
+        <div class="container">
+            <div class="info-section">
+                <h2>{{alang[290].text}}</h2>
+                <p>{{alang[291].text}}</p>
+            </div>
+            <div class="testimonials-section" style="margin-top: 25px;">
+                <h2>{{alang[292].text}}</h2>
+                <div class="testimonials">
+                    <div class="testimonial">
+                        <img src="img/4.jpg" alt="Profile picture of Member 4" />
+                        <h4>Elena, 41</h4>
+                        <p>"{{alang[293].text}}"</p>
+                    </div>
+                    <div class="testimonial">
+                        <img src="img/3.jpg" alt="Profile picture of Member 3" />
+                        <h4>Wenfang, 55</h4>
+                        <p>"{{alang[294].text}}"</p>
+                    </div>
+                    <div class="testimonial">
+                        <img src="img/5.jpg" alt="Profile picture of Member 3" />
+                        <h4>Jenne Darc(Jenny), 48</h4>
+                        <p>"{{alang[295].text}}"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>{{alang[296].text}}</h3>
+                    <p>{{alang[297].text}}</p>
+                </div>
+                <div class="footer-column">
+                    <h3>{{alang[298].text}}</h3>
+                    <p>{{alang[299].text}}</p>
+                    <p>{{alang[300].text}}</p>
+                </div>
+                <div class="footer-column">
+                    <h3>{{alang[301].text}}</h3>
+                    <p>Facebook | Instagram | Twitter</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+  </ion-content>
+</ion-view>

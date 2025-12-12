@@ -1,0 +1,122 @@
+<ion-view title="" hide-nav-bar="true">
+   <div class="content-header-meet">
+      <div class="content-header-messages-title">
+         <h2 class="twigo-font">{{alang[259].text}}</h2>
+      </div>
+      <div class="content-header-meet-right" ng-click="goTo('home.settings');">
+         <svg id="Filters_btn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="38.667" viewBox="0 0 40 38.667">
+            <defs>
+               <clipPath id="clip-path">
+                  <ellipse id="Oval" cx="20" cy="19.333" rx="20" ry="19.333" fill="rgba(0,0,0,0.1)"/>
+               </clipPath>
+            </defs>
+            <ellipse id="Oval-2" data-name="Oval" cx="20" cy="19.333" rx="20" ry="19.333" fill="rgba(0,0,0,0.1)"/>
+            <path id="Filters" d="M5.45,14.5a1.45,1.45,0,1,1,0-2.9h9.1a1.45,1.45,0,0,1,0,2.9Zm-2-5.8a1.45,1.45,0,0,1,0-2.9h13.1a1.45,1.45,0,0,1,0,2.9Zm-2-5.8a1.45,1.45,0,1,1,0-2.9h17.1a1.45,1.45,0,0,1,0,2.9Z" transform="translate(10 12.567)" fill="#fff"/>
+         </svg>
+      </div>
+      <div class="tabs tabs-top visible meet-tabs-select">
+         <div class="tab {{tab1}} ng-empty meet-tabs" 
+            ng-model="tabNEARBY" ng-click="onTabShow(1)">
+            <div class="tab__label comforta ng-binding inside-tab">
+               {{alang[260].text}}
+            </div>
+         </div>
+         <div class="tab {{tab2}} ng-empty meet-tabs-live" ng-model="tabPOPULAR" ng-click="onTabShow(2)" >
+            <div class="tab__label comforta ng-binding inside-tab">
+               {{alang[269].text}}
+            </div>
+         </div>
+      </div>
+   </div>
+   <ion-content scroll="true" class="vivify fadeIn meet-content">
+      <div class="page-content stories-page">
+         <div class="stories-feed-layout stories-discover vivify fadeIn stories-list" data-stories-discover>
+            <div class="stories-feed stories-discover-feed stories-list-feed">
+               <div class="story-container" ng-click="userStoriesMenu()">
+                  <div class="story-preview vivify stories-my-story">
+                     <div class="story-preview-background profile-photo" data-discover-upload-story="1" style="background-image:url({{me.profile_photo}})"></div>
+                     <div class="story-preview-mask-me"></div>
+                     <p class="story-preview-name" id="uploadStoryMobile" data-upload-story onclick="upStoryMobile()" >
+                        <span>{{lang[618].text}}</span>
+                     </p>
+                  </div>
+               </div>
+               <div id="storiesMobile" ng-repeat="story in stories track by $index" ng-show="exploreStories">
+                  <div class="story-container vivify fadeIn delay-{{story.fadeDelay}} ml-4" id="story{{$index}}" data-current-story-position="{{$index}}" ng-click="openStoryDiscover($index,story.id)">
+                     <div class="story-preview">
+                        <div class="backgroundAnimation sloader" style="display:none"></div>
+                        <div class="story-preview-background profile-photo discoverStoryPhoto" ng-if="story.video == 1" style="background-image:url({{story.profile_photo}})"></div>
+                        <div class="story-preview-mask"></div>
+                        <div class="story-preview-background profile-photo discoverStoryPhoto" ng-if="story.video == 0" style="background-image:url({{story.story}})"></div>
+                        <div class="story-preview-mask"></div>
+                        <div class="stories-user-open" id="storyUser{{story.id}}" ng-click="openProfileStory(story)"></div>
+                        <p class="story-preview-name">
+                           <span>{{story.name}}</span>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </ion-content>
+   <div class="tabbar">
+      <div class="tabbar__items">
+         <div class="tabbar__item">
+            <div class="tabbar-item is-active"  ng-click="goTo('home.explore');">
+               <div class="tabbar-item__icon">
+                  <div class="icon icon--stretch mt-5px">
+                     <img src="{{siteUrl}}mobile/twigo/img/menu-discover.svg">
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.meet');">
+               <div class="tabbar-item__icon">
+                  <div class="icon icon--stretch mt-5px" >
+                     <img src="{{siteUrl}}mobile/twigo/img/menu-meet.svg">
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.stories');">
+               <div class="tabbar-item__icon">
+                  <div class="icon icon--stretch mt-5px" >
+                     <img src="{{siteUrl}}mobile/twigo/img/menu-stories.svg">
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.reels');">
+                <div class="tabbar-item__icon">
+                    <div class="icon icon--stretch mt-5px" >
+                        <svg aria-label="Reels" fill="#c1c0c9" width="23" height="23.961" viewBox="0 0 23 23.961" role="img"><line fill="none" stroke="#dad9e2" stroke-linejoin="round" stroke-width="1" x1="2.049" x2="21.95" y1="7.002" y2="7.002"></line><line fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" x1="13.504" x2="16.362" y1="2.001" y2="7.002"></line><line fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" x1="7.207" x2="10.002" y1="2.11" y2="7.002"></line><path d="M2 12.001v3.449c0 2.849.698 4.006 1.606 4.945.94.908 2.098 1.607 4.946 1.607h6.896c2.848 0 4.006-.699 4.946-1.607.908-.939 1.606-2.096 1.606-4.945V8.552c0-2.848-.698-4.006-1.606-4.945C19.454 2.699 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.546 2 5.704 2 8.552Z" fill="none" stroke="#c1c0c9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path><path d="M9.763 17.664a.908.908 0 0 1-.454-.787V11.63a.909.909 0 0 1 1.364-.788l4.545 2.624a.909.909 0 0 1 0 1.575l-4.545 2.624a.91.91 0 0 1-.91 0Z" fill-rule="evenodd"></path></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.matches');">
+               <div class="tabbar-item__icon">
+                  <div class="icon icon--stretch mt-6px">
+                     <img src="{{siteUrl}}mobile/twigo/img/menu-chat.svg">
+                  </div>
+                  <div class="tabbar-item__icon-indicator is-shown" ng-if="unreadMessage"></div>
+               </div>
+            </div>
+         </div>
+         <div class="tabbar__item">
+            <div class="tabbar-item" ng-click="goTo('home.profile');">
+               <div class="tabbar-item__icon">
+                  <div class="icon icon--stretch mt-5px" >
+                     <img src="{{siteUrl}}mobile/twigo/img/menu-profile.svg">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</ion-view>

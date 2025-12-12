@@ -1,0 +1,21 @@
+<ion-modal-view>
+  <ion-content class="profile">
+    <div class="list m-n border-color-fff">
+      <div class="item item-divider b-none item-list-twigo"></div>
+      <div class="item" ng-repeat="l in languages" ng-click="selectLanguage(l.id)" >
+        <span>{{l.text}}</span>
+      </div>
+    </div>
+    <div class="item item-divider b-none background-white"></div>
+  </ion-content>
+  <ion-footer>
+    <button ng-if="!loading" ng-click="closeLanguagesModal()" class="button button-clear comforta close-credits-modal text-center">
+      <center>
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#8c8c8c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </center>
+    </button>
+  </ion-footer>
+</ion-modal-view>

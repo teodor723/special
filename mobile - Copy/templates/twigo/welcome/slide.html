@@ -1,0 +1,22 @@
+<style>
+  ion-header-bar{
+    display: none !important;
+  }
+</style>
+<ion-view title="" hide-nav-bar="true">
+  <ion-content ng-style="{height: iframeHeight + 'px'};" scroll="false" > 
+    <div class="wrapper" style="background: #fafafa;padding: 0" fit vertical layout justified>
+      <div class="slider-skip comforta" ng-click="goTo('home.welcome','right','')">Skip</div>      
+      <ion-slide-box on-slide-changed="slideHasChanged($index)" active-slide="activeIndex" ng-init="activeIndex = 0" class="">
+        <ion-slide class="bg-000" ng-repeat="i in slider"> 
+          <div class="slide-overlay"></div>
+          <div class="slide-img" style="background-image:url('{{i.img}}')"> 
+          <div class="slider-text-container text-center text-muted twigo-font" >
+            <h3 class="comforta slider-text-header mt-20px">{{i.title_text}}</h3>
+            <span class="comforta slider-text-small fc-fafafa">{{i.text}}</span>          
+          </div>        
+        </ion-slide>
+      </ion-slide-box>  
+    </div>
+  </ion-content>
+</ion-view>	

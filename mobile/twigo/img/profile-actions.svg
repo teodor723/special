@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="36" height="36" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <circle id="Oval" cx="18" cy="18" r="18" fill="rgba(0,0,0,0.05)"/>
+    </clipPath>
+  </defs>
+  <g id="Filters" clip-path="url(#clip-path)">
+    <g id="Filters-2" data-name="Filters">
+      <path id="Oval-2" data-name="Oval" d="M18,0a18,18,0,0,1,0,36,18.615,18.615,0,0,1-4.706-.621,17.443,17.443,0,0,1-4.908-2.109A18.033,18.033,0,0,1,18,0Z" fill="rgba(0,0,0,0.05)"/>
+      <g id="Filters-3" data-name="Filters" clip-path="url(#clip-path-2)">
+        <path id="Shape" d="M14.286,2.5a2.5,2.5,0,1,1,2.5,2.5A2.5,2.5,0,0,1,14.286,2.5Zm-7.142,0A2.5,2.5,0,1,1,9.645,5,2.5,2.5,0,0,1,7.143,2.5ZM0,2.5A2.5,2.5,0,1,1,2.5,5,2.5,2.5,0,0,1,0,2.5Z" transform="translate(8 16)" fill="#c1c0c9"/>
+      </g>
+    </g>
+  </g>
+</svg>

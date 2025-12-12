@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="23" height="19.961" viewBox="0 0 23 19.961">
+  <defs>
+    <style>
+      .cls-1 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-2 {
+        fill: rgba(0,0,0,0);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <clipPath id="clip-path">
+      <path id="Messages" d="M11.47,19.961a.993.993,0,0,1-.707-.292L8.78,17.687H4.218C1.892,17.687,0,16.077,0,14.1V3.6C0,1.616,1.892,0,4.218,0H18.783a4.574,4.574,0,0,1,2.982,1.056A3.335,3.335,0,0,1,23,3.6V14.1c0,1.978-1.892,3.586-4.218,3.586l-4.623,0-1.982,1.982A.994.994,0,0,1,11.47,19.961ZM17.463,6.968a1.652,1.652,0,1,0,1.725,1.651A1.691,1.691,0,0,0,17.463,6.968Zm-6.052,0a1.652,1.652,0,1,0,1.724,1.651A1.691,1.691,0,0,0,11.41,6.968Zm-6.053,0a1.652,1.652,0,1,0,0,3.3,1.652,1.652,0,1,0,0-3.3Z" transform="translate(4 5)"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="0.748" y1="0.265" x2="0" y2="0.772" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff8960"/>
+      <stop offset="1" stop-color="#ff62a5"/>
+    </linearGradient>
+  </defs>
+  <g class="cls-1" transform="translate(-4 -5)">
+    <g id="color_primary" data-name="color/primary">
+      <rect id="color_primary_background" data-name="color/primary background" class="cls-2" width="30" height="30"/>
+      <rect id="color_primary-2" data-name="color/primary" class="cls-3" width="30" height="30"/>
+    </g>
+  </g>
+</svg>

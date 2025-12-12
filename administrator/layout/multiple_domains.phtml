@@ -1,0 +1,720 @@
+<?php 
+
+$whitelist = array(
+    '127.0.0.1',
+    'localhost',
+    'www.localhost',
+    'localhost'
+);
+?>
+
+<script>aurl = 'plugin';</script>
+<script>plugin = '';</script>
+
+<!-- SECTION CONTENT -->
+
+<div class="container-fluid page__container" style="padding-top:25px;padding-bottom: 50px">
+
+<div class="card card-form" id="google_analytics_card">
+   <div class="card-header card-header-large bg-white d-flex align-items-center">
+      <h4 class="card-header__title flex m-0">Google Analytics</h4>
+      <div></div>
+   </div>
+   <div class="row no-gutters">
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Measurement ID</strong>
+         </p>
+         <p class="text-muted">
+            ID from google analytics 4 dashboard
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Google Analytics 4 Measurement ID</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="google_analytics_id" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "google_analytics_id"'); ?>" />
+         </div>
+      </div>
+   </div>
+   <div class="card-footer bg-success" style="display: none">
+      <span style="color:#fff">Changes saved</span>
+   </div>
+   <div class="card-footer bg-danger" style="display: none">
+      <span style="color:#fff">Error</span>
+   </div>
+</div>
+
+<div class="card card-form" id="robots_card">
+   <div class="card-header card-header-large bg-white d-flex align-items-center">
+      <h4 class="card-header__title flex m-0">Search Engine Robots</h4>
+      <div></div>
+   </div>
+   <div class="row no-gutters">
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Robots.txt</strong>
+         </p>
+         <p class="text-muted">
+            Allow Google and other search engine robots to crawl and index your PHP website
+            <br>
+            <span class="text-danger">'User-agent: *'</span> indicates that the directives apply to all web crawlers.
+            <br>
+            <span class="text-danger">'Disallow: /admin/'</span> indicates disallows crawling of the admin directory
+            <br>
+            <span class="text-danger">'Disallow: /index.php?page=admin'</span> indicates disallows crawling of the admin login url
+            
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Robots.txt Code</label><br>
+            <textarea onblur="savemulti(this)" rows="10" class="form-control" name="robots_text" id="robots_text"><?php echo getData('multi_settings','config_value','WHERE config_key = "robots_text"'); ?></textarea>
+         </div>
+      </div>
+   </div>
+   <div class="card-footer bg-success" style="display: none">
+      <span style="color:#fff">Changes saved</span>
+   </div>
+   <div class="card-footer bg-danger" style="display: none">
+      <span style="color:#fff">Error</span>
+   </div>
+</div>
+<div class="card card-form" id="logos_card">
+   <div class="card-header card-header-large bg-white d-flex align-items-center">
+      <h4 class="card-header__title flex m-0">Main Domain Logos and Favicon</h4>
+      <div><button type="button" class="btn btn-primary" id="add_more_Btn"><i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">add</i>Add New Domain</button></div>
+   </div>
+   <div class="row no-gutters">
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Desktop Logo</strong>
+         </p>
+         <p class="text-muted">
+            Desktop logo for main domain
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Desktop Logo PNG</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="website_desktop_logo" id="website_desktop_logo" />
+            <div class="mt-2">
+                <img src="<?php echo getData('multi_settings','config_value','WHERE config_key = "website_desktop_logo"'); ?>" width="200" />
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Mobile Logo</strong>
+         </p>
+         <p class="text-muted">
+            Mobile logo for main domain
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Mobile Logo PNG</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="website_mobile_logo" id="website_mobile_logo" />
+            <div class="mt-2">
+                <img src="<?php echo getData('multi_settings','config_value','WHERE config_key = "website_mobile_logo"'); ?>" width="200" />
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Website Favicon</strong>
+         </p>
+         <p class="text-muted">
+            Website Favicon for main domain
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Favicon</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="website_favicon" id="website_favicon" />
+            <div class="mt-2">
+                <img src="<?php echo getData('multi_settings','config_value','WHERE config_key = "website_favicon"'); ?>" width="80" />
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="card-footer bg-success" style="display: none">
+      <span style="color:#fff">Changes saved</span>
+   </div>
+   <div class="card-footer bg-danger" style="display: none">
+      <span style="color:#fff">Error</span>
+   </div>
+</div>
+<div id="multidomains">
+<?php 
+    function ordinal($number) {
+        $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+        if ((($number % 100) >= 11) && (($number%100) <= 13)) {
+            return $number. 'th';
+        } else {
+            return $number. $ends[$number % 10];
+        }
+    }
+
+    $total_domains= getData('multi_settings','config_value','WHERE config_key = "total_domains"');
+    for($i=2; $i<=$total_domains; $i++) {
+        $ord=ordinal($i);
+        
+?>
+    <div class="card card-form" data-number="<?php echo $i; ?>" id="<?php echo $i; ?>_logos_card">
+   <div class="card-header card-header-large bg-white d-flex align-items-center">
+      <h4 class="card-header__title flex m-0"><?php echo $ord; ?> Domain Logos and Favicon</h4>
+      <div></div>
+   </div>
+   <div class="row no-gutters">
+       <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color"><?php echo $ord; ?> Domain Name</strong>
+         </p>
+         <p class="text-muted">
+            Enter the <?php echo $ord; ?> domain name
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Domain</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "'.$i.'_website_domain"'); ?>" name="<?php echo $i; ?>_website_domain" id="<?php echo $i; ?>_website_domain" />
+            <div class="mt-2 table-responsive">
+                <table class="table table-stripped table-bordered">
+                    <caption style="caption-side:top;">A records for <?php echo $ord; ?> domain</caption>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Name</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A</td>
+                            <td>www</td>
+                            <td><?php echo $_SERVER['SERVER_ADDR']; ?></td>
+                        </tr>
+                        <tr>
+                            <td>A</td>
+                            <td>@</td>
+                            <td><?php echo $_SERVER['SERVER_ADDR']; ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color"><?php echo $ord; ?> Site Name</strong>
+         </p>
+         <p class="text-muted">
+            Enter the name of <?php echo $ord; ?> site. This name will be used for sending mail notification.
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Site Name</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "'.$i.'_website_name"'); ?>" name="<?php echo $i; ?>_website_name" id="<?php echo $i; ?>_website_name" />
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color"><?php echo $ord; ?> Site Email</strong>
+         </p>
+         <p class="text-muted">
+            Enter the email for <?php echo $ord; ?> site. This email will be used for sending mail notification.
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Site Email</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "'.$i.'_website_email"'); ?>" name="<?php echo $i; ?>_website_email" id="<?php echo $i; ?>_website_email" />
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Desktop Logo</strong>
+         </p>
+         <p class="text-muted">
+            Desktop logo for <?php echo $ord; ?> domain
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Desktop Logo PNG</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="<?php echo $i; ?>_domain_desktop_logo" id="<?php echo $i; ?>_domain_desktop_logo" />
+            <div class="mt-2">
+                <img src="<?php $im=getData('multi_settings','config_value','WHERE config_key = "'.$i.'_domain_desktop_logo"');echo ($im!='noData')?$im:''; ?>" width="200" />
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Mobile Logo</strong>
+         </p>
+         <p class="text-muted">
+            Mobile logo for <?php echo $ord; ?> domain
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Mobile Logo PNG</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="<?php echo $i; ?>_domain_mobile_logo" id="<?php echo $i; ?>_domain_mobile_logo" />
+            <div class="mt-2">
+                <img src="<?php $im=getData('multi_settings','config_value','WHERE config_key = "'.$i.'_domain_mobile_logo"');echo ($im!='noData')?$im:''; ?>" width="200" />
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Website Favicon</strong>
+         </p>
+         <p class="text-muted">
+            Website Favicon for <?php echo $ord; ?> domain
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Favicon</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="<?php echo $i; ?>_domain_favicon" id="<?php echo $i; ?>_domain_favicon" />
+            <div class="mt-2">
+                <img src="<?php $im=getData('multi_settings','config_value','WHERE config_key = "'.$i.'_domain_favicon"');echo ($im!='noData')?$im:''; ?>" width="80" />
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="card-footer bg-success" style="display: none">
+      <span style="color:#fff">Changes saved</span>
+   </div>
+   <div class="card-footer bg-danger" style="display: none">
+      <span style="color:#fff">Error</span>
+   </div>
+</div>
+<?php } ?>
+</div>
+
+<div class="card card-form" id="seo_card">
+   <div class="card-header card-header-large bg-white d-flex align-items-center">
+      <h4 class="card-header__title flex m-0">Seo and meta information</h4>
+      <div></div>
+   </div>
+   <div class="row no-gutters">
+       <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Website Title</strong>
+         </p>
+         <p class="text-muted">
+            Title for website
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Title</label><br>
+            <input onblur="savemulti(this)" type="text" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "website_title"'); ?>" class="form-control" name="website_title" id="website_title" />
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Description</strong>
+         </p>
+         <p class="text-muted">
+            Seo description: Your page description here
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Description</label><br>
+            <textarea onblur="savemulti(this)" class="form-control" rows="6" name="description" id="description" ><?php echo getData('multi_settings','config_value','WHERE config_key = "description"'); ?></textarea>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Keywords</strong>
+         </p>
+         <p class="text-muted">
+            Seo keywords separated with comma(,)<br>
+            <span class="text-danger">Example:</span> keyword1,keyword2,keyword3
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Keywords</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="keywords" id="keywords" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "keywords"'); ?>" />
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Author</strong>
+         </p>
+         <p class="text-muted">
+            Author: Your Name or Company Name
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Author</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="author" id="author" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "author"'); ?>" />
+         </div>
+      </div>
+      
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Robots</strong>
+         </p>
+         <p class="text-muted">
+            Robots: index, follow
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Robots</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="robots" id="robots" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "robots"'); ?>" />
+         </div>
+      </div>
+      
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Canonical</strong>
+         </p>
+         <p class="text-muted">
+            Canonical URL is a piece of content
+            <br>
+            A canonical URL is the URL of a page that Google choose as the most representative from a set of duplicate pages.
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Canonical URL</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="canonical" id="canonical" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "canonical"'); ?>" />
+         </div>
+      </div>
+      
+      
+   </div>
+   <div class="card-footer bg-success" style="display: none">
+      <span style="color:#fff">Changes saved</span>
+   </div>
+   <div class="card-footer bg-danger" style="display: none">
+      <span style="color:#fff">Error</span>
+   </div>
+</div>
+
+<div class="card card-form" id="opengraph_card">
+   <div class="card-header card-header-large bg-white d-block align-items-center">
+      <h4 class="card-header__title block m-0">Open Graph SEO</h4>
+      <p class="text-muted mt-2">The Open Graph protocol controls what content displays when sharing links on social media. Any web page using Open Graph tags becomes a rich object in the social graph. For example, the Open Graph protocol allows you to control what image, title, and description display when sharing links on social media.</p>
+   </div>
+   <div class="row no-gutters">
+       <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Website Title</strong>
+         </p>
+         <p class="text-muted">
+            Your Page Title
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Title</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="og_title" id="og_title" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "og_title"'); ?>" />
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Description</strong>
+         </p>
+         <p class="text-muted">
+            Your page description here
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Description</label><br>
+            <textarea onblur="savemulti(this)" class="form-control" rows="6" name="og_description" id="og_description" ><?php echo getData('multi_settings','config_value','WHERE config_key = "og_description"'); ?></textarea>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Website Image</strong>
+         </p>
+         <p class="text-muted">
+            Your website image
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Website Image</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="og_image" id="og_image" />
+            <div class="mt-2">
+                <img src="<?php echo getData('multi_settings','config_value','WHERE config_key = "og_image"'); ?>" width="200" />
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Website Url</strong>
+         </p>
+         <p class="text-muted">
+            Your page url
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Website URL</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="og_url" id="og_url" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "og_url"'); ?>" />
+         </div>
+      </div>
+      
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Type</strong>
+         </p>
+         <p class="text-muted">
+            Type of site
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Type</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="og_type" id="og_type" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "og_type"'); ?>" />
+         </div>
+      </div>
+      
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Site Name</strong>
+         </p>
+         <p class="text-muted">
+            Your Website Name
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Site Name</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="og_site_name" id="og_site_name" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "og_site_name"'); ?>" />
+         </div>
+      </div>
+      
+      
+   </div>
+   <div class="card-footer bg-success" style="display: none">
+      <span style="color:#fff">Changes saved</span>
+   </div>
+   <div class="card-footer bg-danger" style="display: none">
+      <span style="color:#fff">Error</span>
+   </div>
+</div>
+
+<div class="card card-form" id="twitter_card">
+   <div class="card-header card-header-large bg-white d-block align-items-center">
+      <h4 class="card-header__title block m-0">Twitter Card SEO</h4>
+    </div>
+   <div class="row no-gutters">
+       <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Twitter Card</strong>
+         </p>
+         <p class="text-muted">
+            Summury large image
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Card</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="twitter_card" id="twitter_card" />
+            <div class="mt-2">
+                <img src="<?php echo getData('multi_settings','config_value','WHERE config_key = "twitter_card"'); ?>" width="200" />
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Twitter Image</strong>
+         </p>
+         <p class="text-muted">
+            Twitter image
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Image</label><br>
+            <input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="twitter_image" id="twitter_image" />
+            <div class="mt-2">
+                <img src="<?php echo getData('multi_settings','config_value','WHERE config_key = "twitter_image"'); ?>" width="200" />
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Title</strong>
+         </p>
+         <p class="text-muted">
+            Your Page Title
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Title</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="twitter_title" id="twitter_title" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "twitter_title"'); ?>" />
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Description</strong>
+         </p>
+         <p class="text-muted">
+            Your page description here
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Description</label><br>
+            <textarea onblur="savemulti(this)" class="form-control" rows="6" name="twitter_description" id="twitter_description" ><?php echo getData('multi_settings','config_value','WHERE config_key = "twitter_description"'); ?></textarea>
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Twitter Site</strong>
+         </p>
+         <p class="text-muted">
+            Your twitter handler
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Site</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="twitter_site" id="twitter_site" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "twitter_site"'); ?>" />
+         </div>
+      </div>
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Creator</strong>
+         </p>
+         <p class="text-muted">
+            Your twitter handler
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Creator</label><br>
+            <input onblur="savemulti(this)" type="text" class="form-control" name="twitter_creator" id="twitter_creator" value="<?php echo getData('multi_settings','config_value','WHERE config_key = "twitter_creator"'); ?>" />
+         </div>
+      </div>
+      
+      
+   </div>
+   <div class="card-footer bg-success" style="display: none">
+      <span style="color:#fff">Changes saved</span>
+   </div>
+   <div class="card-footer bg-danger" style="display: none">
+      <span style="color:#fff">Error</span>
+   </div>
+</div>
+
+<div class="card card-form" id="schema_card">
+   <div class="card-header card-header-large bg-white d-block align-items-center">
+      <h4 class="card-header__title block m-0">Schema Markup</h4>
+    </div>
+   <div class="row no-gutters">
+      <div class="col-lg-4 card-body bg-light">
+         <p>
+            <strong class="headings-color">Code</strong>
+         </p>
+         <p class="text-muted">
+            It is a code in the form of structured data that communicates the meaning of your page, elements, and how users should see it to the searching tool, and in a language, the search engine can understand
+         </p>
+      </div>
+      <div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white">
+         <div class="flex">
+            <label for="siteName">Code</label><br>
+            <textarea onblur="savemulti(this)" class="form-control" rows="20" name="schema_markup" id="schema_markup"><?php echo getData('multi_settings','config_value','WHERE config_key = "schema_markup"'); ?></textarea>
+         </div>
+      </div>
+      
+      
+   </div>
+   <div class="card-footer bg-success" style="display: none">
+      <span style="color:#fff">Changes saved</span>
+   </div>
+   <div class="card-footer bg-danger" style="display: none">
+      <span style="color:#fff">Error</span>
+   </div>
+</div>
+
+</div>
+
+
+<script>
+var bellooPremium = '<?= $sm['settings']['premium']; ?>';
+function savemulti(el,n=''){
+  var key_name=$(el).attr('name');
+  var key_value=$(el).val();
+  $.ajax({
+      url: request_source()+'/admin.php', 
+      data: {
+          action: 'save_multi_domain_settings',
+          key_name: key_name,
+          key_value: key_value,
+          n:n
+      },
+      type: "post",
+      dataType: 'JSON',           
+      success: function(response) {
+        toastr.success('Success!', 'Changes Saved');
+      },
+      error: function(xhr, status, err) {
+          toastr.error('Error!', err);
+      }
+  });  
+}
+function upfile(el,n=''){
+  var key_name=$(el).attr('name');
+  var key_value=$(el).val();
+  var file = $(el)[0].files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var base64File = e.target.result.split(',')[1];
+            $.ajax({
+                url: request_source()+'/admin.php',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    action: 'save_multi_domain_settings',
+                    key_name: key_name,
+                    filename: file.name,
+                    key_value: base64File,
+                    filetype: file.type,
+                    n:n
+                },
+                success: function(response) {
+                    if(response.errmsg) {
+                        toastr.error('Error!', response.errmsg);
+                    }
+                    if(response.msg) {
+                        toastr.success('Success!', response.msg);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    toastr.error('Error!', error);
+                }
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+}
+function getNumberWithOrdinal(n) {
+  var s = ["th", "st", "nd", "rd"],
+      v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+var last=parseInt($("#multidomains > .card-form:last-child").data("number"));
+$("#add_more_Btn").on("click",function(){
+    var id=last+1;
+    last=id;
+    var or=getNumberWithOrdinal(id);
+    $("#multidomains").append('<div class="card card-form" id="'+id+'_logos_card"><div class="card-header card-header-large bg-white d-flex align-items-center"><h4 class="card-header__title flex m-0">'+or+' Domain Logos and Favicon</h4><div></div></div><div class="row no-gutters"><div class="col-lg-4 card-body bg-light"><p><strong class="headings-color">'+or+' Domain Name</strong></p><p class="text-muted">Enter the '+or+' domain name</p></div><div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white"><div class="flex"><label for="siteName">Domain</label><br><input onblur="savemulti(this,'+id+')"  type="text" class="form-control" value="" name="'+id+'_website_domain" id="'+id+'_website_domain" /><div class="mt-2 table-responsive"><table class="table table-stripped table-bordered"><caption style="caption-side:top;">A records for '+or+' domain</caption><thead><tr><th>Type</th><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>A</td><td>www</td><td><?php echo $_SERVER["SERVER_ADDR"]; ?></td></tr><tr><td>A</td><td>@</td><td><?php echo $_SERVER["SERVER_ADDR"]; ?></td></tr></tbody></table></div></div></div><div class="col-lg-4 card-body bg-light"><p><strong class="headings-color">'+or+' Site Name</strong></p><p class="text-muted">Enter the name of '+or+' site. This name will be used for sending mail notification.</p></div><div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white"><div class="flex"><label for="siteName">Site Name</label><br><input onblur="savemulti(this)" type="text" class="form-control" value="" name="'+id+'_website_name" id="'+id+'_website_name" /></div></div><div class="col-lg-4 card-body bg-light"><p><strong class="headings-color">'+or+' Site Email</strong></p><p class="text-muted">Enter the email for '+or+' site. This email will be used for sending mail notification.</p></div><div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white"><div class="flex"><label for="siteName">Site Email</label><br><input onblur="savemulti(this)" type="text" class="form-control" value="" name="'+id+'_website_email" id="'+id+'_website_email" /></div></div><div class="col-lg-4 card-body bg-light"><p><strong class="headings-color">Desktop Logo</strong></p><p class="text-muted">Desktop logo for '+or+' domain</p></div><div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white"><div class="flex"><label for="siteName">Desktop Logo PNG</label><br><input onchange="upfile(this,'+id+')" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="'+id+'_domain_desktop_logo" id="'+id+'_domain_desktop_logo" /><div class="mt-2"><img src="" width="200" /></div></div></div><div class="col-lg-4 card-body bg-light"><p><strong class="headings-color">Mobile Logo</strong></p><p class="text-muted">Mobile logo for '+or+' domain</p></div><div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white"><div class="flex"><label for="siteName">Mobile Logo PNG</label><br><input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="'+id+'_domain_mobile_logo" id="'+id+'_domain_mobile_logo" /><div class="mt-2"><img src="" width="200" /></div></div></div><div class="col-lg-4 card-body bg-light"><p><strong class="headings-color">Website Favicon</strong></p><p class="text-muted">Website Favicon for '+or+' domain</p></div><div class="col-lg-8 card-form__body card-body d-flex align-items-center bg-white"><div class="flex"><label for="siteName">Favicon</label><br><input onchange="upfile(this)" type="file" accept=".png, .jpg, .jpeg, .gif, .ico" class="form-control" name="'+id+'_domain_favicon" id="'+id+'_domain_favicon" /><div class="mt-2"><img src="" width="80" /></div></div></div></div><div class="card-footer bg-success" style="display: none"><span style="color:#fff">Changes saved</span></div><div class="card-footer bg-danger" style="display: none"><span style="color:#fff">Error</span></div></div>');
+});
+
+</script>
