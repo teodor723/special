@@ -1,0 +1,51 @@
+# Laravel Framework
+/vendor/
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Environment
+.env
+.env.backup
+.env.production
+
+# IDE & Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.phar
+
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
+
+# Build & Cache
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
+*.cache
+
+# Debug
+npm-debug.log
+yarn-error.log
+
+# Testing
+.phpunit.cache/
+/coverage/
+
+# Mix/Vite
+/public/build/
+
+# Misc
+*.log
+*.bak
+*.tmp
+
