@@ -15,7 +15,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'email',
-        'password',
+        'pass',
         'name',
         'username',
         'age',
@@ -28,36 +28,39 @@ class User extends Authenticatable
         'lng',
         'bio',
         'bio_url',
-        'profile_photo',
         'credits',
         'premium',
         'verified',
         'lang',
         's_age',
         's_gender',
-        's_radius',
+        's_radious',
         'facebook_id',
         'google_id',
         'apple_id',
         'firebase_uid',
         'app_id',
         'last_access',
-        'sexy',
         'popular',
         'fake',
         'online_day',
         'meet',
         'admin',
+        'superlike',
+        'join_date',
+        'join_date_time',
+        'ip',
+        'referral',
+        'country_code',
     ];
 
     protected $hidden = [
-        'password',
+        'pass',
         'remember_token',
     ];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
         'birthday' => 'date',
         'lat' => 'decimal:7',
         'lng' => 'decimal:7',
@@ -66,7 +69,48 @@ class User extends Authenticatable
         'verified' => 'boolean',
         'fake' => 'boolean',
         'admin' => 'boolean',
+        'superlike' => 'integer',
     ];
+
+    /**
+     * Get the password for authentication (maps to 'pass' column)
+     */
+    public function getAuthPassword()
+    {
+        return $this->pass;
+    }
+
+    /**
+     * Accessor for password (maps to 'pass' column)
+     */
+    public function getPasswordAttribute()
+    {
+        return $this->pass;
+    }
+
+    /**
+     * Mutator for password (maps to 'pass' column)
+     */
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['pass'] = $value;
+    }
+
+    /**
+     * Accessor for s_radius (maps to 's_radious' column - database typo)
+     */
+    public function getSRadiusAttribute()
+    {
+        return $this->s_radious ?? 500;
+    }
+
+    /**
+     * Mutator for s_radius (maps to 's_radious' column - database typo)
+     */
+    public function setSRadiusAttribute($value)
+    {
+        $this->attributes['s_radious'] = $value;
+    }
 
     public $timestamps = false; // Existing DB doesn't use created_at/updated_at
 
@@ -184,12 +228,9 @@ class User extends Authenticatable
     // Accessors & Mutators
     public function getProfilePhotoUrlAttribute(): string
     {
-        if ($this->profile_photo && !str_contains($this->profile_photo, 'no_user')) {
-            return $this->profile_photo;
-        }
-        
+        // Get profile photo from users_photos table (not from users table)
         $profilePhoto = $this->profilePhoto;
-        if ($profilePhoto) {
+        if ($profilePhoto && $profilePhoto->photo && !str_contains($profilePhoto->photo, 'no_user')) {
             return $profilePhoto->photo;
         }
         
@@ -212,7 +253,7 @@ class User extends Authenticatable
 
     public function getSuperLikesAttribute(): int
     {
-        return $this->sexy ?? 0;
+        return (int) ($this->superlike ?? 0);
     }
 
     // Helper Methods
@@ -221,7 +262,7 @@ class User extends Authenticatable
         return $this->credits >= $amount;
     }
 
-    public function deductCredits(int $amount, string $reason = 'Credits spent'): bool
+    public function deductCredits(int $amount, string $reason = 'Credits spent', string $type = 'spend'): bool
     {
         if (!$this->hasEnoughCredits($amount)) {
             return false;
@@ -235,12 +276,13 @@ class User extends Authenticatable
             'credits' => $amount,
             'reason' => $reason,
             'time' => time(),
+            'type' => $type,
         ]);
 
         return true;
     }
 
-    public function addCredits(int $amount, string $reason = 'Credits earned'): void
+    public function addCredits(int $amount, string $reason = 'Credits earned', string $type = 'added'): void
     {
         $this->increment('credits', $amount);
         
@@ -249,6 +291,7 @@ class User extends Authenticatable
             'credits' => $amount,
             'reason' => $reason,
             'time' => time(),
+            'type' => $type,
         ]);
     }
 

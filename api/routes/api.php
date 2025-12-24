@@ -26,7 +26,8 @@ Route::prefix('auth')->group(function () {
     Route::post('/firebase', [AuthController::class, 'firebaseAuth']);
     Route::post('/recover', [AuthController::class, 'recoverPassword']);
     Route::post('/facebook', [AuthController::class, 'facebookConnect']);
-    Route::get('/check-email', [AuthController::class, 'checkEmail']);
+    Route::post('/check-email', [AuthController::class, 'checkEmail']);
+    Route::get('/check-email', [AuthController::class, 'checkEmail']); // Also support GET for backward compatibility
 });
 
 // Get site configuration (public or authenticated)
@@ -38,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Auth
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::post('/auth/complete-registration', [AuthController::class, 'completeRegistration']);
     
     // Profile Management
     Route::prefix('profile')->group(function () {
@@ -53,6 +55,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/update-bio', [ProfileController::class, 'updateBio']);
         Route::put('/update-extended', [ProfileController::class, 'updateExtended']);
         Route::put('/update-notification', [ProfileController::class, 'updateNotification']);
+        Route::post('/interests/add', [ProfileController::class, 'addInterest']);
+        Route::post('/interests/remove', [ProfileController::class, 'removeInterest']);
+        Route::post('/claim-register-reward', [ProfileController::class, 'claimRegisterReward']);
         Route::delete('/delete', [ProfileController::class, 'deleteProfile']);
     });
     

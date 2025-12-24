@@ -59,7 +59,7 @@ class ProfileController extends Controller
         $value = $request->value;
 
         // Validate allowed fields
-        $allowedFields = ['name', 'username', 'bio', 'city', 'country'];
+        $allowedFields = ['name', 'username', 'bio', 'city', 'country', 'age', 'email'];
         
         if (!in_array($field, $allowedFields)) {
             return response()->json([
@@ -85,6 +85,32 @@ class ProfileController extends Controller
                     'error_m' => 'Username already taken',
                 ], 422);
             }
+        }
+
+        // Check email uniqueness
+        if ($field === 'email') {
+            $exists = User::where('email', $value)
+                ->where('id', '!=', $user->id)
+                ->exists();
+            
+            if ($exists) {
+                return response()->json([
+                    'error' => 1,
+                    'error_m' => 'Email already taken',
+                ], 422);
+            }
+        }
+
+        // Validate age
+        if ($field === 'age') {
+            $age = (int) $value;
+            if ($age < 18 || $age > 100) {
+                return response()->json([
+                    'error' => 1,
+                    'error_m' => 'Age must be between 18 and 100',
+                ], 422);
+            }
+            $value = $age;
         }
 
         $user->update([$field => $value]);
@@ -193,11 +219,12 @@ class ProfileController extends Controller
     public function updateRadius(Request $request)
     {
         $request->validate([
-            'radius' => 'required|integer|min:1|max:500',
+            'radius' => 'required|integer|min:1|max:1000',
         ]);
 
         $user = $request->user();
-        $user->update(['s_radius' => $request->radius]);
+        // Use the actual database column name 's_radious' (database typo)
+        $user->update(['s_radious' => $request->radius]);
 
         return response()->json([
             'user' => $this->formatUserResponse($user->fresh()),
@@ -236,7 +263,7 @@ class ProfileController extends Controller
         $bio = strip_tags($request->bio);
         
         $user->update([
-            'bio' => nl2br($bio),
+            'bio' => $bio,
             'bio_url' => $request->bio_url,
         ]);
         Cache::forget("user_profile_{$user->id}");
@@ -259,19 +286,88 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        UserProfileQuestion::updateOrCreate(
-            [
+        // Use DB::table() directly since table has composite key (uid, qid) without id column
+        $exists = DB::table('users_profile_questions')
+            ->where('uid', $user->id)
+            ->where('qid', $request->question_id)
+            ->exists();
+
+        if ($exists) {
+            // Update existing answer - use where()->update() to avoid id column lookup
+            DB::table('users_profile_questions')
+                ->where('uid', $user->id)
+                ->where('qid', $request->question_id)
+                ->update(['answer' => $request->answer]);
+        } else {
+            // Create new answer record
+            DB::table('users_profile_questions')->insert([
                 'uid' => $user->id,
                 'qid' => $request->question_id,
-            ],
-            [
                 'answer' => $request->answer,
-            ]
-        );
+            ]);
+        }
 
         Cache::forget("user_profile_{$user->id}");
 
         return response()->json([
+            'user' => $this->formatUserResponse($user->fresh()),
+        ]);
+    }
+
+    /**
+     * Add interest
+     */
+    public function addInterest(Request $request)
+    {
+        $request->validate([
+            'interest_id' => 'required|integer',
+        ]);
+
+        $user = $request->user();
+        $interestId = $request->interest_id;
+
+        // Check if interest already exists
+        $exists = DB::table('users_interest')
+            ->where('u_id', $user->id)
+            ->where('i_id', $interestId)
+            ->exists();
+
+        if (!$exists) {
+            DB::table('users_interest')->insert([
+                'u_id' => $user->id,
+                'i_id' => $interestId,
+            ]);
+        }
+
+        Cache::forget("user_profile_{$user->id}");
+
+        return response()->json([
+            'success' => true,
+            'user' => $this->formatUserResponse($user->fresh()),
+        ]);
+    }
+
+    /**
+     * Remove interest
+     */
+    public function removeInterest(Request $request)
+    {
+        $request->validate([
+            'interest_id' => 'required|integer',
+        ]);
+
+        $user = $request->user();
+        $interestId = $request->interest_id;
+
+        DB::table('users_interest')
+            ->where('u_id', $user->id)
+            ->where('i_id', $interestId)
+            ->delete();
+
+        Cache::forget("user_profile_{$user->id}");
+
+        return response()->json([
+            'success' => true,
             'user' => $this->formatUserResponse($user->fresh()),
         ]);
     }
@@ -290,19 +386,32 @@ class ProfileController extends Controller
         $notification = $user->notifications;
 
         if (!$notification) {
-            return response()->json([
-                'error' => 1,
-                'error_m' => 'Notification settings not found',
-            ], 404);
+            // Create notification record if it doesn't exist
+            $notification = \App\Models\UserNotification::create([
+                'uid' => $user->id,
+                'fan' => '1,1,1',
+                'match_me' => '1,1,1',
+                'message' => '1,1,1',
+                'visit' => '1,1,1',
+                'near_me' => '1,1,1',
+            ]);
         }
 
+        // Map 'match' to 'match_me' for backward compatibility
+        $column = ($request->type === 'match') ? 'match_me' : $request->type;
+
         // Format: "inapp,email,push" -> "1,1,1"
-        $currentValue = $notification->{$request->type} ?? '1,1,1';
+        $currentValue = $notification->{$column} ?? '1,1,1';
         $parts = explode(',', $currentValue);
-        $parts[2] = $request->value; // Update push notification setting
+        if (count($parts) < 3) {
+            $parts = ['1', '1', '1'];
+        }
+        $parts[2] = $request->value; // Update push notification setting (index 2 = push)
         
-        $notification->update([
-            $request->type => implode(',', $parts),
+        // Update using where clause to avoid primary key issues
+        \App\Models\UserNotification::where('uid', $user->id)
+            ->update([
+                $column => implode(',', $parts),
         ]);
 
         return response()->json([
@@ -508,6 +617,95 @@ class ProfileController extends Controller
             (float) $user2->lat,
             (float) $user2->lng
         );
+    }
+
+    /**
+     * Claim register reward (newAccountFreeCredit)
+     * User can only claim this reward once
+     */
+    public function claimRegisterReward(Request $request)
+    {
+        $user = $request->user();
+        
+        if (!$user) {
+            return response()->json([
+                'error' => 1,
+                'error_m' => 'Unauthorized',
+            ], 401);
+        }
+
+        // Check if user already claimed the reward
+        $existingReward = DB::table('users_rewards')
+            ->where('uid', $user->id)
+            ->where('reward', 'newAccountFreeCredit')
+            ->first();
+
+        if ($existingReward) {
+            return response()->json([
+                'error' => 1,
+                'error_m' => 'Reward already claimed',
+            ], 400);
+        }
+
+        // Get reward amount from config
+        $rewardAmount = (int) env('NEW_ACCOUNT_FREE_CREDIT', 120);
+        
+        if ($rewardAmount <= 0) {
+            return response()->json([
+                'error' => 1,
+                'error_m' => 'Reward not available',
+            ], 400);
+        }
+
+        DB::beginTransaction();
+        
+        try {
+            $time = time();
+            $reason = 'Reward credits for register';
+            $reward = 'newAccountFreeCredit';
+
+            // Add credits to user
+            $user->increment('credits', $rewardAmount);
+            $user->refresh();
+
+            // Record in users_rewards table
+            DB::table('users_rewards')->insert([
+                'uid' => $user->id,
+                'reward' => $reward,
+                'reward_type' => 'credits',
+                'reward_date' => $time,
+                'reward_amount' => $rewardAmount,
+            ]);
+
+            // Record in users_credits table
+            DB::table('users_credits')->insert([
+                'uid' => $user->id,
+                'credits' => $rewardAmount,
+                'reason' => $reason,
+                'time' => $time,
+                'type' => 'added',
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'credits_added' => $rewardAmount,
+                'credits_remaining' => $user->credits,
+                'user' => [
+                    'id' => $user->id,
+                    'credits' => $user->credits,
+                    'registerReward' => 'newAccountFreeCredit',
+                ],
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return response()->json([
+                'error' => 1,
+                'error_m' => 'Failed to claim reward: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
 

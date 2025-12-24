@@ -15,6 +15,7 @@ class UserCredit extends Model
         'credits',
         'reason',
         'time',
+        'type',
     ];
 
     protected $casts = [
