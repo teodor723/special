@@ -18,19 +18,12 @@ class SpotlightController extends Controller
         $user->updateLastAccess();
 
         $limit = config('dating.plugin_spotlight_limit', 50);
-        $area = config('dating.plugin_spotlight_area', 'Worldwide');
-        $worldwide = config('dating.plugin_spotlight_worldwide', 'Yes');
 
-        $query = Spotlight::query()->active();
-
-        // Apply area filter
-        if ($area != 'Worldwide' && $worldwide != 'Yes') {
-            $query->nearby($user->lat, $user->lng, $user->s_radius);
-        } else {
-            $query->nearby($user->lat, $user->lng, 999999); // Worldwide
-        }
-
-        $spotlights = $query->limit($limit)->get();
+        $spotlights = Spotlight::query()
+            ->active()
+            ->orderBy('time', 'desc')
+            ->limit($limit)
+            ->get();
 
         $result = [];
 
@@ -81,20 +74,36 @@ class SpotlightController extends Controller
             ], 422);
         }
 
+        // Check if user is already in spotlight and still active
+        $expiryTime = now()->subDay()->timestamp;
+        $existingSpotlight = Spotlight::where('u_id', $user->id)->first();
+        
+        if ($existingSpotlight && $existingSpotlight->time > $expiryTime) {
+            // User is already in spotlight and still active
+            return response()->json([
+                'error' => 1,
+                'error_m' => 'You are already in spotlight',
+            ], 422);
+        }
+
         // Deduct credits
         $user->deductCredits($price, 'Spotlight feature');
 
-        // Add to spotlight
-        Spotlight::create([
-            'u_id' => $user->id,
-            'time' => time(),
-            'lat' => $user->lat,
-            'lng' => $user->lng,
-            'photo' => profilePhoto($user->id),
-            'lang' => $user->lang,
-            'country' => $user->country ?? '-',
-            'city' => $user->city ?? '-',
-        ]);
+        $currentTime = time();
+        
+        // Update or create spotlight entry
+        Spotlight::updateOrCreate(
+            ['u_id' => $user->id],
+            [
+                'time' => $currentTime,
+                'lat' => $user->lat,
+                'lng' => $user->lng,
+                'photo' => profilePhoto($user->id),
+                'lang' => $user->lang,
+                'country' => $user->country ?? '-',
+                'city' => $user->city ?? '-',
+            ]
+        );
 
         return response()->json([
             'success' => true,

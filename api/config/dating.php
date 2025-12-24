@@ -28,8 +28,9 @@ return [
     */
     'price_spotlight' => env('PRICE_SPOTLIGHT', 50),
     'price_rise_up' => env('PRICE_RISE_UP', 100),
-    'price_discover_100' => env('PRICE_DISCOVER_100', 75),
+    'price_discover' => env('PRICE_DISCOVER', 75),
     'price_super_like' => env('PRICE_SUPER_LIKE', 10),
+    'price_user_like' => env('PRICE_USER_LIKE', 1),
 
     /*
     |--------------------------------------------------------------------------

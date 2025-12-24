@@ -744,8 +744,7 @@ class AuthController extends Controller
             'chatViewUserCredits' => env('CHAT_VIEW_USER_CREDITS', 'No'),
             'chatSpamPrevention' => env('CHAT_SPAM_PREVENTION', 'Yes'),
             'chatTransferCreditsGiftToReceiver' => env('CHAT_TRANSFER_CREDITS_GIFT_TO_RECEIVER', 'No'),
-            'meetViewOnlyPremiumOnline' => env('MEET_VIEW_ONLY_PREMIUM_ONLINE', 'No'),
-            'userLikeCredits' => (int) env('USER_LIKE_CREDITS', 1),
+            'meetViewOnlyPremiumOnline' => env('MEET_VIEW_ONLY_PREMIUM_ONLINE', 'No')
         ];
     }
 
@@ -773,15 +772,16 @@ class AuthController extends Controller
     private function getPrices(): array
     {
         return Cache::remember('prices', 3600, function () {
-            $prices = DB::table('config_prices')
-                ->where('visible', 1)
-                ->pluck('price', 'feature')
-                ->toArray();
-            
-            // Convert all prices to integers, keeping original feature names as keys
+            $config = config('dating');
             $result = [];
-            foreach ($prices as $feature => $price) {
-                $result[$feature] = (int) $price;
+            
+            // Get all price_* config values and remove the prefix
+            foreach ($config as $key => $value) {
+                if (strpos($key, 'price_') === 0) {
+                    // Remove 'price_' prefix
+                    $feature = substr($key, 6); // 6 is the length of 'price_'
+                    $result[$feature] = (int) $value;
+                }
             }
             
             return $result;

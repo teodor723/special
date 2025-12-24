@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Discovery & Matching
     Route::prefix('discovery')->group(function () {
         Route::get('/meet', [DiscoveryController::class, 'getMeetUsers']);
+        Route::get('/popular', [DiscoveryController::class, 'getPopularUsers']);
         Route::get('/game', [DiscoveryController::class, 'getGameUsers']);
         Route::post('/like', [DiscoveryController::class, 'likeUser']);
         Route::get('/matches', [DiscoveryController::class, 'getMatches']);

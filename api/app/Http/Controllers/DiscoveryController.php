@@ -14,23 +14,19 @@ use Pusher\Pusher;
 class DiscoveryController extends Controller
 {
     /**
-     * Get users for Meet page - matches legacy format exactly
+     * Get users for Meet page
      */
     public function getMeetUsers(Request $request)
     {
         $user = $request->user();
         $user->updateLastAccess();
 
-        // Get parameters (matching legacy: uid1=user_id, uid2=limit/page, uid3=online status)
-        // Also support new format: offset, online
-        $limit = (int) ($request->input('uid2') ?? $request->input('offset', 0)); // Page/offset
-        $onlineStatus = (int) ($request->input('uid3') ?? $request->input('online', 0)); // 0=all, 1=online only
-        
-        $searchResult = (int) config('dating.plugin_meet_search_result', 20);
-        $check2 = $searchResult * $limit + $searchResult;
-        if ($check2 == 0) {
-            $check2 = 20;
-        }
+        // Get parameters: offset, online
+        $limit = (int) ($request->input('offset', 0)); // Page/offset
+        $onlineStatus = (int) ($request->input('online', 0)); // 0=all, 1=online only
+
+        $check2 = 10;
+        $searchResult = $check2;
         
         // Get age range
         $ageRange = $user->age_range;
@@ -82,10 +78,12 @@ class DiscoveryController extends Controller
         }
 
         // Order by random, then fake ASC (matching legacy)
-        $query->inRandomOrder()->orderBy('fake', 'asc');
+        //$query->inRandomOrder()->orderBy('fake', 'asc');
 
         // Get users (limit based on page)
-        $limitCount = $limit * 9;
+        $limitCount = $limit * $check2;
+        $query->orderBy('distance', 'desc');
+        $query->orderBy('name', 'asc');
         $users = $query->limit($check2)->offset($limitCount)->get();
 
         // Format results
@@ -96,9 +94,6 @@ class DiscoveryController extends Controller
             $result[] = $this->formatMeetUser($u, $user, $i, $timeNow);
         }
 
-        // Get popular users
-        $popular = $this->getPopularUsers($user);
-
         // Calculate pages
         $totalUsers = $query->count();
         $meetResult = max(0, $totalUsers - $limitCount);
@@ -106,7 +101,6 @@ class DiscoveryController extends Controller
 
         return response()->json([
             'result' => !empty($result) ? $result : '',
-            'popular' => $popular,
             'pages' => $pages,
         ]);
     }
@@ -114,14 +108,21 @@ class DiscoveryController extends Controller
     /**
      * Get popular users for Meet page
      */
-    private function getPopularUsers(User $currentUser): array
+    public function getPopularUsers(Request $request)
     {
-        $limit = (int) config('dating.plugin_populars_search_result', 10);
+        $user = $request->user();
+        $user->updateLastAccess();
+
+        // Get pagination parameters
+        $offset = (int) ($request->input('offset', 0));
+        $searchResult = (int) config('dating.plugin_populars_search_result', 10);
+        $limit = $searchResult;
+        
         $allGenders = count(config('dating.genders', [1, 2])) + 1;
-        $lookingFor = $currentUser->s_gender;
+        $lookingFor = $user->s_gender;
         
         $query = User::query()
-            ->where('id', '!=', $currentUser->id)
+            ->where('id', '!=', $user->id)
             ->orderBy('popular', 'desc')
             ->orderBy('last_access', 'desc');
 
@@ -140,12 +141,25 @@ class DiscoveryController extends Controller
         // Filter by location
         $popularSearchFilter = config('dating.plugin_populars_popular_search_filter', 'Worldwide');
         if ($popularSearchFilter === 'Country') {
-            $query->where('country', $currentUser->country);
+            $query->where('country', $user->country);
         } elseif ($popularSearchFilter === 'City') {
-            $query->where('city', $currentUser->city);
+            $query->where('city', $user->city);
         }
 
-        $users = $query->limit($limit)->get();
+        // Exclude blocked users
+        $blockedIds = UserBlock::where('uid1', $user->id)
+            ->pluck('uid2')
+            ->toArray();
+        
+        if (!empty($blockedIds)) {
+            $query->whereNotIn('id', $blockedIds);
+        }
+
+        // Get total count for pagination
+        $totalUsers = $query->count();
+        
+        // Get users with pagination
+        $users = $query->limit($limit)->offset($offset * $limit)->get();
         
         $popular = [];
         $x = 0;
@@ -154,16 +168,24 @@ class DiscoveryController extends Controller
         
         foreach ($users as $u) {
             $allowed = true;
-            if ($viewOnlyPremium && !$currentUser->premium) {
+            if ($viewOnlyPremium && !$user->premium) {
                 $allowed = false;
             }
             
-            $popular[] = $this->formatMeetUser($u, $currentUser, $x, $timeNow, $allowed);
+            $popular[] = $this->formatMeetUser($u, $user, $x, $timeNow, $allowed);
             $x++;
         }
 
-        return $popular;
+        // Calculate if there are more pages
+        $hasMore = ($offset + 1) * $limit < $totalUsers;
+
+        return response()->json([
+            'popular' => $popular,
+            'hasMore' => $hasMore,
+            'total' => $totalUsers,
+        ]);
     }
+
 
     /**
      * Format meet user - matches legacy format exactly
@@ -216,6 +238,7 @@ class DiscoveryController extends Controller
             'age' => $u->age,
             'gender' => (string) $u->gender,
             'city' => $city,
+            'distance' => $u->distance,
             'photo' => profilePhoto($u->id, 0), // Thumb
             'photoBig' => profilePhoto($u->id, 1), // Big photo
             'error' => 0,
@@ -333,8 +356,8 @@ class DiscoveryController extends Controller
             $currentUser->decrement('superlike');
         }
 
-        // Check credits for like action (not for dislike)
-        $likeCreditsCost = (int) env('USER_LIKE_CREDITS', 1);
+        // Check credits for like action (not for dislike)        
+        $likeCreditsCost = config('dating.price_user_like', 1);
         $creditsDeducted = 0;
         
         if ($action === 'like' && $likeCreditsCost > 0) {
@@ -540,16 +563,24 @@ class DiscoveryController extends Controller
             ->where('u2', $currentUser->id)
             ->value('timeago');
 
-        // Create or update visit
-        UserVisit::updateOrCreate(
-            [
+        // Create or update visit using DB::table() since table has composite key without id column
+        $exists = DB::table('users_visits')
+            ->where('u1', $targetUserId)
+            ->where('u2', $currentUser->id)
+            ->exists();
+
+        if ($exists) {
+            DB::table('users_visits')
+                ->where('u1', $targetUserId)
+                ->where('u2', $currentUser->id)
+                ->update(['timeago' => $time]);
+        } else {
+            DB::table('users_visits')->insert([
                 'u1' => $targetUserId,
                 'u2' => $currentUser->id,
-            ],
-            [
                 'timeago' => $time,
-            ]
-        );
+            ]);
+        }
 
         // Send notification if timeout passed
         $timeout = config('dating.plugin_fake_users_notification_timeout', 30) * 60;
@@ -672,29 +703,7 @@ class DiscoveryController extends Controller
             }
         } else {
             $name = $u->name;
-        }
-        
-        // Format full profile data (matching legacy format)
-        $full = [
-            'id' => (string) $u->id,
-            'name' => $name,
-            'username' => $u->username ?? '',
-            'distance' => $u->distance ?? '',
-            'first_name' => $first_name,
-            'bio' => $u->bio ?? '',
-            'gender' => (string) $u->gender,
-            'city' => $u->city ?? '',
-            'country' => $u->country ?? '',
-            'credits' => (string) ($u->credits ?? 0),
-            'age' => (string) $u->age,
-            'fake' => (string) ($u->fake ?? 0),
-            'online_day' => (string) ($u->online_day ?? 0),
-            'last_access' => (string) ($u->last_access ?? time()),
-            'premium' => (string) ($u->premium ?? 0),
-            'verified' => (string) ($u->verified ?? 0),
-            'popular' => (string) ($u->popular ?? 0),
-            'profile_photo' => profilePhoto($u->id),
-        ];
+        }       
         
         // Check if current user is a fan of this user
         $isFan = isFan($currentUser->id, $u->id) ? 1 : 0;
@@ -711,8 +720,7 @@ class DiscoveryController extends Controller
             'total' => 0, // Legacy code sets this to 0
             'photo' => profilePhoto($u->id, 0), // Thumb
             'discoverPhoto' => profilePhoto($u->id, 1), // Big photo
-            'photos' => getUserPhotosAll($u->id, 'discover'),
-            'full' => $full,
+            'photos' => getUserPhotosAll($u->id, 'discover'),            
             'story' => '0',
             'stories' => [],
             'error' => 0,
