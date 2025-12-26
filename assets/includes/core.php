@@ -6694,7 +6694,7 @@ function getvaluemetax($last,$server){
         	$first=explode("_", $key)[0];
     	}
 	}
-	return $sm['metasettings'][$first+$last];
+	return $sm['metasettings'][$first.$last];
 
 }
 

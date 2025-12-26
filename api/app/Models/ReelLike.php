@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ReelLike extends Model
 {
-    protected $table = 'reels_like';
+    protected $table = 'reels_likes';
     public $timestamps = false;
 
     protected $fillable = [
         'uid',
-        'reel',
+        'rid',
     ];
 
     public function user(): BelongsTo
@@ -22,7 +22,7 @@ class ReelLike extends Model
 
     public function reel(): BelongsTo
     {
-        return $this->belongsTo(Reel::class, 'reel');
+        return $this->belongsTo(Reel::class, 'id', 'rid');
     }
 }
 

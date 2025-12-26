@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Spotlight extends Model
 {
     protected $table = 'spotlight';
+    protected $primaryKey = 'u_id';
+    public $incrementing = false;
     public $timestamps = false;
 
     protected $fillable = [

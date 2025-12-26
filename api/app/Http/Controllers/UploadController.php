@@ -68,7 +68,7 @@ class UploadController extends Controller
             $filename = time() . '_' . Str::random(10) . '.' . $extension;
 
             // Upload to S3
-            $path = Storage::disk('s3')->putFileAs('uploads', $file, $filename, 'public');
+            $path = Storage::disk('s3')->putFileAs('', $file, $filename, 'public');
 
             if (!$path) {
                 throw new \Exception('Failed to upload file to S3');
@@ -195,7 +195,7 @@ class UploadController extends Controller
             
             // Extract filename from URL
             $filename = basename(parse_url($path, PHP_URL_PATH));
-            $storagePath = 'uploads/' . $filename;
+            $storagePath =  $filename;
 
             if (Storage::disk('s3')->exists($storagePath)) {
                 Storage::disk('s3')->delete($storagePath);

@@ -37,17 +37,17 @@ class Reel extends Model
 
     public function likes(): HasMany
     {
-        return $this->hasMany(ReelLike::class, 'reel');
+        return $this->hasMany(ReelLike::class, 'rid', 'id');
     }
 
     public function views(): HasMany
     {
-        return $this->hasMany(ReelView::class, 'reel');
+        return $this->hasMany(ReelView::class, 'rid', 'id');
     }
 
     public function purchases(): HasMany
     {
-        return $this->hasMany(ReelPurchase::class, 'reel');
+        return $this->hasMany(ReelPurchase::class, 'rid', 'id');
     }
 
     public function scopeApproved($query)

@@ -9,6 +9,8 @@ class UserProfileQuestion extends Model
 {
     protected $table = 'users_profile_questions';
     public $timestamps = false;
+    protected $primaryKey = null; // Composite primary key (uid, qid)
+    public $incrementing = false;
 
     protected $fillable = [
         'uid',

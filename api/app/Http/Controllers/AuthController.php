@@ -309,6 +309,11 @@ class AuthController extends Controller
                 'approved' => 1,
                 'time' => time(),
             ]);
+            
+            // Clear profile photo cache (for both thumb and big photo)
+            Cache::forget("user_photo_{$user->id}_0"); // Thumb
+            Cache::forget("user_photo_{$user->id}_1"); // Big photo
+            Cache::forget("user_profile_{$user->id}"); // User profile cache
         }
 
         return response()->json([
@@ -383,6 +388,8 @@ class AuthController extends Controller
             'alang' => $this->getAppLanguageStrings($siteLang),
             'prices' => $this->getPrices(),
             'gifts' => $this->getGifts(),
+            'premium' => $this->getPremiumConfig(),
+            'credits' => $this->getCreditsConfig(),
             'firebase' => $this->getFirebaseConfig(),
             'pusher' => $this->getPusherConfig(),
             'userIp' => $userIp,
@@ -728,7 +735,8 @@ class AuthController extends Controller
     {
         return [
             'name' => config('app.name'),
-            'logo' => env('APP_LOGO_URL', 'https://special-dating.com/medias/50538a6ca0d376c3cb8bd1c05c83b902.png'),
+            'logo' => env('APP_LOGO_URL', ''),
+            'background' => env('APP_BACKGROUND_URL', ''),
             'first_color' => '#ff4458',
             'second_color' => '#ff736e',
             'newAccountFreeCredit' => (int) env('NEW_ACCOUNT_FREE_CREDIT', 120),
@@ -742,7 +750,7 @@ class AuthController extends Controller
             'chatCreditsPerMessage' => (int) env('CHAT_CREDITS_PER_MESSAGE', 5),
             'chatCreditsPerMessageGender' => (int) env('CHAT_CREDITS_PER_MESSAGE_GENDER', 3),
             'chatViewUserCredits' => env('CHAT_VIEW_USER_CREDITS', 'No'),
-            'chatSpamPrevention' => env('CHAT_SPAM_PREVENTION', 'Yes'),
+            'chatSpamPrevention' => env('CHAT_SPAM_PREVENTION', 'No'),
             'chatTransferCreditsGiftToReceiver' => env('CHAT_TRANSFER_CREDITS_GIFT_TO_RECEIVER', 'No'),
             'meetViewOnlyPremiumOnline' => env('MEET_VIEW_ONLY_PREMIUM_ONLINE', 'No')
         ];
@@ -751,7 +759,8 @@ class AuthController extends Controller
     private function getApiKeys(): array
     {
         return [
-            'geolocationApiKey' => env('GEOLOCATION_API_KEY', '')
+            'geolocationApiKey' => env('GEOLOCATION_API_KEY', ''),
+            'giphyApiKey' => env('GIPHY_API_KEY', '')
         ];
     }
 
@@ -827,6 +836,50 @@ class AuthController extends Controller
                         'name' => $interest->name ?? '',
                         'icon' => $interest->icon ?? '',
                         'text' => $interest->name ?? '',
+                    ];
+                })
+                ->toArray();
+        });
+    }
+
+    private function getPremiumConfig(): array
+    {
+        return Cache::remember('premium_config', 3600, function () {
+            $currency = config('payment.currency', 'USD');
+            $currencySymbol = config('payment.currency_symbol', '$');
+            
+            return DB::table('config_premium')
+                ->orderBy('id', 'asc')
+                ->get()
+                ->map(function ($premium) use ($currency, $currencySymbol) {
+                    return [
+                        'id' => (int) $premium->id,
+                        'days' => (int) $premium->days,
+                        'price' => (float) $premium->price,
+                        'currency' => $currency,
+                        'currency_symbol' => $currencySymbol,
+                    ];
+                })
+                ->toArray();
+        });
+    }
+
+    private function getCreditsConfig(): array
+    {
+        return Cache::remember('credits_config', 3600, function () {
+            $currency = config('payment.currency', 'USD');
+            $currencySymbol = config('payment.currency_symbol', '$');
+            
+            return DB::table('config_credits')
+                ->orderBy('id', 'asc')
+                ->get()
+                ->map(function ($credit) use ($currency, $currencySymbol) {
+                    return [
+                        'id' => (int) $credit->id,
+                        'credits' => (int) $credit->credits,
+                        'price' => (float) $credit->price,
+                        'currency' => $currency,
+                        'currency_symbol' => $currencySymbol,
                     ];
                 })
                 ->toArray();

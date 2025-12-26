@@ -6,10 +6,12 @@ use App\Models\User;
 use App\Models\UserLike;
 use App\Models\UserVisit;
 use App\Models\UserBlock;
+use App\Models\Chat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Pusher\Pusher;
+use GuzzleHttp\Client;
 
 class DiscoveryController extends Controller
 {
@@ -449,6 +451,11 @@ class DiscoveryController extends Controller
         $user = $request->user();
         $user->updateLastAccess();
 
+        // Get pagination parameters
+        $offset = (int) ($request->input('offset', 0));
+        $limit = 20; // Items per page
+        $offsetCount = $offset * $limit;
+
         // Get users who liked this user (fans)
         $fans = UserLike::where('u2', $user->id)
             ->where('love', 1)
@@ -458,46 +465,151 @@ class DiscoveryController extends Controller
         if (empty($fans)) {
             return response()->json([
                 'matches' => [],
+                'hasMore' => false,
             ]);
         }
 
-        // Get users this user also liked (mutual matches)
-        $likes = UserLike::where('u1', $user->id)
+        // Get users this user also liked (mutual matches) with pagination
+        $likesQuery = UserLike::where('u1', $user->id)
             ->whereIn('u2', $fans)
             ->where('love', 1)
-            ->orderBy('time', 'desc')
-            ->get();
+            ->orderBy('time', 'desc');
+
+        $totalCount = $likesQuery->count();
+        $likes = $likesQuery->limit($limit)->offset($offsetCount)->get();
 
         $matches = [];
 
         foreach ($likes as $like) {
-            $targetUser = User::find($like->u2);
-            
+            $targetUser = User::find($like->u2);            
             if (!$targetUser) continue;
-
-            $isFan = isFan($like->u2, $user->id);
-            $isMatch = $isFan ? 1 : 0;
-
+            
             $matches[] = [
                 'id' => $targetUser->id,
                 'name' => $targetUser->name,
                 'first_name' => explode(' ', $targetUser->name)[0],
                 'age' => $targetUser->age,
                 'city' => $targetUser->city,
-                'photo' => profilePhoto($targetUser->id),
-                'fan' => $isFan,
-                'match' => $isMatch,
+                'photo' => profilePhoto($targetUser->id),                
                 'premium' => $targetUser->premium,
                 'verified' => $targetUser->verified,
                 'status' => $targetUser->is_online ? 'y' : 'n',
                 'story' => 0, // TODO: Check stories
                 'last_m' => getTimeDifference($like->time),
                 'credits' => $targetUser->credits,
+                'unreadCount' => $this->getUnreadCount($user->id, $targetUser->id),
             ];
         }
 
+        $hasMore = ($offsetCount + $limit) < $totalCount;
+
         return response()->json([
             'matches' => $matches,
+            'hasMore' => $hasMore,
+        ]);
+    }
+
+    /**
+     * Get users who liked me (fans)
+     */
+    public function likeme(Request $request)
+    {
+        $user = $request->user();
+        $user->updateLastAccess();
+
+        // Get pagination parameters
+        $offset = (int) ($request->input('offset', 0));
+        $limit = 20; // Items per page
+        $offsetCount = $offset * $limit;
+
+        // Get users who liked this user (fans), ordered by time desc with pagination
+        $likesQuery = UserLike::where('u2', $user->id)
+            ->where('love', 1)
+            ->orderBy('time', 'desc');
+
+        $totalCount = $likesQuery->count();
+        $likes = $likesQuery->limit($limit)->offset($offsetCount)->get();
+
+        $fans = [];
+
+        foreach ($likes as $like) {
+            $targetUser = User::find($like->u1);
+            
+            if (!$targetUser) continue;
+            
+            $fans[] = [
+                'id' => $targetUser->id,
+                'name' => $targetUser->name,
+                'first_name' => explode(' ', $targetUser->name)[0],
+                'age' => $targetUser->age,
+                'city' => $targetUser->city,
+                'photo' => profilePhoto($targetUser->id),                
+                'premium' => $targetUser->premium,
+                'verified' => $targetUser->verified,
+                'status' => $targetUser->is_online ? 'y' : 'n',
+                'story' => 0, // TODO: Check stories
+                'last_m' => getTimeDifference($like->time),
+                'credits' => $targetUser->credits,
+                'unreadCount' => $this->getUnreadCount($user->id, $targetUser->id),
+            ];
+        }
+
+        $hasMore = ($offsetCount + $limit) < $totalCount;
+
+        return response()->json([
+            'matches' => $fans,
+            'hasMore' => $hasMore,
+        ]);
+    }
+
+    /**
+     * Get users I liked
+     */
+    public function myLike(Request $request)
+    {
+        $user = $request->user();
+        $user->updateLastAccess();
+
+        // Get pagination parameters
+        $offset = (int) ($request->input('offset', 0));
+        $limit = 10; // Items per page
+        $offsetCount = $offset * $limit;
+
+        // Get users this user has liked, ordered by time desc with pagination
+        $likesQuery = UserLike::where('u1', $user->id)
+            ->where('love', 1)
+            ->orderBy('time', 'desc');
+
+        $totalCount = $likesQuery->count();
+        $likes = $likesQuery->limit($limit)->offset($offsetCount)->get();
+
+        $myLikes = [];
+        foreach ($likes as $like) {
+            $targetUser = User::find($like->u2);            
+            if (!$targetUser) continue;
+            
+            $myLikes[] = [
+                'id' => $targetUser->id,
+                'name' => $targetUser->name,
+                'first_name' => explode(' ', $targetUser->name)[0],
+                'age' => $targetUser->age,
+                'city' => $targetUser->city,
+                'photo' => profilePhoto($targetUser->id),            
+                'premium' => $targetUser->premium,
+                'verified' => $targetUser->verified,
+                'status' => $targetUser->is_online ? 'y' : 'n',
+                'story' => 0, // TODO: Check stories
+                'last_m' => getTimeDifference($like->time),
+                'credits' => $targetUser->credits,
+                'unreadCount' => $this->getUnreadCount($user->id, $targetUser->id),
+            ];
+        }
+
+        $hasMore = ($offsetCount + $limit) < $totalCount;
+
+        return response()->json([
+            'matches' => $myLikes,
+            'hasMore' => $hasMore,
         ]);
     }
 
@@ -508,20 +620,23 @@ class DiscoveryController extends Controller
     {
         $user = $request->user();
 
-        $visits = UserVisit::where('u1', $user->id)
+        // Get pagination parameters
+        $offset = (int) ($request->input('offset', 0));
+        $limit = 20; // Items per page
+        $offsetCount = $offset * $limit;
+
+        $visitsQuery = UserVisit::where('u1', $user->id)
             ->where('u2', '!=', $user->id)
-            ->orderBy('timeago', 'desc')
-            ->get();
+            ->orderBy('timeago', 'desc');
+
+        $totalCount = $visitsQuery->count();
+        $visits = $visitsQuery->limit($limit)->offset($offsetCount)->get();
 
         $visitors = [];
 
         foreach ($visits as $visit) {
-            $visitor = User::find($visit->u2);
-            
+            $visitor = User::find($visit->u2);            
             if (!$visitor) continue;
-
-            $isFan = isFan($visitor->id, $user->id);
-            $isMatch = ($isFan && isFan($user->id, $visitor->id)) ? 1 : 0;
 
             $visitors[] = [
                 'id' => $visitor->id,
@@ -529,19 +644,21 @@ class DiscoveryController extends Controller
                 'first_name' => explode(' ', $visitor->name)[0],
                 'age' => $visitor->age,
                 'city' => $visitor->city,
-                'photo' => profilePhoto($visitor->id),
-                'fan' => $isFan,
-                'match' => $isMatch,
+                'photo' => profilePhoto($visitor->id),                
                 'premium' => $visitor->premium,
                 'status' => $visitor->is_online ? 'y' : 'n',
                 'last_m' => getTimeDifference($visit->timeago) . ' ago',
                 'last_m_time' => getTimeDifference($visit->timeago),
                 'credits' => $visitor->credits,
+                'unreadCount' => $this->getUnreadCount($user->id, $visitor->id),
             ];
         }
 
+        $hasMore = ($offsetCount + $limit) < $totalCount;
+
         return response()->json([
-            'visitors' => $visitors,
+            'matches' => $visitors,
+            'hasMore' => $hasMore,
         ]);
     }
 
@@ -743,6 +860,17 @@ class DiscoveryController extends Controller
     }
 
     /**
+     * Get unread message count from a user
+     */
+    private function getUnreadCount(int $currentUserId, int $targetUserId): int
+    {
+        return Chat::where('r_id', $currentUserId)
+            ->where('s_id', $targetUserId)
+            ->where('seen', 0)
+            ->count();
+    }
+
+    /**
      * Send like notification via Pusher
      */
     private function sendLikeNotification(User $from, int $toUserId, int $action): void
@@ -867,14 +995,26 @@ class DiscoveryController extends Controller
         }
 
         try {
+            $options = [
+                'cluster' => config('services.pusher.options.cluster'),
+                'useTLS' => true,
+            ];
+
+            // Disable SSL verification for local development to fix cURL error 60
+            // This is safe for local development but should NOT be used in production
+            $httpClient = null;
+            if (app()->environment('local', 'development') || str_contains(config('app.url', ''), 'local')) {
+                $httpClient = new Client([
+                    'verify' => false, // Disable SSL verification for local dev
+                ]);
+            }
+
             return new Pusher(
                 config('services.pusher.key'),
                 config('services.pusher.secret'),
                 $pusher_id,
-                [
-                    'cluster' => config('services.pusher.options.cluster'),
-                    'useTLS' => true,
-                ]
+                $options,
+                $httpClient
             );
         } catch (\Exception $e) {
             return null;

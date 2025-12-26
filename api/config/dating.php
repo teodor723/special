@@ -31,6 +31,7 @@ return [
     'price_discover' => env('PRICE_DISCOVER', 75),
     'price_super_like' => env('PRICE_SUPER_LIKE', 10),
     'price_user_like' => env('PRICE_USER_LIKE', 1),
+    'price_chat_message' => env('PRICE_ChAT_MESSAGE', 5),
 
     /*
     |--------------------------------------------------------------------------
@@ -45,7 +46,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'plugin_meet_search_result' => 20,
-    'plugin_story_days' => env('STORY_EXPIRY_DAYS', 1),
+    'plugin_story_days' => env('STORY_EXPIRY_DAYS', 365*3),
     'plugin_story_review' => false,
     'plugin_spotlight_limit' => 50,
     'plugin_spotlight_area' => 'Worldwide',

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Pusher\Pusher;
+use GuzzleHttp\Client;
 
 class ChatController extends Controller
 {
@@ -66,15 +67,15 @@ class ChatController extends Controller
 
             $matches[] = [
                 'id' => $partner->id,
-                'name' => $partner->name,
-                'first_name' => explode(' ', $partner->name)[0],
+                'name' => $this->sanitizeUtf8($partner->name ?? ''),
+                'first_name' => $this->sanitizeUtf8(explode(' ', $partner->name ?? '')[0] ?? ''),
                 'age' => $partner->age,
-                'city' => $partner->city,
+                'city' => $this->sanitizeUtf8($partner->city ?? ''),
                 'photo' => profilePhoto($partner->id),
                 'premium' => $partner->premium,
                 'status' => $partner->is_online ? 'y' : 'n',
-                'last_m' => $lastMessageText,
-                'last_m_time' => getTimeDifference($lastMessage->time),
+                'last_m' => $this->sanitizeUtf8($lastMessageText),
+                'last_m_time' => $this->sanitizeUtf8(getTimeDifference($lastMessage->time)),
                 'unread' => $unreadCount,
                 'credits' => $partner->credits,
             ];
@@ -130,6 +131,7 @@ class ChatController extends Controller
             return [
                 'id' => $msg->id,
                 'message' => $this->formatMessage($msg),
+                'body' => $msg->message,
                 'time' => $msg->time,
                 'timestamp' => date('M d Y', $msg->time),
                 'hour' => date('H:i', $msg->time),
@@ -328,8 +330,11 @@ class ChatController extends Controller
         if ($msg->gift) return 'Gift';
         if ($msg->story) return 'Story';
 
-        $text = strip_tags($msg->message);
-        return strlen($text) > 50 ? substr($text, 0, 50) . '...' : $text;
+        $text = strip_tags($msg->message ?? '');
+        $text = $this->sanitizeUtf8($text);
+        
+        // Use mb_strlen for proper UTF-8 character counting
+        return mb_strlen($text) > 50 ? mb_substr($text, 0, 50) . '...' : $text;
     }
 
     /**
@@ -469,6 +474,218 @@ class ChatController extends Controller
     }
 
     /**
+     * Send real-time message notification (refactored from rt.php)
+     * Handles Pusher notifications for chat messages
+     */
+    public function sendRealTimeMessage(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string', // Format: senderId[rt]receiverId[rt]senderPhoto[rt]senderName[rt]content[rt]type
+        ]);
+
+        $user = $request->user();
+        
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized', 'message' => 'Authentication required'], 401);
+        }
+        
+        $query = $request->input('query');
+        $data = explode('[rt]', $query);
+
+        if (count($data) < 6) {
+            return response()->json(['error' => 'Invalid query format'], 400);
+        }
+
+        $senderId = (int) $data[0];
+        $receiverId = (int) $data[1];
+        $senderPhoto = $data[2];
+        $senderName = $data[3];
+        $message = $data[4];
+        $type = $data[5];
+        $storyType = $data[6] ?? '';
+        $storyUrl = $data[7] ?? '';
+
+        // Verify sender is the authenticated user
+        if ($senderId !== (int) $user->id) {
+            return response()->json([
+                'error' => 'Unauthorized', 
+                'message' => 'Sender ID does not match authenticated user'
+            ], 403);
+        }
+
+        $receiver = User::find($receiverId);
+        if (!$receiver) {
+            return response()->json(['error' => 'Receiver not found'], 404);
+        }
+
+        $lang = $this->getUserLang($receiverId);
+        $time = time();
+        $notiMessage = $this->getLang(686, $lang);
+
+        // Handle special message types
+        if ($type == 'credits') {
+            $creditsAmount = $data[6] ?? '';
+            $message = '<b>' . $this->getLang(583, $lang) . ' ' . $creditsAmount . ' ' . $this->getLang(128, $lang) . '!</b>';
+            $notiMessage = $message;
+        }
+
+        if ($type == 'videocall') {
+            $notiMessage = $message;
+        }
+
+        // Format content based on type
+        $content = $message;
+        if ($type == 'image') {
+            $content = '<div class="message__pic_" style="cursor:pointer;"><img src="' . $message . '" /></div>';
+            $notiMessage = $this->getLang(687, $lang);
+        } elseif ($type == 'gif') {
+            $content = '<div class="message__pic_" style="cursor:pointer;border:none"><img src="' . $message . '" /></div>';
+            $notiMessage = $this->getLang(688, $lang);
+        } elseif ($type == 'gift') {
+            $content = '<div class="message__pic_" style="cursor:pointer;border:none"><img src="' . $message . '" /></div>';
+            $notiMessage = $this->getLang(689, $lang);
+        } elseif ($type == 'story') {
+            if ($storyType == 'video') {
+                $content = '<div class="message__pic_" style="cursor:pointer;">
+                    <video src="' . $storyUrl . '" type="video/mp4" muted preload style="position:absolute;top:0;left:0;width:100%;height:100%"></video>
+                </div>
+                <span style="opacity:.6;font-size:11px;margin-bottom:10px">' . $this->getLang(663, $lang) . '</span><br>' . $message;
+            } else {
+                $content = '<div class="message__pic_" style="cursor:pointer;"><img src="' . $storyUrl . '" /></div>
+                <span style="opacity:.6;font-size:11px;margin-bottom:10px">' . $this->getLang(663, $lang) . '</span><br>' . $message;
+            }
+        }
+
+        $pusher = $this->getPusher();
+        if (!$pusher) {
+            return response()->json(['error' => 'Pusher not configured'], 500);
+        }
+
+        // Send chat event
+        $chatEvent = 'chat' . $receiverId . $senderId;
+        $chatData = [
+            'type' => $type,
+            'notification_chat' => false,
+            'message' => $message,
+            'id' => $senderId,
+            'action' => 'message',
+            'chatHeaderRight' => '<div class="js-message-block" id="you">
+                <div class="message">
+                    <div class="brick brick--xsm brick--hover">
+                        <div class="brick-img profile-photo" data-src="' . $senderPhoto . '"></div>
+                    </div>
+                    <div class="message__txt">
+                        <span class="lgrey message__time" style="margin-right: 15px;">' . date("H:i", $time) . '</span>
+                        <div class="message__name lgrey">' . $senderName . '</div>
+                        <p class="montserrat chat-text">' . $content . '</p>
+                    </div>
+                </div>
+            </div>',
+        ];
+
+        $pusher->trigger(config('services.pusher.key'), $chatEvent, $chatData);
+
+        // Check for unread messages to determine notification_chat
+        $unreadResults = DB::table('chat')
+            ->where('r_id', $receiverId)
+            ->where('seen', 0)
+            ->where('notification', 0)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $notiData = [
+            'notification_chat' => false,
+            'id' => $senderId,
+            'message' => $notiMessage,
+            'time' => date("H:i", $time),
+            'type' => $type,
+            'icon' => $senderPhoto,
+            'name' => $senderName,
+            'photo' => 0,
+            'action' => 'message',
+            'unread' => $this->checkUnreadMessages($receiverId),
+        ];
+
+        if ($unreadResults->count() > 0) {
+            $notiData['notification_chat'] = $this->getUserFriends($receiverId);
+            $notiData['unread'] = $this->checkUnreadMessages($receiverId);
+        }
+
+        // Send notification event
+        $notiEvent = 'notification' . $receiverId;
+        $pusher->trigger(config('services.pusher.key'), $notiEvent, $notiData);
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Send typing indicator (refactored from rt.php)
+     */
+    public function sendTypingIndicator(Request $request)
+    {
+        $request->validate([
+            'sender_id' => 'required',
+            'receiver_id' => 'required|integer',
+            'is_typing' => 'required|integer|in:0,1',
+        ]);
+
+        $user = $request->user();
+        
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized', 'message' => 'Authentication required'], 401);
+        }
+
+        $senderId = (int) $request->input('sender_id');
+        $receiverId = (int) $request->input('receiver_id');
+        $isTyping = (int) $request->input('is_typing');
+
+        // Verify sender is the authenticated user
+        if ($senderId !== (int) $user->id) {
+            return response()->json([
+                'error' => 'Unauthorized', 
+                'message' => 'Sender ID does not match authenticated user'
+            ], 403);
+        }
+
+        $pusher = $this->getPusher();
+        if (!$pusher) {
+            return response()->json(['error' => 'Pusher not configured'], 500);
+        }
+
+        $event = 'typing' . $receiverId . $senderId;
+        $data = ['t' => $isTyping];
+
+        $pusher->trigger(config('services.pusher.key'), $event, $data);
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Track today's chat usage (refactored from api.php 'today' action)
+     */
+    public function trackTodayChat(Request $request)
+    {
+        $user = $request->user();
+        
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized', 'message' => 'Authentication required'], 401);
+        }
+        
+        $time = time();
+        $date = date('m/d/Y', $time);
+
+        DB::table('users_chat')->updateOrInsert(
+            ['uid' => $user->id, 'date' => $date],
+            [
+                'count' => DB::raw('count + 1'),
+                'last_chat' => $time,
+            ]
+        );
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
      * Get Pusher instance
      */
     private function getPusher(): ?Pusher
@@ -480,18 +697,117 @@ class ChatController extends Controller
         }
 
         try {
+            $options = [
+                'cluster' => config('services.pusher.options.cluster'),
+                'useTLS' => true,
+            ];
+
+            // Disable SSL verification for local development to fix cURL error 60
+            // This is safe for local development but should NOT be used in production
+            $httpClient = null;
+            if (app()->environment('local', 'development') || str_contains(config('app.url', ''), 'local')) {
+                $httpClient = new Client([
+                    'verify' => false, // Disable SSL verification for local dev
+                ]);
+            }
+
             return new Pusher(
                 config('services.pusher.key'),
                 config('services.pusher.secret'),
                 $pusher_id,
-                [
-                    'cluster' => config('services.pusher.options.cluster'),
-                    'useTLS' => true,
-                ]
+                $options,
+                $httpClient
             );
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * Helper: Get user language ID
+     */
+    private function getUserLang(int $userId): int
+    {
+        $user = User::find($userId);
+        return $user ? (int) $user->lang : 1;
+    }
+
+    /**
+     * Helper: Get language string
+     */
+    private function getLang(int $langId, int $lang): string
+    {
+        $langData = DB::table('site_lang')
+            ->where('id', $langId)
+            ->where('lang_id', $lang)
+            ->value('text');
+        
+        return $langData ?: '';
+    }
+
+    /**
+     * Helper: Check unread messages count
+     */
+    private function checkUnreadMessages(int $userId): int
+    {
+        return Chat::where('r_id', $userId)
+            ->where('seen', 0)
+            ->count();
+    }
+
+    /**
+     * Helper: Get user friends (for notification_chat)
+     */
+    private function getUserFriends(int $userId): array
+    {
+        $friends = [];
+        $today = date('w');
+        
+        $results = DB::table('chat')
+            ->select('s_id', 'id')
+            ->where('r_id', $userId)
+            ->where('seen', '<=', 1)
+            ->orderBy('id', 'desc')
+            ->distinct()
+            ->get();
+
+        foreach ($results as $result) {
+            if (!in_array($result->s_id, $friends)) {
+                $friends[] = $result->s_id;
+            }
+        }
+
+        return $friends;
+    }
+
+    /**
+     * Sanitize UTF-8 string to remove invalid characters
+     */
+    private function sanitizeUtf8(?string $string): string
+    {
+        if ($string === null) {
+            return '';
+        }
+
+        // Use iconv to remove invalid UTF-8 characters
+        if (function_exists('iconv')) {
+            $string = @iconv('UTF-8', 'UTF-8//IGNORE', $string);
+        }
+        
+        // Fallback: use mb_convert_encoding
+        if ($string !== false) {
+            $string = mb_convert_encoding($string, 'UTF-8', 'UTF-8');
+        }
+        
+        // Remove any remaining invalid UTF-8 sequences using regex
+        $string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $string);
+        
+        // Final check: ensure valid UTF-8
+        if (!mb_check_encoding($string, 'UTF-8')) {
+            $string = mb_convert_encoding($string, 'UTF-8', 'UTF-8');
+        }
+        
+        return $string ?: '';
     }
 }
 

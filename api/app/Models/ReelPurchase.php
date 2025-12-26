@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ReelPurchase extends Model
 {
-    protected $table = 'reels_purchases';
+    protected $table = 'users_reels_purchases';
     public $timestamps = false;
 
     protected $fillable = [
         'uid',
-        'reel',
-        'amount',
+        'rid',
+        'time',
     ];
 
     protected $casts = [
-        'amount' => 'integer',
+        'time' => 'integer',
     ];
 
     public function user(): BelongsTo
@@ -27,7 +27,7 @@ class ReelPurchase extends Model
 
     public function reel(): BelongsTo
     {
-        return $this->belongsTo(Reel::class, 'reel');
+        return $this->belongsTo(Reel::class, 'id', 'rid');
     }
 }
 

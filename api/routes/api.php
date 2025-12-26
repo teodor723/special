@@ -76,6 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/game', [DiscoveryController::class, 'getGameUsers']);
         Route::post('/like', [DiscoveryController::class, 'likeUser']);
         Route::get('/matches', [DiscoveryController::class, 'getMatches']);
+        Route::get('/likeme', [DiscoveryController::class, 'likeme']);
+        Route::get('/my-like', [DiscoveryController::class, 'myLike']);
         Route::get('/visitors', [DiscoveryController::class, 'getVisitors']);
         Route::post('/visit', [DiscoveryController::class, 'addVisit']);
         Route::post('/block', [DiscoveryController::class, 'blockUser']);
@@ -95,6 +97,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/read/{userId}', [ChatController::class, 'markAsRead']);
         Route::delete('/conversation/{userId}', [ChatController::class, 'deleteConversation']);
         Route::get('/unread-count', [ChatController::class, 'getUnreadCount']);
+        
+        // Real-time endpoints
+        Route::post('/rt/message', [ChatController::class, 'sendRealTimeMessage']);
+        Route::post('/rt/typing', [ChatController::class, 'sendTypingIndicator']);
+        Route::post('/track-today', [ChatController::class, 'trackTodayChat']);
     });
     
     // Stories

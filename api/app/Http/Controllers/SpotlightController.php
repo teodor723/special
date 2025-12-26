@@ -74,24 +74,12 @@ class SpotlightController extends Controller
             ], 422);
         }
 
-        // Check if user is already in spotlight and still active
-        $expiryTime = now()->subDay()->timestamp;
-        $existingSpotlight = Spotlight::where('u_id', $user->id)->first();
-        
-        if ($existingSpotlight && $existingSpotlight->time > $expiryTime) {
-            // User is already in spotlight and still active
-            return response()->json([
-                'error' => 1,
-                'error_m' => 'You are already in spotlight',
-            ], 422);
-        }
-
         // Deduct credits
         $user->deductCredits($price, 'Spotlight feature');
 
         $currentTime = time();
         
-        // Update or create spotlight entry
+        // Update or create spotlight entry (if user already in spotlight, just update time)
         Spotlight::updateOrCreate(
             ['u_id' => $user->id],
             [

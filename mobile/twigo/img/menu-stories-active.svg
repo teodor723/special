@@ -1,8 +1,8 @@
 <svg id="Videos" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="23" height="23" viewBox="0 0 26 26">
   <defs>
     <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#c1c0c9"/>
-      <stop offset="1" stop-color="#c1c0c9"/>
+      <stop offset="0" stop-color="#ff7d75"/>
+      <stop offset="1" stop-color="#ff7d75"/>
     </linearGradient>
   </defs>
   <path id="Oval" d="M13,0A13,13,0,1,1,0,13,13,13,0,0,1,13,0Z" transform="translate(0 0)" fill="url(#linear-gradient)"/>

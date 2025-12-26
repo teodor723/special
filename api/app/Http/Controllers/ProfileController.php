@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\FormatsUserResponse;
 use App\Models\User;
 use App\Models\UserProfileQuestion;
 use Illuminate\Http\Request;
@@ -10,37 +11,29 @@ use Illuminate\Support\Facades\Cache;
 
 class ProfileController extends Controller
 {
+    use FormatsUserResponse;
     /**
      * Get user profile
+     * Returns the same format as /auth/me for consistency
      */
     public function show(int $id)
     {
-        $user = User::with(['photos.approved', 'profileQuestions'])
+        $user = User::with(['profileQuestions'])
             ->findOrFail($id);
 
         $currentUser = auth()->user();
 
+        // Use the same formatUserResponse method as /auth/me
+        $userData = $this->formatUserResponse($user);
+        
+        // Add additional fields specific to viewing other users' profiles
+        $userData['isFan'] = isFan($currentUser->id, $user->id);
+        $userData['isMatch'] = $user->isMatchWith($currentUser->id) ? 1 : 0;
+        $userData['isBlocked'] = blockedUser($currentUser->id, $user->id);
+        $userData['distance'] = $this->calculateUserDistance($currentUser, $user);
+
         return response()->json([
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'username' => $user->username,
-                'first_name' => explode(' ', $user->name)[0],
-                'age' => $user->age,
-                'city' => $user->city,
-                'country' => $user->country,
-                'bio' => $user->bio ?: 'No bio yet',
-                'profile_photo' => $user->profile_photo_url,
-                'photos' => userAppPhotos($user->id),
-                'videos' => userAppPhotos($user->id, 1),
-                'status' => $user->is_online ? 'y' : 'n',
-                'isFan' => isFan($currentUser->id, $user->id),
-                'isMatch' => $user->isMatchWith($currentUser->id) ? 1 : 0,
-                'isBlocked' => blockedUser($currentUser->id, $user->id),
-                'premium' => $user->premium,
-                'verified' => $user->verified,
-                'distance' => $this->calculateUserDistance($currentUser, $user),
-            ],
+            'user' => $userData,
         ]);
     }
 
@@ -506,7 +499,7 @@ class ProfileController extends Controller
             }
         } elseif ($type == 2 || $type == 'reward') {
             // Add credits
-            $user->addCredits($amount, $reason);
+            //$user->addCredits($amount, $reason);
         }
 
         return response()->json([
@@ -572,35 +565,6 @@ class ProfileController extends Controller
     /**
      * Format user response
      */
-    private function formatUserResponse(User $user): array
-    {
-        return [
-            'id' => $user->id,
-            'name' => $user->name,
-            'username' => $user->username,
-            'first_name' => explode(' ', $user->name)[0],
-            'age' => $user->age,
-            'gender' => $user->gender,
-            'looking' => $user->looking,
-            's_gender' => $user->s_gender,
-            's_age' => $user->s_age,
-            's_radius' => $user->s_radius,
-            'city' => $user->city,
-            'country' => $user->country,
-            'lat' => (float) $user->lat,
-            'lng' => (float) $user->lng,
-            'bio' => $user->bio,
-            'profile_photo' => $user->profile_photo_url,
-            'credits' => $user->credits,
-            'premium' => $user->premium,
-            'verified' => $user->verified,
-            'lang' => $user->lang,
-            'slike' => getUserSuperLikes($user->id),
-            'sage' => $user->age_range['max'],
-            'photos' => userAppPhotos($user->id),
-            'notification' => $user->notifications?->getAttributes() ?? [],
-        ];
-    }
 
     /**
      * Calculate distance between users

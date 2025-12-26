@@ -1,16 +1,17 @@
+# Disable directory slash redirect (prevents CORS preflight issues)
+DirectorySlash Off
+
 <IfModule mod_negotiation.c>
     Options -MultiViews -Indexes
 </IfModule>
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
+    
     # Pass Authorization header to PHP
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Route to front controller
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    
+    # Route all API requests to Laravel
+    RewriteRule ^(.*)$ public/index.php [END,QSA]
 </IfModule>

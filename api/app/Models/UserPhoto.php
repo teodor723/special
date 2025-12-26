@@ -23,6 +23,7 @@ class UserPhoto extends Model
         'request_id',
         'media_id',
         'status',
+        'story',
     ];
 
     protected $casts = [

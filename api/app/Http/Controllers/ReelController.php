@@ -6,55 +6,75 @@ use App\Models\Reel;
 use App\Models\ReelLike;
 use App\Models\ReelView;
 use App\Models\ReelPurchase;
+use App\Traits\ModeratesContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class ReelController extends Controller
 {
+    use ModeratesContent;
     /**
      * Get reels feed
      */
     public function getReels(Request $request)
     {
         $user = $request->user();
-        $limit = $request->input('limit', 0);
+        $limit = (int) $request->input('limit', 0);
         $customFilter = $request->input('filter', '');
         $trending = $request->input('trending', 'No');
+        
+        // Convert trending to boolean (Yes/1 = true, No/0 = false)
+        $isTrending = ($trending == 'Yes' || $trending == 1 || $trending === true);
 
         // Determine looking for gender
         $userGender = $user->gender;
         $lookingFor = $userGender == 1 ? 2 : 1;
 
-        // Build query
+        // Build base query - always exclude own reels and visible only
         $query = Reel::with('user')
             ->where('visible', 1)
-            ->where('gender', $lookingFor);
+            ->where('uid', '!=', $user->id);
 
         // Apply custom filters
         if ($customFilter == 'liked') {
-            $likedReelIds = ReelLike::where('uid', $user->id)->pluck('reel');
+            $likedReelIds = ReelLike::where('uid', $user->id)->pluck('rid');
+            if ($likedReelIds->isEmpty()) {
+                return response()->json(['reels' => []]);
+            }
             $query->whereIn('id', $likedReelIds);
         } elseif ($customFilter == 'purchased') {
-            $purchasedReelIds = ReelPurchase::where('uid', $user->id)->pluck('reel');
+            $purchasedReelIds = ReelPurchase::where('uid', $user->id)->pluck('rid');
+            if ($purchasedReelIds->isEmpty()) {
+                return response()->json(['reels' => []]);
+            }
             $query->whereIn('id', $purchasedReelIds);
         } elseif ($customFilter == 'me') {
             $query->where('uid', $user->id)->where('gender', $userGender);
+        } else {
+            // Only apply gender filter for trending (when no custom filter)
+            if ($isTrending) {
+                $query->where('gender', $lookingFor);
+            }
         }
 
-        // Apply trending filter
-        if ($trending == 'Yes') {
-            $query->trending();
-        }
+        // For trending: exclude already played reels and use random ordering
+        if ($isTrending && $customFilter == '') {
+            // Get played reels from database
+            $playedReels = ReelView::where('uid', $user->id)->pluck('rid')->toArray();
 
-        // Exclude already played reels (from session/cache)
-        $playedReels = Cache::get("played_reels_{$user->id}", []);
-        if (!empty($playedReels) && $customFilter != 'me') {
-            $query->whereNotIn('id', $playedReels);
+            
+            
+            if (!empty($playedReels)) {
+                $query->whereNotIn('id', $playedReels);
+            }
+            
+            // Use random ordering for trending
+            $query->inRandomOrder();
+        } else {
+            // For non-trending: order by id ASC (oldest first)
+            $query->orderBy('id', 'asc');
         }
-
-        // Order by newest
-        $query->orderBy('id', 'desc');
 
         // Paginate
         $reels = $query->offset($limit)->limit(10)->get();
@@ -203,7 +223,7 @@ class ReelController extends Controller
 
         // Toggle like
         $existingLike = ReelLike::where('uid', $user->id)
-            ->where('reel', $id)
+            ->where('rid', $id)
             ->first();
 
         if ($existingLike) {
@@ -214,12 +234,12 @@ class ReelController extends Controller
             // Like
             ReelLike::create([
                 'uid' => $user->id,
-                'reel' => $id,
+                'rid' => $id,
             ]);
             $liked = true;
         }
 
-        $likesCount = ReelLike::where('reel', $id)->count();
+        $likesCount = ReelLike::where('rid', $id)->count();
 
         return response()->json([
             'success' => true,
@@ -239,13 +259,13 @@ class ReelController extends Controller
 
         // Check if already viewed
         $alreadyViewed = ReelView::where('uid', $user->id)
-            ->where('reel', $id)
+            ->where('rid', $id)
             ->exists();
 
         if (!$alreadyViewed) {
             ReelView::create([
                 'uid' => $user->id,
-                'reel' => $id,
+                'rid' => $id,
             ]);
 
             // Add to played reels cache
@@ -254,7 +274,7 @@ class ReelController extends Controller
             Cache::put("played_reels_{$user->id}", array_unique($playedReels), 3600);
         }
 
-        $viewsCount = ReelView::where('reel', $id)->count();
+        $viewsCount = ReelView::where('rid', $id)->count();
 
         return response()->json([
             'success' => true,
@@ -273,7 +293,7 @@ class ReelController extends Controller
 
         // Check if already purchased
         $alreadyPurchased = ReelPurchase::where('uid', $user->id)
-            ->where('reel', $id)
+            ->where('rid', $id)
             ->exists();
 
         if ($alreadyPurchased) {
@@ -302,8 +322,8 @@ class ReelController extends Controller
         // Create purchase record
         ReelPurchase::create([
             'uid' => $user->id,
-            'reel' => $id,
-            'amount' => $reel->reel_price,
+            'rid' => $id,
+            'time' => time(),
         ]);
 
         // Transfer credits to reel owner
@@ -325,6 +345,32 @@ class ReelController extends Controller
     private function formatReel(Reel $reel, $currentUser): array
     {
         $user = $reel->user;
+
+        // Handle case where user doesn't exist (deleted user)
+        if (!$user) {
+            return [
+                'id' => $reel->id,
+                'uid' => $reel->uid,
+                'reel_src' => $reel->reel_src,
+                'reel_src_hls' => $reel->reel_src_hls,
+                'reel_meta' => $reel->reel_meta,
+                'reel_price' => $reel->reel_price,
+                'time' => $reel->time,
+                'views' => $reel->views()->count(),
+                'likes' => $reel->likes()->count(),
+                'liked' => false,
+                'purchased' => false,
+                'user' => [
+                    'id' => $reel->uid,
+                    'name' => 'Deleted User',
+                    'first_name' => 'Deleted',
+                    'age' => 0,
+                    'photo' => asset('themes/default/img/no-user.png'),
+                    'premium' => 0,
+                    'verified' => 0,
+                ],
+            ];
+        }
 
         return [
             'id' => $reel->id,
@@ -350,30 +396,6 @@ class ReelController extends Controller
         ];
     }
 
-    /**
-     * Moderate content based on Rekognition results
-     */
-    private function moderateContent(array $rekognitionData): int
-    {
-        $minConfidence = config('services.aws.rekognition_min_confidence', 75);
-        
-        // Check for inappropriate content
-        foreach ($rekognitionData as $label) {
-            if (!isset($label['Confidence'])) continue;
-            
-            $confidence = $label['Confidence'];
-            $name = $label['Name'] ?? '';
-            
-            // Flag inappropriate labels
-            $inappropriateLabels = ['Explicit Nudity', 'Violence', 'Suggestive', 'Drugs'];
-            
-            if (in_array($name, $inappropriateLabels) && $confidence >= $minConfidence) {
-                return 2; // Rejected
-            }
-        }
-        
-        return 1; // Approved
-    }
 }
 
 

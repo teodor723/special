@@ -9,22 +9,24 @@ class UserNotification extends Model
 {
     protected $table = 'users_notifications';
     public $timestamps = false;
+    protected $primaryKey = 'uid';
+    public $incrementing = false;
 
     protected $fillable = [
         'uid',
         'fan',
-        'match',
+        'match_me',
         'message',
         'visit',
-        'gift',
+        'near_me',
     ];
 
     protected $casts = [
         'fan' => 'string',
-        'match' => 'string',
+        'match_me' => 'string',
         'message' => 'string',
         'visit' => 'string',
-        'gift' => 'string',
+        'near_me' => 'string',
     ];
 
     public function user(): BelongsTo
@@ -34,7 +36,9 @@ class UserNotification extends Model
 
     public function getNotificationSettings(string $type): array
     {
-        $setting = $this->$type ?? '1,1,1';
+        // Map 'match' to 'match_me' for backward compatibility
+        $column = ($type === 'match') ? 'match_me' : $type;
+        $setting = $this->$column ?? '1,1,1';
         $parts = explode(',', $setting);
         
         return [

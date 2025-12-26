@@ -15,17 +15,17 @@ class UserStory extends Model
         'storyType',
         'story',
         'storyTime',
-        'storyViews',
         'seen',
         'deleted',
         'visible',
         'rekognition',
-        'hls_url',
+        'story_src_hls',
+        'lat',
+        'lng',
     ];
 
     protected $casts = [
         'storyTime' => 'integer',
-        'storyViews' => 'integer',
         'deleted' => 'boolean',
         'visible' => 'integer',
     ];
